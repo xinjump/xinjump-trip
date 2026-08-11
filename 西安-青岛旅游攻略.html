@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>西安 → 青岛 6天5晚旅游攻略 | 2026年9月</title>
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f0f4f8;
+    color: #2d3748;
+    line-height: 1.8;
+    font-size: 15px;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    background: linear-gradient(135deg, #1a365d 0%, #2563eb 40%, #0ea5e9 70%, #06b6d4 100%);
+    color: #fff;
+    text-align: center;
+    padding: 70px 20px 55px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 1200 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,40 C200,100 400,0 600,40 C800,80 1000,0 1200,40 L1200,120 L0,120 Z' fill='%23f0f4f8'/%3E%3C/svg%3E") no-repeat bottom/cover;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .hero .subtitle {
+    font-size: 1.05rem;
+    opacity: 0.92;
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .hero .badge {
+    display: inline-block;
+    margin-top: 16px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 5px 18px;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+
+  /* ===== Container ===== */
+  .container { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+
+  /* ===== Overview Cards ===== */
+  .overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: -30px 0 36px;
+    position: relative;
+    z-index: 2;
+  }
+  .ov-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    transition: transform 0.2s;
+  }
+  .ov-card:hover { transform: translateY(-3px); }
+  .ov-card .icon { font-size: 2rem; margin-bottom: 6px; }
+  .ov-card .label { font-size: 0.8rem; color: #718096; margin-bottom: 4px; }
+  .ov-card .value { font-size: 1.15rem; font-weight: 700; color: #1e40af; }
+
+  /* ===== Sections ===== */
+  .section {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .section h2 {
+    font-size: 1.45rem;
+    color: #1e3a5f;
+    border-left: 4px solid #2563eb;
+    padding-left: 14px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section h3 {
+    font-size: 1.15rem;
+    color: #334155;
+    margin: 22px 0 12px;
+  }
+  .section h4 {
+    font-size: 1rem;
+    color: #475569;
+    margin: 16px 0 8px;
+  }
+
+  /* ===== Tables ===== */
+  .table-wrap { overflow-x: auto; margin: 14px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    min-width: 500px;
+  }
+  th, td { padding: 10px 13px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+  th {
+    background: #f1f5f9;
+    color: #1e40af;
+    font-weight: 700;
+    font-size: 0.83rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  tr:hover td { background: #f8fafc; }
+
+  /* ===== Highlight boxes ===== */
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .callout-info  { background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e40af; }
+  .callout-warn  { background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
+  .callout-tip   { background: #ecfdf5; border-left: 4px solid #10b981; color: #065f46; }
+  .callout-high  { background: #fdf2f8; border-left: 4px solid #ec4899; color: #831843; }
+
+  /* ===== Day Header ===== */
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 28px 0 10px;
+    color: #1e3a5f;
+    position: relative;
+  }
+  .day-num {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, #2563eb, #0ea5e9);
+    color: #fff;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 1.3rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+  }
+  .day-title { font-size: 1.1rem; font-weight: 700; }
+
+  /* ===== Badge ===== */
+  .tag {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .tag-green  { background: #d1fae5; color: #065f46; }
+  .tag-orange { background: #ffedd5; color: #9a3412; }
+  .tag-pink   { background: #fce7f3; color: #9d174d; }
+
+  /* ===== Timeline ===== */
+  .timeline { margin: 14px 0; }
+  .tl-item {
+    display: flex;
+    gap: 14px;
+    padding: 13px 0;
+    border-bottom: 1px dashed #e2e8f0;
+  }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-time {
+    min-width: 60px;
+    font-weight: 700;
+    color: #2563eb;
+    font-size: 0.85rem;
+    padding-top: 2px;
+  }
+  .tl-body { flex: 1; }
+  .tl-body strong { color: #1e3a5f; display: block; margin-bottom: 3px; }
+  .tl-body span { font-size: 0.88rem; color: #475569; }
+
+  /* ===== Budget Bar ===== */
+  .budget-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .bud-item {
+    flex: 1; min-width: 120px;
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .bud-item .amt { font-size: 1.4rem; font-weight: 800; color: #2563eb; }
+  .bud-item .lbl { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+
+  /* ===== Itinerary Map ===== */
+  .itinerary {
+    background: linear-gradient(135deg, #1e3a5f, #1e40af);
+    color: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 0.85rem;
+    line-height: 2;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* ===== Footer ===== */
+  .footer {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.82rem;
+    padding: 12px 20px 30px;
+  }
+  .footer strong { color: #475569; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 640px) {
+    .section { padding: 20px 16px; }
+    .overview { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .tl-item { flex-direction: column; gap: 4px; }
+  }
+
+  /* ===== Print ===== */
+  @media print {
+    body { background: #fff; font-size: 13px; }
+    .hero { background: #1e3a5f !important; padding: 30px 20px; -webkit-print-color-adjust: exact; }
+    .section { box-shadow: none; border: 1px solid #e2e8f0; break-inside: avoid; }
+    .floating-bar, .toc-overlay, .toc-panel { display: none !important; }
+  }
+
+  /* ===== Dark Mode ===== */
+  body.dark {
+    background: #0f172a;
+    color: #cbd5e1;
+  }
+  body.dark .section {
+    background: #1e293b;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  body.dark .section h2 { color: #93c5fd; }
+  body.dark .section h3, body.dark .section h4 { color: #cbd5e1; }
+  body.dark th { background: #334155; color: #93c5fd; }
+  body.dark tr:hover td { background: #1e293b; }
+  body.dark td, body.dark th { border-color: #334155; }
+  body.dark .ov-card { background: #1e293b; box-shadow: 0 2px 16px rgba(0,0,0,0.3); }
+  body.dark .ov-card .value { color: #93c5fd; }
+  body.dark .day-header { color: #e2e8f0; }
+  body.dark .tl-time { color: #93c5fd; }
+  body.dark .tl-body strong { color: #e2e8f0; }
+  body.dark .tl-body span { color: #94a3b8; }
+  body.dark .tl-item { border-color: #334155; }
+  body.dark .callout-info { background: #1e293b; border-color: #3b82f6; color: #93c5fd; }
+  body.dark .callout-warn { background: #1e293b; border-color: #f59e0b; color: #fcd34d; }
+  body.dark .callout-tip { background: #1e293b; border-color: #10b981; color: #6ee7b7; }
+  body.dark .callout-high { background: #1e293b; border-color: #ec4899; color: #f9a8d4; }
+  body.dark .itinerary { background: #0f172a; }
+  body.dark .bud-item { background: #1e293b; }
+  body.dark .bud-item .amt { color: #93c5fd; }
+  body.dark .tag { background: #1e3a5f; color: #93c5fd; }
+  body.dark .tag-green { background: #064e3b; color: #6ee7b7; }
+  body.dark .tag-orange { background: #78350f; color: #fcd34d; }
+  body.dark .tag-pink { background: #831843; color: #f9a8d4; }
+  body.dark .footer { color: #64748b; }
+  body.dark .footer strong { color: #94a3b8; }
+
+  /* ===== Floating Action Bar ===== */
+  .floating-bar {
+    position: fixed;
+    right: 18px;
+    bottom: 120px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .fab {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.25s;
+    position: relative;
+    color: #475569;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  body.dark .fab {
+    background: #1e293b;
+    border-color: #334155;
+    color: #cbd5e1;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  }
+  .fab:hover { transform: translateY(-2px) scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+  .fab:active { transform: scale(0.95); }
+  .fab.tooltip::after {
+    content: attr(data-tip);
+    position: absolute;
+    right: 54px;
+    background: #1e293b;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .fab.tooltip:hover::after { opacity: 1; }
+
+  #btn-top {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.25s, box-shadow 0.25s;
+    background: linear-gradient(135deg, #2563eb, #0ea5e9);
+    color: #fff;
+    border: none;
+  }
+  #btn-top.visible { opacity: 1; pointer-events: auto; }
+
+  /* ===== TOC Panel ===== */
+  .toc-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 1001;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .toc-overlay.open { opacity: 1; pointer-events: auto; }
+  .toc-panel {
+    position: fixed;
+    right: 0; top: 0; bottom: 0;
+    width: 300px; max-width: 85vw;
+    background: #fff;
+    z-index: 1002;
+    overflow-y: auto;
+    padding: 24px 20px;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+  }
+  body.dark .toc-panel { background: #1e293b; }
+  .toc-panel.open { transform: translateX(0); }
+  .toc-panel h3 {
+    font-size: 1.15rem;
+    color: #1e3a5f;
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  body.dark .toc-panel h3 { color: #e2e8f0; }
+  .toc-close {
+    margin-left: auto;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #64748b;
+    display: flex; align-items: center; justify-content: center;
+  }
+  body.dark .toc-close { background: #334155; color: #94a3b8; }
+  .toc-panel a {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.92rem;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+  }
+  body.dark .toc-panel a { color: #94a3b8; }
+  .toc-panel a:hover {
+    background: #eff6ff;
+    color: #2563eb;
+  }
+  body.dark .toc-panel a:hover { background: #334155; color: #93c5fd; }
+  .toc-panel a.toc-sub {
+    font-size: 0.82rem;
+    padding: 6px 14px 6px 28px;
+    color: #64748b;
+  }
+  body.dark .toc-panel a.toc-sub { color: #94a3b8; }
+  /* ===== TOC toggle row ===== */
+  .toc-row {
+    display: flex; align-items: center;
+  }
+  .toc-row a {
+    flex: 1;
+    padding-right: 4px;
+  }
+  .toc-row .toc-toggle {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: #64748b;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  body.dark .toc-row .toc-toggle {
+    background: #334155; border-color: #475569; color: #94a3b8;
+  }
+  .toc-row .toc-toggle.collapsed { transform: rotate(-90deg); }
+  .toc-subgroup {
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+    max-height: 400px;
+  }
+  .toc-subgroup.collapsed { max-height: 0; }
+
+  /* ===== Font size sliders ===== */
+  .font-slider {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 0.85rem;
+    color: #64748b;
+  }
+  body.dark .font-slider { border-color: #334155; }
+  .font-slider button {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    font-size: 1rem; font-weight: 700;
+    color: #475569;
+    display: flex; align-items: center; justify-content: center;
+  }
+  body.dark .font-slider button { background: #334155; border-color: #475569; color: #cbd5e1; }
+  .font-slider .font-label { flex: 1; text-align: center; }
+
+  /* ===== Responsive: mobile floating bar ===== */
+  @media (max-width: 640px) {
+    .floating-bar {
+      right: 10px; bottom: 90px; gap: 6px;
+    }
+    .fab { width: 38px; height: 38px; font-size: 1rem; }
+    .toc-panel { width: 85vw; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<header class="hero">
+  <h1>西安 → 青岛 6天5晚旅游攻略</h1>
+  <p class="subtitle">2026年9月25日 — 9月30日 · 两人同行 · 黄岛一日精华 · 帆船出海</p>
+  <span class="badge">高性价比 · 秘境打卡 · 海鲜自由</span>
+</header>
+
+<div class="container">
+
+<!-- ==================== 出行概况 ==================== -->
+<div class="overview">
+  <div class="ov-card"><div class="icon">👥</div><div class="label">出行人员</div><div class="value">2人同行</div></div>
+  <div class="ov-card"><div class="icon">📍</div><div class="label">出发 → 目的地</div><div class="value">西安 → 青岛</div></div>
+  <div class="ov-card"><div class="icon">📅</div><div class="label">出行日期</div><div class="value">9.25 — 9.30</div></div>
+  <div class="ov-card"><div class="icon">🌙</div><div class="label">总计天数</div><div class="value">6天5晚</div></div>
+  <div class="ov-card"><div class="icon">💰</div><div class="label">人均预算</div><div class="value">¥2,850-2,950</div></div>
+</div>
+
+<!-- ==================== 交通 ==================== -->
+<div class="section">
+  <h2>🚄 交通方案 & 推荐</h2>
+  <h3>城际交通：高铁（强烈推荐）</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>车次参考</th><th>出发</th><th>到达</th><th>耗时</th><th>二等座参考价</th></tr>
+      <tr><td><strong>G1834</strong></td><td>西安北 早班</td><td>青岛站 下午</td><td>约 5h54min</td><td>~578 元/人</td></tr>
+      <tr style="background:#eff6ff"><td><strong>⭐ G2064</strong></td><td>西安北 09:37</td><td>青岛站 15:50</td><td>约 6h13min</td><td>~643 元/人</td></tr>
+      <tr><td>G1856/G1857</td><td>西安北 12:59</td><td>青岛北 20:30</td><td>约 7h31min</td><td>~550 元/人</td></tr>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <strong>推荐车次</strong>：G2064 或 G1834（早出发下午到，不耽误当天行程）<br>
+    <strong>往返高铁总费用</strong>：约 580-650 元 × 2人 × 2程 = <strong>2,400 - 2,600 元</strong>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>行程</th><th>推荐班次</th><th>票价/人</th></tr>
+      <tr><td><span class="tag">去程 9/25</span></td><td>G2064 西安北 09:37 → 青岛站 15:50</td><td>~643 元</td></tr>
+      <tr><td><span class="tag-green">返程 9/30</span></td><td>G1835/G2063 青岛站 下午 → 西安北 晚间</td><td>~580-643 元</td></tr>
+    </table>
+  </div>
+  <div class="callout callout-warn">
+    <strong>购票提醒</strong>：9月25日临近国庆，务必提前15天（9月10日左右）在 12306 APP 抢票。
+  </div>
+  <h3>市内 & 跨海交通</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>路线</th><th>方式</th><th>耗时</th><th>费用</th></tr>
+      <tr><td>市区各景点</td><td>地铁</td><td>—</td><td>2-6 元/次</td></tr>
+      <tr><td>青岛站 → 黄岛金沙滩</td><td>隧道公交 / 打车跨海隧道</td><td>约 30-40 min</td><td>公交 2 元 / 打车约 50-60 元</td></tr>
+      <tr><td>黄岛内部</td><td>打车 / 骑行</td><td>—</td><td>打车 10-20 元/次</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== 住宿 ==================== -->
+<div class="section">
+  <h2>🏨 住宿推荐（全程市区，5晚连住不挪窝）</h2>
+  <p style="color:#64748b;margin-bottom:16px">黄岛仅一日游不过夜，全程住市区省去搬运行李的麻烦，轻松出行。</p>
+  <div class="table-wrap">
+    <table>
+      <tr><th>类型</th><th>推荐</th><th>参考价/晚</th><th>特点</th></tr>
+      <tr><td>经济型酒店</td><td>如家/汉庭/锦江之星（台东/火车站店）</td><td>200-280 元</td><td>干净实惠、位置便利</td></tr>
+      <tr><td>品质民宿</td><td>大学路/小鱼山附近老城民宿</td><td>220-320 元</td><td>有格调、老城氛围浓</td></tr>
+    </table>
+  </div>
+  <div class="callout callout-tip">
+    <strong>住宿总预算</strong>（5晚）：约 <strong>1,100 - 1,500 元</strong><br>
+    推荐台东/火车站区域，出门就是地铁和夜市，性价比最高
+  </div>
+</div>
+
+<!-- ==================== 每日行程 ==================== -->
+<div class="section">
+  <h2>📋 每日详细行程</h2>
+
+  <!-- Day 1 -->
+  <div class="day-header" id="day1"><div class="day-num">D1</div><div class="day-title">9月25日（周五）抵达 + 初探老城 <span class="tag">轻松适应</span></div></div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time">上午</div><div class="tl-body"><strong>🚄 高铁出发</strong><span>西安北站乘 G2064（09:37 发车），车上可带零食/自热饭</span></div></div>
+    <div class="tl-item"><div class="tl-time">下午</div><div class="tl-body"><strong>抵达 + 入住</strong><span>15:50 到青岛站，地铁至酒店办理入住，稍作休整</span></div></div>
+    <div class="tl-item"><div class="tl-time">傍晚</div><div class="tl-body"><strong>🚶 栈桥</strong><span>青岛地标，免费。漫步回澜阁，喂海鸥、看夕阳海景（1h）</span></div></div>
+    <div class="tl-item"><div class="tl-time">晚间</div><div class="tl-body"><strong>🍽️ 晚餐 + 中山路</strong><span>步行至中山路，尝<strong>王姐烧烤</strong>（烤鱿鱼、五花肉串）+ <strong>劈柴院</strong>小吃街，人均 50-70 元</span></div></div>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="day-header" id="day2"><div class="day-num">D2</div><div class="day-title">9月26日（周六）老城经典一日 <span class="tag-green">步行较多</span></div></div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time">上午</div><div class="tl-body"><strong>⛪ 天主教堂 → 🏛️ 大学路网红墙</strong><span>天主教堂（门票 10元，30min）→ 步行至大学路"网红墙角"打卡（免费），沿途逛老舍故居、信号山路文艺小店</span></div></div>
+    <div class="tl-item"><div class="tl-time">中午</div><div class="tl-body"><strong>🍽️ 午餐：九龙餐厅</strong><span>大沽路老店，30年老字号。香辣鱿鱼条 + 五花肉炒比管 + 蛤蜊冬瓜汤，人均 60-80 元</span></div></div>
+    <div class="tl-item"><div class="tl-time">下午</div><div class="tl-body"><strong>🏡 八大关</strong><span>万国建筑博览（免费区域）。推荐进<strong>花石楼</strong>（蒋介石旧居，8.5元）+ <strong>公主楼</strong>（丹麦童话，15元），2.5-3h</span></div></div>
+    <div class="tl-item"><div class="tl-time">傍晚</div><div class="tl-body"><strong>🌅 第二海水浴场</strong><span>在八大关尽头，沙滩踩水、拍落日剪影</span></div></div>
+    <div class="tl-item"><div class="tl-time">晚间</div><div class="tl-body"><strong>🍺 台东步行街夜市</strong><span>青岛最大夜市！烤生蚝、烤海胆、炒酸奶、脂渣、袋装啤酒，人均 60-80 元</span></div></div>
+  </div>
+
+  <!-- Day 3 -->
+  <div class="day-header" id="day3"><div class="day-num">D3</div><div class="day-title">9月27日（周日）滨海文艺 + 帆船出海 <span class="tag-pink">帆船高光</span></div></div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time">上午</div><div class="tl-body"><strong>🏖️ 小麦岛</strong><span>地铁2号线麦岛站。免费"小济州岛"，草地+海景+灯塔，绝美拍照地（1.5-2h）</span></div></div>
+    <div class="tl-item"><div class="tl-time">中午</div><div class="tl-body"><strong>🍽️ 午餐：船歌鱼水饺</strong><span>必点鲅鱼水饺、墨鱼水饺、黄花鱼水饺，人均 70-90 元</span></div></div>
+    <div class="tl-item"><div class="tl-time">下午</div><div class="tl-body"><strong>⛵ 奥帆中心帆船出海体验</strong><span>在奥帆中心体验<strong>双体帆船出海</strong>（约1-1.5h），人均 <strong>80-170 元</strong>。含升帆、掌舵互动，在海上换个角度看青岛天际线！</span></div></div>
+    <div class="tl-item"><div class="tl-time">傍晚</div><div class="tl-body"><strong>🌆 情人坝 + 五四广场</strong><span>沿海边走到情人坝看日落 → 步行至五四广场看"五月的风"雕塑</span></div></div>
+    <div class="tl-item"><div class="tl-time">晚间</div><div class="tl-body"><strong>🍽️ 晚餐 + 灯光秀</strong><span><strong>开海红岛海鲜虾水饺</strong>（本地人推荐），人均 80-120 元。20:00 五四广场沿海灯光秀（免费）</span></div></div>
+  </div>
+  <div class="callout callout-high">
+    <strong>帆船预订提示</strong>：提前在美团/携程/飞猪预订，选择 15:00-16:00 时段（光线最好），拼船 80-100 元/人即可，提前一天预约。
+  </div>
+
+  <!-- Day 4 -->
+  <div class="day-header" id="day4"><div class="day-num">D4</div><div class="day-title">9月28日（周一）黄岛一日精华 <span class="tag-orange">跨海一日游</span></div></div>
+  <div class="callout callout-info"><strong>今天不用退房</strong>：轻装出发，只带随身包，傍晚返回同一个酒店。</div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time">上午</div><div class="tl-body"><strong>🚕 跨海出发 → 🏖️ 金沙滩</strong><span>打车经胶州湾隧道至黄岛金沙滩（约40min，打车约55元）。"亚洲第一滩"免费开放，沙质细腻柔软，9月底人少清净（1-1.5h）</span></div></div>
+    <div class="tl-item"><div class="tl-time">上午</div><div class="tl-body"><strong>🏛️ 凤凰之声大剧院（外观）</strong><span>金沙滩旁的网红地标，纯白流线型建筑像一架巨型钢琴，免费拍照打卡（30min）</span></div></div>
+    <div class="tl-item"><div class="tl-time">中午</div><div class="tl-body"><strong>🍽️ 午餐</strong><span><strong>一品海鲜青岛本邦菜</strong>（金沙滩附近），海鲜大咖拼盘或辣炒蛤蜊+家烧杂鱼，人均 70-90 元</span></div></div>
+    <div class="tl-item"><div class="tl-time">下午</div><div class="tl-body"><strong>🌊 鱼鸣嘴 ⭐ 全天高光</strong><span>打车前往（约20min）。<strong>"青岛的天涯海角"</strong>——三面环海的狭长海岬，悬崖+礁石+碧海，完全不商业化！木栈道尽头观景平台出片率极高，对面就是灵山岛。退潮时可在礁石区<strong>赶海</strong>（抓小螃蟹、挖贝壳），体验感满分（2-3h）</span></div></div>
+    <div class="tl-item"><div class="tl-time">傍晚</div><div class="tl-body"><strong>🌅 鱼鸣嘴日落</strong><span>青岛公认的最佳日落观赏点！17:30-18:00 太阳从灵山岛方向缓缓沉入海中，橙色晚霞洒满海面</span></div></div>
+    <div class="tl-item"><div class="tl-time">晚间</div><div class="tl-body"><strong>🚕 返回市区 + 🍽️ 晚餐</strong><span>打车返回（约40min），直奔<strong>台东步行街夜市</strong>，烤生蚝+烤海胆+散装啤酒，人均 50-70 元</span></div></div>
+  </div>
+  <div class="callout callout-tip">
+    <strong>鱼鸣嘴贴士</strong>：提前查退潮时间（手机天气APP可查），退潮前后2小时赶海最佳。穿防滑鞋，礁石湿滑！<br>
+    <strong>黄岛一日只选最精华</strong>：金沙滩+鱼鸣嘴=自然景观天花板，其余网红打卡点分散且雷同，一天刚刚好。
+  </div>
+
+  <!-- Day 5 -->
+  <div class="day-header" id="day5"><div class="day-num">D5</div><div class="day-title">9月29日（周二）老城全景 + 海鲜收官 <span class="tag-pink">情怀收尾</span></div></div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time">上午</div><div class="tl-body"><strong>⛰️ 信号山公园</strong><span>门票5元（旋转观景台15元），登顶360°俯瞰青岛老城——红瓦绿树碧海蓝天尽收眼底，青岛最佳全景拍摄点（1-1.5h）</span></div></div>
+    <div class="tl-item"><div class="tl-time">上午</div><div class="tl-body"><strong>🏛️ 德国总督楼旧址（迎宾馆）</strong><span>门票20元/人，百年德式古堡建筑，内部极尽奢华，了解青岛殖民历史（1h）。时间紧可外观免费</span></div></div>
+    <div class="tl-item"><div class="tl-time">中午</div><div class="tl-body"><strong>🍽️ 午餐：双合园饺子</strong><span>另一家青岛饺子名店，全家福水饺（鲅鱼+墨鱼+黄花鱼+虾仁），人均 50-70 元</span></div></div>
+    <div class="tl-item"><div class="tl-time">下午</div><div class="tl-body"><strong>🏝️ 小青岛</strong><span>门票5元/人，青岛的"琴岛"——白色灯塔+松林+360°海景，与栈桥隔海相望（1h）</span></div></div>
+    <div class="tl-item"><div class="tl-time">下午</div><div class="tl-body"><strong>🌿 鲁迅公园 + 海底世界（可选）</strong><span>鲁迅公园免费，沿海礁石步道散步。想逛水族馆可去海底世界（门票170元/人），不想花钱可跳过</span></div></div>
+    <div class="tl-item"><div class="tl-time">傍晚</div><div class="tl-body"><strong>🍺 青岛啤酒博物馆</strong><span>登州路56号，门票60元/人（含两杯原浆+啤酒豆），了解百年青啤历史（1.5h）</span></div></div>
+    <div class="tl-item"><div class="tl-time">晚间</div><div class="tl-body"><strong>🦞 营口路农贸市场</strong><span>青岛最地道吃法！自己买鲜活海鲜（螃蟹、虾、蛤蜊、海螺等），旁边小店加工（加工费10-20元/份）。两人吃到撑约 <strong>150-200 元</strong></span></div></div>
+    <div class="tl-item"><div class="tl-time">晚间</div><div class="tl-body"><strong>🍺 散装啤酒</strong><span>打一袋散装原浆啤酒（5-8元/斤），拎塑料袋喝——最正宗的青岛烟火气！</span></div></div>
+  </div>
+  <div class="callout callout-high">
+    <strong>今天节奏</strong>：老城漫步+全景俯瞰+海鲜收官之夜，节奏舒适不赶。信号山+小青岛是老城最后两块拼图，集齐青岛经典全貌。
+  </div>
+
+  <!-- Day 6 -->
+  <div class="day-header" id="day6"><div class="day-num">D6</div><div class="day-title">9月30日（周三）收尾 + 返程 <span class="tag-green">轻松收尾</span></div></div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time">上午</div><div class="tl-body"><strong>🛍️ 伴手礼采购</strong><span>台东步行街/利群超市：<strong>青岛啤酒（原浆罐装）、脂渣、烤鱼片、崂山可乐、高粱饴</strong></span></div></div>
+    <div class="tl-item"><div class="tl-time">上午</div><div class="tl-body"><strong>☕ 大学路咖啡馆</strong><span>如果时间充裕，找一家老城咖啡馆坐坐，享受最后的青岛时光</span></div></div>
+    <div class="tl-item"><div class="tl-time">中午</div><div class="tl-body"><strong>🍽️ 最后一餐：万和春排骨米饭</strong><span>青岛名片级美食，软烂脱骨，酱汁拌饭绝了，人均 35-45 元</span></div></div>
+    <div class="tl-item"><div class="tl-time">下午</div><div class="tl-body"><strong>🚄 返程</strong><span>青岛站乘高铁返回西安北，预计晚间抵达</span></div></div>
+  </div>
+</div>
+
+<!-- ==================== 帆船出海 ==================== -->
+<div class="section">
+  <h2>⛵ 帆船出海体验</h2>
+  <p style="margin-bottom:12px;color:#475569">本次旅程唯一的海上项目安排在 Day3 奥帆中心，不与其他内容重复。</p>
+  <div class="table-wrap">
+    <table>
+      <tr><th>项目</th><th>时长</th><th>单人价格</th><th>体验</th></tr>
+      <tr><td><strong>双体帆船出海</strong></td><td>1-1.5 小时</td><td><strong>80-170 元</strong></td><td>拼船或包船，含升帆、掌舵互动，海上换个角度看青岛天际线</td></tr>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <strong>预订提示</strong>：提前在美团/携程/飞猪预订，选择 15:00-16:00 时段（光线最佳），拼船 80-100 元/人即可。<br>
+    🦺 安全贴士：穿救生衣、手机装防水袋、补涂防晒霜。
+  </div>
+</div>
+
+<!-- ==================== 美食 ==================== -->
+<div class="section">
+  <h2>🍴 地道美食清单</h2>
+  <h3>A. 市区老城美食</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>排名</th><th>美食</th><th>推荐店铺</th><th>人均</th></tr>
+      <tr><td>⭐1</td><td>鲅鱼水饺</td><td>船歌鱼水饺、双合园饺子</td><td>70-90 元</td></tr>
+      <tr><td>⭐2</td><td>辣炒蛤蜊 + 原浆啤酒</td><td>营口路市场加工</td><td>50-80 元</td></tr>
+      <tr><td>⭐3</td><td>九龙餐厅</td><td>大沽路老店（30年老字号）</td><td>60-80 元</td></tr>
+      <tr><td>⭐4</td><td>排骨米饭</td><td>万和春排骨米饭</td><td>35-45 元</td></tr>
+      <tr><td>⭐5</td><td>王姐烧烤</td><td>中山路/台东三路</td><td>40-60 元</td></tr>
+      <tr><td>⭐6</td><td>海鲜水饺宴</td><td>开海红岛海鲜虾水饺</td><td>80-120 元</td></tr>
+    </table>
+  </div>
+  <h3>B. 黄岛/西海岸美食（一日游推荐）</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>排名</th><th>美食</th><th>推荐店铺</th><th>人均</th><th>特色</th></tr>
+      <tr><td>⭐1</td><td>海鲜大咖拼盘</td><td>一品海鲜青岛本邦菜</td><td>70-90 元</td><td>金沙滩附近，分量足</td></tr>
+      <tr><td>⭐2</td><td>渔家小馆</td><td>鱼鸣嘴村内小店</td><td>80-120 元</td><td>海景+地道渔家菜，沉浸感满分</td></tr>
+      <tr><td>⭐3</td><td>融创茂美食</td><td>融创茂（品牌连锁餐厅）</td><td>50-80 元</td><td>品牌多、环境好、不踩雷</td></tr>
+    </table>
+  </div>
+  <h3>C. 不可错过的小吃</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>小吃</th><th>哪里吃</th><th>价格</th></tr>
+      <tr><td>🥤 崂山可乐</td><td>任意便利店</td><td>5-8 元/瓶</td></tr>
+      <tr><td>🦑 烤鱿鱼</td><td>台东/中山路</td><td>10-15 元/串</td></tr>
+      <tr><td>🍺 袋装啤酒</td><td>营口路市场/街边啤酒店</td><td>5-8 元/斤</td></tr>
+      <tr><td>🥓 青岛脂渣</td><td>李村/台东夜市</td><td>20-30 元/袋</td></tr>
+      <tr><td>🧊 海菜凉粉</td><td>本地菜馆</td><td>15-20 元</td></tr>
+      <tr><td>🥟 三鲜锅贴</td><td>街头早餐店</td><td>15-25 元</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== 景点费用 ==================== -->
+<div class="section">
+  <h2>🎫 景点 & 活动费用汇总</h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>景点/项目</th><th>单人费用</th><th>两人费用</th><th>游玩时长</th></tr>
+      <tr><td>栈桥</td><td>免费</td><td>0</td><td>0.5h</td></tr>
+      <tr><td>天主教堂</td><td>10 元</td><td>20 元</td><td>0.5h</td></tr>
+      <tr><td>八大关（花石楼+公主楼）</td><td>23.5 元</td><td>47 元</td><td>2.5h</td></tr>
+      <tr><td>小麦岛</td><td>免费</td><td>0</td><td>2h</td></tr>
+      <tr><td>五四广场 + 奥帆中心</td><td>免费</td><td>0</td><td>2h</td></tr>
+      <tr><td>⛵ 帆船出海体验</td><td>80-170 元</td><td>160-340 元</td><td>1.5h</td></tr>
+      <tr><td>金沙滩</td><td>免费</td><td>0</td><td>1.5h</td></tr>
+      <tr><td>凤凰之声大剧院（外观）</td><td>免费</td><td>0</td><td>0.5h</td></tr>
+      <tr style="background:#ecfdf5"><td>🌊 鱼鸣嘴</td><td>免费</td><td>0</td><td>2-3h</td></tr>
+      <tr><td>信号山公园</td><td>5-15 元</td><td>10-30 元</td><td>1.5h</td></tr>
+      <tr><td>德国总督楼旧址</td><td>20 元</td><td>40 元</td><td>1h</td></tr>
+      <tr><td>小青岛</td><td>5 元</td><td>10 元</td><td>1h</td></tr>
+      <tr><td>青岛啤酒博物馆</td><td>60 元</td><td>120 元</td><td>1.5h</td></tr>
+    </table>
+  </div>
+  <div class="callout callout-tip">
+    <strong>景点门票总计</strong>（按推荐组合）：帆船 250 + 啤酒博物馆 120 + 八大关 47 + 天主教堂 20 + 信号山 20 + 总督楼 40 + 小青岛 10 ≈ <strong>约 507 元</strong>（两人）<br>
+    黄岛一日只去金沙滩+鱼鸣嘴，全免费。钱花在刀刃上，体验不打折。
+  </div>
+</div>
+
+<!-- ==================== 天气穿衣 ==================== -->
+<div class="section">
+  <h2>🌤️ 天气 & 穿衣指南</h2>
+  <h3>9月底青岛天气</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>指标</th><th>数值</th></tr>
+      <tr><td>白天平均气温</td><td>24 - 27°C</td></tr>
+      <tr><td>夜间平均气温</td><td>17 - 20°C</td></tr>
+      <tr><td>海水温度</td><td>约 22 - 24°C</td></tr>
+      <tr><td>天气特点</td><td>秋高气爽，多云为主，偶有阵雨</td></tr>
+      <tr><td>日出/日落</td><td>约 05:50 / 17:50</td></tr>
+    </table>
+  </div>
+  <h3>穿衣建议（洋葱式穿法）</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>场景</th><th>建议</th></tr>
+      <tr><td><strong>日常出行</strong></td><td>短袖 T + 薄长裤，早晚加一件<strong>薄风衣/牛仔外套</strong></td></tr>
+      <tr><td><strong>海边/沙滩</strong></td><td>泳衣/沙滩裤 + 防晒衣 + 人字拖</td></tr>
+      <tr><td><strong>帆船出海</strong></td><td>泳衣穿在里面，外罩速干衣/防晒服</td></tr>
+      <tr><td><strong>拍照穿搭</strong></td><td>女生：长裙/白衬衫+草帽；男生：浅色亚麻衬衫</td></tr>
+      <tr><td><strong>晚间</strong></td><td>加一件薄卫衣或针织开衫，海风微凉</td></tr>
+      <tr><td><strong>不建议</strong></td><td>厚毛衣、羽绒服（用不到）；深色吸热衣物</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== 避坑指南 ==================== -->
+<div class="section">
+  <h2>⚠️ 避坑指南</h2>
+  <h3>🚫 交通避坑</h3>
+  <ol style="padding-left:20px;line-height:2.2">
+    <li><strong>市区到黄岛别走跨海大桥</strong>：贵且容易堵。走<strong>胶州湾隧道</strong>更快更便宜。</li>
+    <li><strong>不要在景区门口坐黑车</strong>：坚持用滴滴/高德叫车或坐地铁。</li>
+    <li><strong>下载「青岛地铁 APP」</strong>：扫码乘车方便快捷。</li>
+  </ol>
+  <h3>🍽️ 餐饮避坑</h3>
+  <ol start="4" style="padding-left:20px;line-height:2.2">
+    <li><strong>景区门口大排档不吃</strong>：营口路市场自己买+旁边加工最靠谱。</li>
+    <li><strong>出租车司机推荐的餐厅</strong>：大概率是回扣店。</li>
+    <li><strong>大众点评 4.0+ 老店基本不踩雷</strong>。</li>
+  </ol>
+  <h3>🎑 国庆前避坑</h3>
+  <ol start="7" style="padding-left:20px;line-height:2.2">
+    <li>9月28-30日已有游客提前到达，拍照趁上午人少。</li>
+    <li>高铁票 + 住宿提前 15-20 天预订。</li>
+  </ol>
+  <h3>🏝️ 黄岛一日游避坑</h3>
+  <ol start="9" style="padding-left:20px;line-height:2.2">
+    <li>🐟 <strong>鱼鸣嘴赶海看潮汐</strong>：提前查退潮时间（手机天气APP），退潮前后2小时最佳。礁石湿滑，穿防滑鞋！</li>
+    <li>🍽️ <strong>黄岛吃饭去融创茂</strong>：连锁品牌多、价格透明，不会踩雷。</li>
+    <li>🚕 <strong>跨海走胶州湾隧道</strong>：别走跨海大桥（贵且容易堵），隧道更快更便宜。</li>
+  </ol>
+</div>
+
+<!-- ==================== 预算 ==================== -->
+<div class="section">
+  <h2>💰 预算明细</h2>
+  <h3>两人总预算（高性价比 · 60​00以内）</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>类别</th><th>项目</th><th>费用（元）</th><th>备注</th></tr>
+      <tr><td><strong>城际交通</strong></td><td>往返高铁</td><td>2,400 - 2,600</td><td>二等座，2人往返</td></tr>
+      <tr><td><strong>市内交通</strong></td><td>地铁+打车+跨海</td><td>200 - 300</td><td>黄岛仅一日跨海</td></tr>
+      <tr><td><strong>住宿</strong></td><td>5晚全程市区</td><td>1,100 - 1,500</td><td>经济酒店/老城民宿，不挪窝</td></tr>
+      <tr><td><strong>餐饮</strong></td><td>6天三餐+小吃</td><td>1,400 - 1,800</td><td>按120-150元/天/人</td></tr>
+      <tr><td><strong>门票+帆船</strong></td><td>景点+帆船出海</td><td>400 - 700</td><td>黄岛一日纯免费</td></tr>
+      <tr><td><strong>其他</strong></td><td>零食/水/杂费</td><td>100 - 200</td><td>—</td></tr>
+    </table>
+  </div>
+  <h3>📊 总预算汇总</h3>
+  <div class="budget-bar">
+    <div class="bud-item">
+      <div class="amt">~2,850 元</div>
+      <div class="lbl">⭐ 人均</div>
+      <div style="font-size:0.8rem;color:#64748b;margin-top:6px">全程市区住宿+帆船出海+黄岛精华+海鲜自由</div>
+    </div>
+    <div class="bud-item">
+      <div class="amt">~5,700 元</div>
+      <div class="lbl">两人总计（60​00以内 ✓）</div>
+    </div>
+    <div class="bud-item">
+      <div class="amt">~2,450 元</div>
+      <div class="lbl">不含高铁 / 人均</div>
+      <div style="font-size:0.8rem;color:#64748b;margin-top:6px">纯目的地消费（住+吃+玩）</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 出行清单 ==================== -->
+<div class="section">
+  <h2>✅ 出行准备清单</h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>类别</th><th>物品</th></tr>
+      <tr><td>📇 证件</td><td>身份证（高铁/酒店必备）</td></tr>
+      <tr><td>📱 电子</td><td>手机、充电宝×2、数据线</td></tr>
+      <tr><td>👕 日常衣物</td><td>短袖×3、长裤×2、薄风衣×1、卫衣×1</td></tr>
+      <tr><td>🏖️ 海边专属</td><td>泳衣/泳裤×1（帆船出海可能溅水）、沙滩裤、防晒衣</td></tr>
+      <tr><td>👟 鞋子</td><td>运动鞋、人字拖、<strong>防滑鞋/沙滩鞋</strong>（鱼鸣嘴赶海礁石必备）</td></tr>
+      <tr><td>🧴 防护</td><td>防晒霜 SPF50+、墨镜、遮阳帽、雨伞</td></tr>
+      <tr><td>📱 防水</td><td><strong>手机防水袋×2</strong>（帆船出海必备）</td></tr>
+      <tr><td>🎒 赶海工具</td><td>小铲子/小桶（鱼鸣嘴退潮后捉螃蟹，超市可买或酒店借）</td></tr>
+      <tr><td>💊 药品</td><td>肠胃药（吃海鲜必备！）、创可贴、晕船药</td></tr>
+      <tr><td>📲 APP</td><td>12306、青岛地铁、大众点评、高德地图、美团/携程（订门票）</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== 行程速览图 ==================== -->
+<div class="section">
+  <h2>🗺️ 行程速览图</h2>
+  <div class="itinerary">
+9/25 Day1  🚄 高铁出发 → 抵达青岛 → 🚶栈桥落日 → 🍽️中山路·王姐烧烤
+                         🏨 入住市区酒店（连住5晚不挪窝）
+9/26 Day2  ⛪ 天主教堂 → 🏛️大学路网红墙 → 🍽️九龙餐厅 → 🏡八大关 → 🍺台东夜市
+9/27 Day3  🌿 小麦岛 → 🍽️船歌鱼水饺 → ⛵帆船出海 → 🌆情人坝 → 五四广场灯光秀
+9/28 Day4  🚕 跨海黄岛一日游 → 🏖️金沙滩 → 🌊鱼鸣嘴悬崖日落 → 🍺台东夜市
+9/29 Day5  ⛰️信号山全景 → 🏛️迎宾馆 → 🍽️双合园 → 🏝️小青岛 → 🍺啤酒博物馆 → 🦞营口路海鲜
+9/30 Day6  🛍️ 伴手礼 → ☕大学路咖啡 → 🍽️排骨米饭 → 🚄 高铁返程
+  </div>
+</div>
+
+<!-- ==================== Footer ==================== -->
+<div class="footer">
+  <p style="font-size:1.05rem;margin-bottom:8px;">
+    🌊 <strong>六天五晚，从老城红瓦绿树到西海岸秘境风光，<br>
+    从奥帆中心扬帆出海到鱼鸣嘴悬崖日落，从信号山俯瞰全景到营口路市场塑料袋啤酒的烟火气——<br>
+    6,000 以内，两人完美的青岛之旅！</strong>
+  </p>
+  <p>本攻略制作于 2026年8月，票价和价格以实际出行时为准，建议出发前再次确认各景点开放时间及信息。</p>
+</div>
+
+</div><!-- .container -->
+
+<!-- ==================== 浮动快捷工具栏 ==================== -->
+<div class="floating-bar">
+  <button class="fab tooltip" data-tip="快捷导航" id="btn-toc" title="快捷导航" aria-label="打开导航目录">📑</button>
+  <button class="fab tooltip" data-tip="夜间模式" id="btn-dark" title="切换夜间模式" aria-label="切换夜间/白天模式">🌙</button>
+  <button class="fab tooltip" data-tip="放大字体" id="btn-font-up" title="放大字体" aria-label="放大字体">A⁺</button>
+  <button class="fab tooltip" data-tip="缩小字体" id="btn-font-down" title="缩小字体" aria-label="缩小字体">A⁻</button>
+  <button class="fab tooltip" data-tip="打印攻略" id="btn-print" title="打印攻略" aria-label="打印">🖨️</button>
+  <button class="fab" id="btn-top" title="回到顶部" aria-label="回到顶部">⬆</button>
+</div>
+
+<!-- ==================== 目录侧面板 ==================== -->
+<div class="toc-overlay" id="toc-overlay"></div>
+<div class="toc-panel" id="toc-panel">
+  <h3>📑 攻略导航 <button class="toc-close" id="toc-close" aria-label="关闭导航">✕</button></h3>
+  <a href="#sec-transport">🚄 交通方案 & 推荐</a>
+  <a href="#sec-hotel">🏨 住宿推荐</a>
+  <div class="toc-row">
+    <a href="#sec-itinerary">📋 每日详细行程</a>
+    <button class="toc-toggle" id="toc-toggle-days" aria-label="展开/收起每日行程" title="展开/收起">▾</button>
+  </div>
+  <div class="toc-subgroup" id="toc-days">
+    <a href="#day1" class="toc-sub">D1 · 抵达+初探老城</a>
+    <a href="#day2" class="toc-sub">D2 · 老城经典一日</a>
+    <a href="#day3" class="toc-sub">D3 · 滨海文艺+帆船出海</a>
+    <a href="#day4" class="toc-sub">D4 · 黄岛一日精华</a>
+    <a href="#day5" class="toc-sub">D5 · 老城全景+海鲜收官</a>
+    <a href="#day6" class="toc-sub">D6 · 收尾+返程</a>
+  </div>
+  <a href="#sec-sailing">⛵ 帆船出海体验</a>
+  <a href="#sec-food">🍴 地道美食清单</a>
+  <a href="#sec-tickets">🎫 景点 & 活动费用汇总</a>
+  <a href="#sec-weather">🌤️ 天气 & 穿衣指南</a>
+  <a href="#sec-pitfalls">⚠️ 避坑指南</a>
+  <a href="#sec-budget">💰 预算明细</a>
+  <a href="#sec-checklist">✅ 出行准备清单</a>
+  <a href="#sec-overview">🗺️ 行程速览图</a>
+  <div class="font-slider">
+    <button id="toc-font-up" title="放大">A⁺</button>
+    <span class="font-label" id="font-size-label">字体：标准</span>
+    <button id="toc-font-down" title="缩小">A⁻</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  /* ===== ID anchors for TOC nav ===== */
+  var sections = document.querySelectorAll('.section');
+  var sectionIds = [
+    'sec-transport', 'sec-hotel', 'sec-itinerary', 'sec-sailing',
+    'sec-food', 'sec-tickets', 'sec-weather', 'sec-pitfalls',
+    'sec-budget', 'sec-checklist', 'sec-overview'
+  ];
+  sections.forEach(function(s, i) { if (sectionIds[i]) s.id = sectionIds[i]; });
+
+  /* ===== DOM refs ===== */
+  var btnTop = document.getElementById('btn-top');
+  var btnToc = document.getElementById('btn-toc');
+  var btnDark = document.getElementById('btn-dark');
+  var btnFontUp = document.getElementById('btn-font-up');
+  var btnFontDown = document.getElementById('btn-font-down');
+  var btnPrint = document.getElementById('btn-print');
+  var tocOverlay = document.getElementById('toc-overlay');
+  var tocPanel = document.getElementById('toc-panel');
+  var tocClose = document.getElementById('toc-close');
+  var tocLinks = tocPanel.querySelectorAll('a[href^="#"]');
+  var tocFontUp = document.getElementById('toc-font-up');
+  var tocFontDown = document.getElementById('toc-font-down');
+  var fontSizeLabel = document.getElementById('font-size-label');
+
+  var body = document.body;
+  var html = document.documentElement;
+  var fontSizeLevel = 0; // -2..+2
+  var fontSizeNames = ['特小', '较小', '标准', '较大', '特大'];
+  var fontSizeValues = [12.5, 14, 15, 16.5, 18];
+
+  /* ===== Back to top ===== */
+  function toggleTopBtn() {
+    var scrollY = window.scrollY || window.pageYOffset;
+    if (scrollY > 600) {
+      btnTop.classList.add('visible');
+    } else {
+      btnTop.classList.remove('visible');
+    }
+  }
+  window.addEventListener('scroll', toggleTopBtn, { passive: true });
+
+  btnTop.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ===== Dark mode ===== */
+  var isDark = localStorage.getItem('trip-guide-dark') === '1';
+  function applyDark(on) {
+    if (on) {
+      body.classList.add('dark');
+      btnDark.textContent = '☀️';
+      btnDark.setAttribute('data-tip', '日间模式');
+    } else {
+      body.classList.remove('dark');
+      btnDark.textContent = '🌙';
+      btnDark.setAttribute('data-tip', '夜间模式');
+    }
+    localStorage.setItem('trip-guide-dark', on ? '1' : '0');
+  }
+  applyDark(isDark);
+
+  btnDark.addEventListener('click', function() {
+    isDark = !body.classList.contains('dark');
+    applyDark(isDark);
+  });
+
+  /* ===== TOC Panel ===== */
+  function openToc() {
+    tocOverlay.classList.add('open');
+    tocPanel.classList.add('open');
+  }
+  function closeToc() {
+    tocOverlay.classList.remove('open');
+    tocPanel.classList.remove('open');
+  }
+  btnToc.addEventListener('click', openToc);
+  tocClose.addEventListener('click', closeToc);
+  tocOverlay.addEventListener('click', closeToc);
+
+  tocLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var targetId = link.getAttribute('href').replace('#', '');
+      var target = document.getElementById(targetId);
+      if (target) {
+        e.preventDefault();
+        closeToc();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  /* ===== TOC days collapse/expand ===== */
+  var tocToggleDays = document.getElementById('toc-toggle-days');
+  var tocDays = document.getElementById('toc-days');
+  var daysExpanded = true;
+  tocToggleDays.addEventListener('click', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    daysExpanded = !daysExpanded;
+    if (daysExpanded) {
+      tocDays.classList.remove('collapsed');
+      tocToggleDays.classList.remove('collapsed');
+      tocToggleDays.textContent = '▾';
+    } else {
+      tocDays.classList.add('collapsed');
+      tocToggleDays.classList.add('collapsed');
+      tocToggleDays.textContent = '▸';
+    }
+  });
+
+  // ESC key closes TOC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && tocPanel.classList.contains('open')) {
+      closeToc();
+    }
+  });
+
+  /* ===== Font size ===== */
+  function applyFontSize() {
+    body.style.fontSize = fontSizeValues[fontSizeLevel + 2] + 'px';
+    fontSizeLabel.textContent = '字体：' + fontSizeNames[fontSizeLevel + 2];
+    localStorage.setItem('trip-guide-font', fontSizeLevel);
+  }
+  function changeFont(delta) {
+    fontSizeLevel = Math.max(-2, Math.min(2, fontSizeLevel + delta));
+    applyFontSize();
+  }
+
+  var savedFont = parseInt(localStorage.getItem('trip-guide-font'));
+  if (!isNaN(savedFont) && savedFont >= -2 && savedFont <= 2) {
+    fontSizeLevel = savedFont;
+  }
+  applyFontSize();
+
+  btnFontUp.addEventListener('click', function() { changeFont(1); });
+  btnFontDown.addEventListener('click', function() { changeFont(-1); });
+  tocFontUp.addEventListener('click', function() { changeFont(1); });
+  tocFontDown.addEventListener('click', function() { changeFont(-1); });
+
+  /* ===== Print ===== */
+  btnPrint.addEventListener('click', function() {
+    window.print();
+  });
+
+  /* ===== Keyboard shortcuts ===== */
+  document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+    var k = e.key.toLowerCase();
+    if (k === 't' && e.ctrlKey) { e.preventDefault(); openToc(); }        // Ctrl+T → TOC
+    if (k === 'd' && e.ctrlKey) { e.preventDefault();                     // Ctrl+D → dark mode
+      isDark = !body.classList.contains('dark');
+      applyDark(isDark);
+    }
+    if (k === 'home' && !e.ctrlKey && !e.metaKey) {                       // Home → scroll top
+      // let native work
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
