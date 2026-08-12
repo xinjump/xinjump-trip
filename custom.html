@@ -223,7 +223,8 @@
     transition: background 0.2s, color 0.2s;
   }
   .drop-btn:hover, .drop.open .drop-btn { background: #dbeafe; color: #1e40af; }
-  .drop-btn::after { content: '▾'; font-size: 0.7rem; margin-left: 2px; }
+  .drop-btn::after { content: '▾'; font-size: 0.7rem; margin-left: 2px; transition: transform 0.2s; }
+  .drop.open .drop-btn::after { transform: rotate(180deg); }
   .drop-menu {
     position: absolute; top: calc(100% + 8px); left: 0;
     min-width: 210px; max-width: 320px;
@@ -232,12 +233,7 @@
     padding: 8px; display: none;
     flex-direction: column; gap: 2px; z-index: 100;
   }
-  .drop:hover .drop-menu, .drop.open .drop-menu { display: flex; }
-  /* 桥接按钮与菜单间的间隙，避免鼠标下移时菜单一闪而过 */
-  .drop-menu::before {
-    content: ''; position: absolute;
-    top: -8px; left: 0; right: 0; height: 8px;
-  }
+  .drop.open .drop-menu { display: flex; }
   .drop-menu a {
     display: block; padding: 7px 12px; border-radius: 8px;
     font-size: 0.84rem; font-weight: 600; color: #334155;
