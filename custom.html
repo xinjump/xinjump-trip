@@ -355,9 +355,34 @@
   /* ===== 空状态 ===== */
   .empty-tip { text-align: center; padding: 30px 20px; color: #94a3b8; font-size: 0.92rem; }
 
+  /* ===== 移动端适配（手机 / 小屏平板） ===== */
   @media (max-width: 640px) {
-    .builder-card { padding: 22px 18px; }
-    .section { padding: 20px 18px; }
+    .container { padding: 0 16px; }
+    .hero { padding: 44px 16px 52px; }
+    .builder-card { padding: 22px 16px; margin-top: -28px; }
+    .guide-hero { padding: 24px 18px 22px; }
+    .section { padding: 20px 16px; }
+    /* iOS 聚焦输入框不自动缩放 */
+    .field input, .field select { font-size: 16px; }
+    /* 快捷导航：压缩间距，吸顶更紧凑 */
+    .quick-nav { top: 8px; padding: 10px; gap: 6px; }
+    .quick-nav a, .drop-btn { padding: 5px 10px; font-size: 0.8rem; }
+    /* 每日行程下拉：右对齐 + 限高滚动，避免溢出屏幕 */
+    .drop-menu { left: auto; right: 0; max-width: min(320px, calc(100vw - 24px)); max-height: 60vh; overflow-y: auto; }
+    /* 锚点定位：预留吸顶多行导航的高度 */
+    .section { scroll-margin-top: 120px; }
+    .day-card { scroll-margin-top: 130px; }
+    /* 每日卡片：标题可换行，箭头固定 */
+    .day-header { flex-wrap: wrap; }
+    .day-title { flex: 1 1 60%; min-width: 0; }
+    .day-arrow { flex: 0 0 auto; }
+    .tl-item { gap: 10px; }
+    .tl-time { width: 44px; font-size: 0.75rem; }
+    /* 表格：小屏压缩字号，减少横向滚动量 */
+    .table-wrap { -webkit-overflow-scrolling: touch; }
+    th, td { padding: 8px 10px; font-size: 0.85rem; }
+    .budget-grid { grid-template-columns: 1fr; }
+    .footer { padding-bottom: 24px; }
   }
 
   @media print {

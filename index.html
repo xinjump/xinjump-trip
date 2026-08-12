@@ -209,10 +209,20 @@
   #btn-top.visible { opacity: 1; pointer-events: auto; }
 
   @media (max-width: 720px) {
+    .container { padding: 0 16px; }
+    .hero { padding: 56px 20px 130px; }
+    .search-card { padding: 22px 18px 20px; }
     .sc-fields { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 460px) {
+    .hero { padding: 44px 16px 116px; }
+    .search-card { margin-top: -66px; padding: 20px 16px 18px; }
     .sc-fields { grid-template-columns: 1fr; }
+    /* iOS 聚焦输入框不自动缩放 */
+    .sc-field input, .sc-field select { font-size: 16px; }
+    .hot-tag { padding: 3px 10px; font-size: 0.78rem; }
+    .s-btn { height: 46px; font-size: 1rem; }
+    .floating-bar { right: 12px; bottom: 20px; }
   }
 
   @media print {
