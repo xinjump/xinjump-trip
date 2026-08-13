@@ -6,12 +6,14 @@
 
 ## ✨ 功能特性
 
-- **一键生成**：首页选择目的地 / 天数 / 人数，自动跳转生成专属攻略
-- **URL 直链**：支持 `custom.html?from=西安&to=青岛&days=5&persons=2` 参数直达，便于分享
+- **一键生成**：首页选择目的地 / 天数 / 人数 / 人均预算，自动跳转生成专属攻略
+- **人均预算档位**：支持「经济实惠 2000-4000 元 / 舒适标准 3500-6500 元 / 品质尊享 5000-10000+ 元 / 智能推荐」四档，选定后**内容随之调整**：预算数字按档位区间计算、住宿按每晚上限筛选、每日行程中的餐饮替换为对应价位的当地推荐、美食清单按价位精选、景点清单按票价重排，整体不超出所选预算
+- **吃喝不重样**：每日行程中的美食自动去重——同一美食每天最多出现 1 次、全程最多保留 2 次（视为热门推荐），补充日午餐/晚餐必选不同款式；去重不足时替换为其他当地美食，避免连吃多天同一家
+- **行程自动补足**：所选天数超出城市模板收录范围时，自动基于该城市景点/美食库补足行程，并给出提示
 - **逐日行程**：每日卡片按时间轴展开，点击标题可折叠/展开当天内容
 - **快捷导航**：吸顶导航条 + 平滑滚动；「每日行程」下拉菜单支持一键定位到任意一天（D1~Dn）
-- **行程自动补足**：所选天数超出城市模板收录范围时，自动基于该城市景点/美食库补足行程，并给出提示
 - **完整攻略区块**：目的地简介、交通方案、住宿推荐、每日行程、地道美食、景点参考、预算估算、避坑贴士
+- **URL 直链**：支持 `custom.html?from=西安&to=青岛&days=5&persons=2&budget=comfort` 参数直达，便于分享
 - **深色模式**：右上角 🌙 按钮或 `Ctrl + D` 切换，偏好保存在 `localStorage`
 - **打印友好**：打印时自动隐藏表单与导航，展开全部行程，适合导出 PDF
 - **响应式布局**：适配桌面 / 平板 / 手机，默认出发地为西安
@@ -37,7 +39,7 @@ npx serve .
 浏览器打开：
 
 ```
-custom.html?from=西安&to=青岛&days=5&persons=2
+custom.html?from=西安&to=青岛&days=5&persons=2&budget=comfort
 ```
 
 | 参数 | 说明 | 示例 |
@@ -46,13 +48,29 @@ custom.html?from=西安&to=青岛&days=5&persons=2
 | `to` | 目的地 | `青岛` |
 | `days` | 旅游天数（3-10） | `5` |
 | `persons` | 出行人数（1-10） | `2` |
+| `budget` | 人均预算档位（`economy` / `comfort` / `quality` / `auto`，可选，默认 `auto`） | `comfort` |
 
 ## 📄 页面说明
 
 | 页面 | 作用 |
 | ---- | ---- |
-| `index.html` | 首页入口：选择目的地 / 天数 / 人数，或点击热门目的地标签，跳转生成 |
+| `index.html` | 首页入口：选择目的地 / 天数 / 人数 / 人均预算，或点击热门目的地标签，跳转生成 |
 | `custom.html` | 攻略生成器：读取 URL 参数自动生成，也支持在页面内修改参数重新生成 |
+
+## 🏙️ 目的地（27 城）
+
+首页目的地下拉与生成器选项均由 `assets/js/cities.js` 的 `CITY_LIST` 驱动，运行时自动按 **线级 → 地区 → 名称拼音** 排序：
+
+| 线级 | 地区 | 城市 |
+| ---- | ---- | ---- |
+| **一线** | 中国内地 | 北京、上海、广州、深圳 |
+| **一线** | 港澳台 | 香港 |
+| **新一线** | 中国内地 | 成都、杭州、重庆、武汉、苏州、西安、南京、长沙、天津、郑州、东莞、青岛、沈阳、宁波、昆明 |
+| **二线** | 中国内地 | 厦门、大连 |
+| **三线及以下** | 中国内地 | 三亚、威海、大理、丽江、西双版纳 |
+| **海外** | 预留 | （未来扩展，如东京 / 曼谷 / 巴黎） |
+
+> 首页「热门目的地」标签取自一线 + 新一线清单（`index.html` 中 `hotNames` 变量），新增城市如需上榜请同步维护。
 
 ## 📁 项目结构
 
@@ -63,19 +81,42 @@ xinjump-trip/
 ├── README.md
 └── assets/
     └── js/
-        ├── cities.js       # 城市列表 CITY_LIST 与数据结构说明
-        └── cities/         # 每个城市一个数据文件（共 11 个）
-            ├── qingdao.js  # 青岛
-            ├── beijing.js  # 北京
-            ├── kunming.js  # 昆明
-            ├── dali.js     # 大理
-            ├── lijiang.js  # 丽江
-            ├── xishuangbanna.js # 西双版纳
-            ├── sanya.js    # 三亚
-            ├── weihai.js   # 威海
-            ├── dalian.js   # 大连
-            ├── xiamen.js   # 厦门
-            └── hongkong.js # 香港
+        ├── cities.js       # 城市注册表 CITY_LIST（线级/地区排序）与数据结构说明
+        └── cities/         # 城市数据，按 地区 → 线级 分层（共 27 城）
+            ├── cn/                     # 中国内地
+            │   ├── tier1/              #   一线（4）
+            │   │   ├── beijing.js      # 北京
+            │   │   ├── shanghai.js     # 上海
+            │   │   ├── guangzhou.js    # 广州
+            │   │   └── shenzhen.js     # 深圳
+            │   ├── tierNew/            #   新一线（15）
+            │   │   ├── chengdu.js      # 成都
+            │   │   ├── hangzhou.js     # 杭州
+            │   │   ├── chongqing.js    # 重庆
+            │   │   ├── wuhan.js        # 武汉
+            │   │   ├── suzhou.js       # 苏州
+            │   │   ├── xian.js         # 西安
+            │   │   ├── nanjing.js      # 南京
+            │   │   ├── changsha.js     # 长沙
+            │   │   ├── tianjin.js      # 天津
+            │   │   ├── zhengzhou.js    # 郑州
+            │   │   ├── dongguan.js     # 东莞
+            │   │   ├── qingdao.js      # 青岛
+            │   │   ├── shenyang.js     # 沈阳
+            │   │   ├── ningbo.js       # 宁波
+            │   │   └── kunming.js      # 昆明
+            │   ├── tier2/              #   二线（2）
+            │   │   ├── xiamen.js       # 厦门
+            │   │   └── dalian.js       # 大连
+            │   └── tier3/              #   三线及以下（5）
+            │       ├── sanya.js        # 三亚
+            │       ├── weihai.js       # 威海
+            │       ├── dali.js         # 大理
+            │       ├── lijiang.js      # 丽江
+            │       └── xishuangbanna.js # 西双版纳
+            ├── hk-mo-tw/               # 港澳台（1）
+            │   └── hongkong.js         # 香港
+            └── overseas/               # 海外（预留，未来按国家/大洲再建子目录）
 ```
 
 ## 🏙️ 城市数据结构
@@ -113,22 +154,40 @@ window.CITY_DATA['青岛'] = {
 
 两步即可：
 
-1. **新建数据文件**：复制任一现有城市文件（如 `qingdao.js`），在 `assets/js/cities/` 下新建 `xxx.js`，按上述结构写入数据（`days` 至少提供一个 3-7 天模板，`foods` / `spots` 建议 8 条以上，便于行程自动补足）。
-2. **注册城市**：在 `assets/js/cities.js` 的 `CITY_LIST` 末尾追加：
+1. **新建数据文件**：复制任一现有城市文件（如 `cn/tier1/beijing.js`），放到对应目录：
+   - 国内城市 → `assets/js/cities/cn/<线级>/xxx.js`（`tier1` / `tierNew` / `tier2` / `tier3`）
+   - 港澳台 → `assets/js/cities/hk-mo-tw/xxx.js`
+   - 海外 → `assets/js/cities/overseas/<国家或大洲>/xxx.js`（目录不存在则新建）
+   
+   按城市数据结构写入数据（`days` 至少提供一个 3-7 天模板，`foods` / `spots` 建议 8 条以上，便于行程自动补足）。
+2. **注册城市**：在 `assets/js/cities.js` 的 `CITY_LIST` 中，按地区分组插入一条记录（`region` 与 `tier` 决定目录归属与排序权重，无需手动排位置）：
 
 ```js
 window.CITY_LIST = [
-  // ... 已有城市
-  { name: '新城市名', file: 'xxx.js' }
+  /* ---- 中国内地 · 一线 ---- */
+  { name: '北京', region: 'cn', tier: 'tier1', file: 'cn/tier1/beijing.js' },
+  // ...
+  /* ---- 海外 ---- */
+  { name: '东京', region: 'overseas', tier: 'overseas', file: 'overseas/japan/tokyo.js' }
 ];
 ```
 
-保存刷新后，新城市会自动出现在首页目的地下拉、热门标签与生成器的目的地选项中。
+字段说明：
+
+| 字段 | 取值 | 说明 |
+| ---- | ---- | ---- |
+| `region` | `cn` / `hk-mo-tw` / `overseas` | 所属地区，决定目录归属 |
+| `tier` | `tier1`(一线) / `tierNew`(新一线) / `tier2`(二线) / `tier3`(三线及以下) / `overseas`(海外) | 线级，决定下拉排序 |
+| `file` | 相对 `assets/js/cities/` 的路径 | 与 `region`/`tier` 对应的实际文件位置 |
+
+保存刷新后，新城市会自动出现在首页目的地下拉与生成器的目的地选项中，并按线级自动排序（热门标签为独立清单，如需上榜请同步 `index.html` 的 `hotNames`）。
 
 ## 🛠️ 技术要点
 
 - **无框架**：原生 JS + 字符串拼接渲染，`custom.html` 中 `build()` 负责生成攻略 HTML
 - **数据加载**：`cities.js` 定义 `CITY_LIST`，页面动态注入各城市 `<script>`，全部加载完成后初始化
+- **行程生成流水线**：`getPlan`（取模板或补足）→ `extendPlan`（超天数补足，补充日午/晚餐各取不同款）→ `ensureLunch`（补上午餐）→ `applyBudgetToPlan`（按档位替换餐饮）→ `dedupePlan`（最终去重巡检：每天 ≤1 次、全程 ≤2 次）
+- **美食识别防误判**：餐饮行识别会先剥离括号（店名/价格）与备注再匹配，多个同名子串取最长（如「海鲜」⊂「海鲜水饺」），店名命中只计数不替换，避免共享店名（如楼外楼）导致误替换
 - **每日定位**：快捷导航下拉通过锚点 `#day-N` 实现逐日定位，`scroll-margin-top` 抵消吸顶导航遮挡；下拉支持 hover 与 click 两种展开方式
 - **行程折叠**：基于 `resultBox` 事件委托，点击 `.day-header` 切换当天折叠状态
 - **打印适配**：`@media print` 下隐藏表单与导航、展开全部行程、保留封面配色

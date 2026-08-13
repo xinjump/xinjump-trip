@@ -1,48 +1,78 @@
 /* ================================================================
- * 城市数据主入口
- * 每个城市一个数据文件（assets/js/cities/xxx.js），文件名注册到 CITY_LIST。
- * 新增城市两步：
- *   1. 新建 assets/js/cities/xxx.js，往 window.CITY_DATA 里写一条数据
- *   2. 在 CITY_LIST 末尾追加 { name, file }
+ * 城市注册表（唯一入口）
+ *
+ * 目录结构（按 地区 → 线级 分层，方便扩展）：
+ *   assets/js/cities/
+ *   ├── cn/          # 中国内地
+ *   │   ├── tier1/   #   一线
+ *   │   ├── tierNew/ #   新一线
+ *   │   ├── tier2/   #   二线
+ *   │   └── tier3/   #   三线及以下
+ *   ├── hk-mo-tw/    # 港澳台
+ *   └── overseas/    # 海外（预留：未来按国家/大洲再建子目录）
+ *
+ * 新增城市：
+ *   1. 数据文件放进对应地区/线级目录（见上）
+ *   2. 在下方 CITY_LIST 按分组插入一条记录：
+ *        { name: '城市名', region: 'cn', tier: 'tier1', file: 'cn/tier1/xxx.js' }
+ *      region: cn / hk-mo-tw / overseas
+ *      tier:   tier1(一线) / tierNew(新一线) / tier2(二线) / tier3(三线及以下) / overseas(海外)
+ *   列表会在运行时按「线级优先、地区次之」自动排序，无需手动排位置。
  * ================================================================ */
-window.CITY_DATA = {};
 
-/* 出发地固定为西安；CITY_LIST 顺序即下拉框顺序 */
+/* 排序权重：线级优先、地区次之（决定目的地下拉顺序） */
+var TIER_ORDER = { tier1: 0, tierNew: 1, tier2: 2, tier3: 3, overseas: 4 };
+var REGION_ORDER = { cn: 0, 'hk-mo-tw': 1, overseas: 2 };
+
 window.CITY_LIST = [
-  { name: '青岛',  file: 'qingdao.js' },
-  { name: '北京',  file: 'beijing.js' },
-  { name: '昆明',  file: 'kunming.js' },
-  { name: '大理',  file: 'dali.js' },
-  { name: '丽江',  file: 'lijiang.js' },
-  { name: '西双版纳', file: 'xishuangbanna.js' },
-  { name: '三亚',  file: 'sanya.js' },
-  { name: '威海',  file: 'weihai.js' },
-  { name: '大连',  file: 'dalian.js' },
-  { name: '厦门',  file: 'xiamen.js' },
-  { name: '香港',  file: 'hongkong.js' }
+  /* ---- 中国内地 · 一线 ---- */
+  { name: '北京',  region: 'cn',       tier: 'tier1',   file: 'cn/tier1/beijing.js' },
+  { name: '上海',  region: 'cn',       tier: 'tier1',   file: 'cn/tier1/shanghai.js' },
+  { name: '广州',  region: 'cn',       tier: 'tier1',   file: 'cn/tier1/guangzhou.js' },
+  { name: '深圳',  region: 'cn',       tier: 'tier1',   file: 'cn/tier1/shenzhen.js' },
+
+  /* ---- 中国内地 · 新一线 ---- */
+  { name: '成都',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/chengdu.js' },
+  { name: '杭州',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/hangzhou.js' },
+  { name: '重庆',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/chongqing.js' },
+  { name: '武汉',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/wuhan.js' },
+  { name: '苏州',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/suzhou.js' },
+  { name: '西安',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/xian.js' },
+  { name: '南京',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/nanjing.js' },
+  { name: '长沙',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/changsha.js' },
+  { name: '天津',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/tianjin.js' },
+  { name: '郑州',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/zhengzhou.js' },
+  { name: '东莞',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/dongguan.js' },
+  { name: '青岛',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/qingdao.js' },
+  { name: '沈阳',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/shenyang.js' },
+  { name: '宁波',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/ningbo.js' },
+  { name: '昆明',  region: 'cn',       tier: 'tierNew', file: 'cn/tierNew/kunming.js' },
+
+  /* ---- 中国内地 · 二线 ---- */
+  { name: '厦门',  region: 'cn',       tier: 'tier2',   file: 'cn/tier2/xiamen.js' },
+  { name: '大连',  region: 'cn',       tier: 'tier2',   file: 'cn/tier2/dalian.js' },
+
+  /* ---- 中国内地 · 三线及以下 ---- */
+  { name: '三亚',  region: 'cn',       tier: 'tier3',   file: 'cn/tier3/sanya.js' },
+  { name: '威海',  region: 'cn',       tier: 'tier3',   file: 'cn/tier3/weihai.js' },
+  { name: '大理',  region: 'cn',       tier: 'tier3',   file: 'cn/tier3/dali.js' },
+  { name: '丽江',  region: 'cn',       tier: 'tier3',   file: 'cn/tier3/lijiang.js' },
+  { name: '西双版纳', region: 'cn',    tier: 'tier3',   file: 'cn/tier3/xishuangbanna.js' },
+
+  /* ---- 港澳台 ---- */
+  { name: '香港',  region: 'hk-mo-tw', tier: 'tier1',   file: 'hk-mo-tw/hongkong.js' },
+
+  /* ---- 海外（示例，取消注释即可启用；tier 可按当地定位填） ---- */
+  // { name: '东京', region: 'overseas', tier: 'overseas', file: 'overseas/japan/tokyo.js' }
 ];
 
-/*
- * 城市数据结构说明：
- * {
- *   cover:    'CSS 渐变',
- *   emoji:    '封面图标',
- *   tagline:  '一句话副标题',
- *   bestMonths: '推荐月份，如 5-10月',
- *   intro:    '城市简介 1-2 句',
- *   transport:[ { mode:'🚄 高铁', line:'G2064 西安北 09:37 → 青岛站 15:50', time:'约6小时13分', price:'~643 元' } ],
- *   hotels:   [ { type:'经济型', rec:'如家/汉庭…', price:'200-280 元/晚', note:'…' } ],
- *   foods:    [ { name:'鲅鱼水饺', shop:'船歌鱼水饺、双合园饺子', per:'70-90 元', note:'…' } ],
- *   spots:    [ { name:'栈桥', ticket:'免费', time:'1h', note:'回澜阁、喂海鸥' } ],
- *   days: {   // 3-7 天行程模板
- *     3: [ { title:'D1 主题', tag:'标签', items:[ {t:'上午', x:'…'} ] }, … ],
- *     4: […], 5: […], 6: […], 7: […]
- *   },
- *   budget: {
- *     perDay: [最低, 最高],      // 人均每日目的地消费（住+吃+市内交通+门票）
- *     transport: [最低, 最高],   // 往返大交通人均
- *     note: '预算说明'
- *   },
- *   tips: [ '避坑/提示 数组' ]
- * }
- */
+/* 按 线级 → 地区 → 名称 排序，保证下拉展示稳定有序 */
+(function () {
+  window.CITY_LIST.sort(function (a, b) {
+    var t = (TIER_ORDER[a.tier] == null ? 99 : TIER_ORDER[a.tier]) - (TIER_ORDER[b.tier] == null ? 99 : TIER_ORDER[b.tier]);
+    if (t) return t;
+    var r = (REGION_ORDER[a.region] == null ? 99 : REGION_ORDER[a.region]) - (REGION_ORDER[b.region] == null ? 99 : REGION_ORDER[b.region]);
+    if (r) return r;
+    return a.name.localeCompare(b.name, 'zh');
+  });
+})();

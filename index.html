@@ -55,7 +55,7 @@
   }
   .sc-fields {
     display: grid;
-    grid-template-columns: 1.1fr 1.4fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 16px;
   }
   .sc-field label {
@@ -287,24 +287,23 @@
             <option value="10">10 人</option>
           </select>
         </div>
+        <div class="sc-field">
+          <label for="s-budget">人均预算</label>
+          <select id="s-budget">
+            <option value="auto" selected>智能推荐（不限）</option>
+            <option value="economy">经济实惠 · 2000-4000 元</option>
+            <option value="comfort">舒适标准 · 3500-6500 元</option>
+            <option value="quality">品质尊享 · 5000-10000+ 元</option>
+          </select>
+        </div>
       </div>
       <button type="submit" class="s-btn" id="s-btn">✨ 生成攻略</button>
     </form>
   </section>
 
-  <!-- ==================== 热门目的地快捷选择 ==================== -->
+  <!-- ==================== 热门目的地快捷选择（一线+新一线，由 JS 渲染） ==================== -->
   <div class="hot-tip">或直接选择热门目的地：</div>
-  <div class="hot-tag" data-to="青岛">青岛</div>
-  <div class="hot-tag" data-to="北京">北京</div>
-  <div class="hot-tag" data-to="昆明">昆明</div>
-  <div class="hot-tag" data-to="大理">大理</div>
-  <div class="hot-tag" data-to="丽江">丽江</div>
-  <div class="hot-tag" data-to="西双版纳">西双版纳</div>
-  <div class="hot-tag" data-to="三亚">三亚</div>
-  <div class="hot-tag" data-to="威海">威海</div>
-  <div class="hot-tag" data-to="大连">大连</div>
-  <div class="hot-tag" data-to="厦门">厦门</div>
-  <div class="hot-tag" data-to="香港">香港</div>
+  <div id="hot-tags"></div>
 
   <!-- ==================== Footer ==================== -->
   <div class="footer">
@@ -331,16 +330,19 @@
   var toSel = document.getElementById('s-to');
   var daysSel = document.getElementById('s-days');
   var personsSel = document.getElementById('s-persons');
+  var budgetSel = document.getElementById('s-budget');
   var btn = document.getElementById('s-btn');
 
   function go(to) {
     var from = fromSel.value.trim() || '西安';
     var days = daysSel.value || 5;
     var persons = personsSel.value || 2;
+    var budget = budgetSel.value || 'auto';
     var url = 'custom.html?from=' + encodeURIComponent(from) +
               '&to=' + encodeURIComponent(to) +
               '&days=' + days +
-              '&persons=' + persons;
+              '&persons=' + persons +
+              '&budget=' + budget;
     location.href = url;
   }
 
@@ -358,19 +360,13 @@
     go(to);
   });
 
-  /* 热门目的地快捷入口：点击先同步表单再跳转 */
-  Array.prototype.forEach.call(document.querySelectorAll('.hot-tag'), function(tag) {
-    tag.addEventListener('click', function() {
-      toSel.value = tag.getAttribute('data-to');
-      go(tag.getAttribute('data-to'));
-    });
-  });
-
   /* ===== 加载城市数据并填充目的地下拉（与生成器页一致，含 emoji） ===== */
   var loader = document.createElement('script');
   loader.src = 'assets/js/cities.js';
   loader.onload = function() {
     var list = window.CITY_LIST || [];
+    /* 先初始化全局 CITY_DATA，城市数据脚本依赖它注册数据 */
+    window.CITY_DATA = window.CITY_DATA || {};
     var loaded = 0;
     function fill() {
       if (loaded < list.length) return;
@@ -380,6 +376,25 @@
         opts.push('<option value="' + c.name + '">' + c.name + '（' + emoji + '）</option>');
       });
       toSel.insertAdjacentHTML('beforeend', opts.join(''));
+
+      /* 热门目的地：仅展示一线+新一线城市（存在才渲染） */
+      var hotNames = ['北京', '上海', '广州', '深圳', '成都', '杭州', '重庆', '武汉',
+                      '苏州', '西安', '南京', '长沙', '天津', '郑州', '东莞',
+                      '青岛', '沈阳', '宁波', '昆明'];
+      var hotTags = document.getElementById('hot-tags');
+      hotNames.forEach(function(name) {
+        if (window.CITY_DATA && window.CITY_DATA[name]) {
+          var el = document.createElement('div');
+          el.className = 'hot-tag';
+          el.setAttribute('data-to', name);
+          el.textContent = name;
+          el.addEventListener('click', function() {
+            toSel.value = name;
+            go(name);
+          });
+          hotTags.appendChild(el);
+        }
+      });
     }
     list.forEach(function(c) {
       var s = document.createElement('script');

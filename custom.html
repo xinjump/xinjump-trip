@@ -453,6 +453,15 @@
         </select>
       </div>
       <div class="field">
+        <label for="f-budget">人均预算</label>
+        <select id="f-budget">
+          <option value="auto" selected>智能推荐（不限）</option>
+          <option value="economy">经济实惠 · 2000-4000 元（二线水平）</option>
+          <option value="comfort">舒适标准 · 3500-6500 元（新一线水平）</option>
+          <option value="quality">品质尊享 · 5000-10000+ 元（一线水平）</option>
+        </select>
+      </div>
+      <div class="field">
         <button type="submit" class="btn-generate">✨ 生成攻略</button>
       </div>
     </form>
@@ -496,7 +505,10 @@
   if (list.length === 0) init();
 
   /* ============ 核心逻辑 ============ */
-  var CITY_DATA = window.CITY_DATA || {};
+  /* 必须在动态加载城市数据脚本前初始化全局 CITY_DATA，
+     否则城市脚本执行 window.CITY_DATA['城市名'] = d 时 window.CITY_DATA 为 undefined 会抛错 */
+  window.CITY_DATA = window.CITY_DATA || {};
+  var CITY_DATA = window.CITY_DATA;
   var resultBox = document.getElementById('result');
 
   /* 每日行程下拉：点击按钮展开/收起，点击菜单项后收起 */
@@ -552,14 +564,14 @@
     return String(name).split('（')[0].split('(')[0].trim();
   }
 
-  /* 模板天数不足时，用该城市景点/美食库自动补足天数 */
-  function extendPlan(city, plan, days) {
+  /* 模板天数不足时，用该城市景点/美食库自动补足天数；foods/spots 可传档位过滤后的池 */
+  function extendPlan(city, plan, days, foods, spots) {
     if (plan.length >= days) return plan;
     var lastDay = plan[plan.length - 1];
     var core = plan.slice(0, plan.length - 1);
     var extra = days - plan.length;
-    var spots = city.spots || [];
-    var foods = city.foods || [];
+    spots = spots || city.spots || [];
+    foods = foods || city.foods || [];
 
     /* 收集模板中已出现的景点简称，避免补充日重复 */
     var used = {};
@@ -574,10 +586,36 @@
     /* 模板未覆盖的景点池，按顺序分配给补充日，用尽后降级为休闲日（绝不重复景点） */
     var pool = spots.filter(function (s) { return !used[s.name]; });
 
+    /* 模板中已出现过的美食（含店名），补充日避开，避免「吃喝」重样 */
+    var usedFood = {};
+    plan.forEach(function (day) {
+      (day.items || []).forEach(function (it) {
+        foods.forEach(function (f) {
+          if (it.x.indexOf(f.name) > -1) { usedFood[f.name] = 1; return; }
+          var shops = String(f.shop || '').split(/[、,，\/]/);
+          for (var m = 0; m < shops.length; m++) {
+            var s = shops[m].trim();
+            if (s.length >= 2 && it.x.indexOf(s) > -1) { usedFood[f.name] = 1; return; }
+          }
+        });
+      });
+    });
+    var foodPool = foods.filter(function (f) { return !usedFood[f.name]; });
+    if (!foodPool.length) foodPool = foods.slice(); /* 模板已吃遍全城，回退全量 */
+    var foodCursor = 0;
+    /* 依次取一道未用过的美食（补充日之间也不重样）；池只剩一款时返回 null，晚餐改通用文案 */
+    function nextFood() {
+      if (foodCursor >= foodPool.length) return null;
+      var f = foodPool[foodCursor];
+      foodCursor++;
+      return f;
+    }
+
     var added = [];
     for (var i = 0; i < extra; i++) {
       var n = core.length + i + 1;
-      var f = foods[i % foods.length];
+      var f1 = nextFood();
+      var f2 = nextFood();
       var s1 = pool[i * 2];
       var s2 = pool[i * 2 + 1];
 
@@ -599,15 +637,20 @@
         afternoon = '🚶 市区街巷 City Walk，随走随拍，感受当地烟火气';
       }
 
+      /* 午餐/晚餐各取一款不重样的美食；池子只够一款时晚餐改为自由觅食 */
+      var lunchTxt = f1 ? '🍽️ ' + f1.name + '（' + f1.shop + '）' : '🍽️ 当地口碑店午餐';
+      var dinnerTxt = f2
+        ? '🍜 晚餐：' + f2.name + '（' + f2.shop + '），饭后逛夜市/步行街'
+        : '🍜 晚餐：夜市/美食街自由觅食，饭后散步消食';
       added.push({
         title: title,
         tag: tag,
         items: [
           { t: '上午', x: morning },
-          { t: '中午', x: '🍽️ ' + f.name + '（' + f.shop + '）' },
+          { t: '中午', x: lunchTxt },
           { t: '下午', x: afternoon },
           { t: '傍晚', x: '🌆 找个观景位看日落，饭后散步消食' },
-          { t: '晚间', x: '🍜 晚餐：' + f.name + '（' + f.shop + '），饭后逛夜市/步行街' }
+          { t: '晚间', x: dinnerTxt }
         ]
       });
     }
@@ -620,9 +663,9 @@
     return core.concat(added);
   }
 
-  /* 参考青岛写法：为行程缺失午餐的日子自动补上「值得吃的中午饭」 */
-  function ensureLunch(city, plan) {
-    var foods = city.foods || [];
+  /* 参考青岛写法：为行程缺失午餐的日子自动补上「值得吃的中午饭」；foods 可传档位过滤后的池 */
+  function ensureLunch(city, plan, foods) {
+    foods = foods || city.foods || [];
     if (!foods.length) return plan;
     var cursor = 0;
     var usedAll = {}; /* 跨天已推荐过的美食，避免天天重样 */
@@ -682,6 +725,201 @@
     return plan;
   }
 
+  /* ===== 人均预算档位 ===== */
+  var BUDGET_LEVELS = {
+    economy: { id: 'economy', label: '经济实惠', range: [2000, 4000],  displayHigh: null,     desc: '参考二线城市消费水平' },
+    comfort: { id: 'comfort', label: '舒适标准', range: [3500, 6500],  displayHigh: null,     desc: '参考新一线城市消费水平' },
+    quality: { id: 'quality', label: '品质尊享', range: [5000, 10000], displayHigh: '10000+', desc: '参考一线城市消费水平' },
+    auto: null
+  };
+
+  /* 解析 "300-450 元/晚" 之类的价格字符串，返回 [min, max]；无法解析返回 null */
+  function parsePriceNum(str) {
+    var m = String(str || '').match(/(\d+(?:\.\d+)?)\s*[-~至]\s*(\d+(?:\.\d+)?)/);
+    if (m) return [parseFloat(m[1]), parseFloat(m[2])];
+    m = String(str || '').match(/(\d+(?:\.\d+)?)/);
+    if (m) return [parseFloat(m[1]), parseFloat(m[1])];
+    return null;
+  }
+
+  /* 按预算档位筛选住宿：每晚房间价上限 ≈ (档位人均上限 - 往返交通) / 天数 × 0.9（默认双人拼房）。
+     若全部超出则回退为按价格升序取最便宜的一家，并标记 fallback 供页面提示。 */
+  function pickHotels(hotels, level, days, transport) {
+    var list = (hotels || []).slice();
+    if (!level) return { hotels: list, fallback: false };
+    var cap = Math.max(150, Math.round((level.range[1] - transport[1]) / days * 0.9));
+    var filtered = list.filter(function (h) {
+      var p = parsePriceNum(h.price);
+      return !p || p[1] <= cap;
+    });
+    if (filtered.length) return { hotels: filtered, fallback: false };
+    list.sort(function (a, b) {
+      var pa = parsePriceNum(a.price), pb = parsePriceNum(b.price);
+      return (pa ? pa[0] : 1e9) - (pb ? pb[0] : 1e9);
+    });
+    return { hotels: list.slice(0, 1), fallback: true };
+  }
+
+  /* 解析价格为"人均参考值"（区间取中值，如 "150-250 元/人" → 200），免费/无法解析返回 null */
+  function priceMid(str) {
+    var p = parsePriceNum(str);
+    if (!p) return null;
+    return Math.round((p[0] + p[1]) / 2);
+  }
+
+  /* 人均参考文案：per 已含单位（元/人、元、元/只、元/斤等），无「元」时补默认单位，避免「元/人/人」 */
+  function perTxt(per) {
+    per = String(per || '');
+    return '约' + per + (per.indexOf('元') > -1 ? '' : '元/人');
+  }
+
+  /* 各档位美食人均上限（按 priceMid 判断） */
+  var FOOD_CAPS = { economy: 80, comfort: 200, quality: Infinity };
+
+  /* 按档位过滤美食池：economy 只留低价小吃、comfort 中档、quality 高价位优先；
+     过滤后不足 3 项则回退全量（保证清单可用）。 */
+  function foodPoolForLevel(foods, level) {
+    var list = (foods || []).slice();
+    if (!level) return list;
+    var cap = FOOD_CAPS[level.id] || Infinity;
+    var rated = list.filter(function (f) {
+      var m = priceMid(f.per);
+      return m == null || m <= cap; /* 无价格信息视为可接受 */
+    });
+    if (rated.length >= 3) {
+      if (level.id === 'quality') {
+        rated.sort(function (a, b) { return (priceMid(b.per) || 0) - (priceMid(a.per) || 0); });
+      }
+      return rated;
+    }
+    if (level.id === 'quality') {
+      list.sort(function (a, b) { return (priceMid(b.per) || 0) - (priceMid(a.per) || 0); });
+    }
+    return list; /* 回退全量 */
+  }
+
+  /* 按档位重排景点池：economy 免费/低价优先（必去景点保留，仅调序），quality 高票价优先 */
+  function spotPoolForLevel(spots, level) {
+    var list = (spots || []).slice();
+    if (!level) return list;
+    if (level.id === 'economy') {
+      list.sort(function (a, b) {
+        var pa = priceMid(a.ticket), pb = priceMid(b.ticket);
+        return (pa == null ? 0 : pa) - (pb == null ? 0 : pb);
+      });
+      return list;
+    }
+    if (level.id === 'quality') {
+      list.sort(function (a, b) {
+        var pa = priceMid(a.ticket), pb = priceMid(b.ticket);
+        return (pb || 0) - (pa || 0);
+      });
+    }
+    return list;
+  }
+
+  /* 从档位美食池挑一家（轮询 + 跨天去重）；池中全部用过则返回 null，交回调用方保留原样，避免硬替换成重复美食 */
+  function pickFoodForLevel(pool, used, cursor) {
+    if (!pool.length) return null;
+    for (var k = 0; k < pool.length; k++) {
+      var f = pool[(cursor + k) % pool.length];
+      if (!used[f.name]) { used[f.name] = 1; return f; }
+    }
+    return null;
+  }
+
+  /* 把行程中所有 🍽️/🍜 餐饮行按档位替换为对应价位的美食（auto 档不替换，保留数据原样） */
+  function applyBudgetToPlan(plan, city, level) {
+    if (!level) return plan;
+    var pool = foodPoolForLevel(city.foods || [], level);
+    if (!pool.length) return plan;
+    var used = {};
+    var cursor = 0;
+    plan.forEach(function (day) {
+      (day.items || []).forEach(function (it) {
+        if (/[\u{1F37D}\u{1F35C}]/u.test(it.x)) { /* 🍽 / 🍜 码点匹配，避免误伤 🏛️ 等共享高代理的 emoji */
+          var f = pickFoodForLevel(pool, used, cursor++);
+          if (f) it.x = '🍽️ ' + f.name + '（' + f.shop + '，' + perTxt(f.per) + '）' + (f.note ? ' · ' + f.note : '');
+        }
+      });
+    });
+    return plan;
+  }
+
+  /* 最终去重巡检：吃喝不重样（同一美食每天最多 1 次、全程最多 2 次视为热门推荐），
+     超出时替换为池中「当天未用且全程次数最少」的美食；替换不到则保留原样。
+     兜底 auto 档模板本身的跨天重复（如大理白族三道茶连吃 4 天），以及档位替换/补餐产生的重复。 */
+  function dedupePlan(plan, foods, altPool) {
+    if (!foods || !foods.length) return plan;
+    altPool = altPool && altPool.length ? altPool : foods;
+
+    /* 从餐饮行文本识别归属美食。先剥离括号（店名/价格）与「· 备注」，避免
+       「锅包肉（老边饺子馆…）」被店名里的美食名误判、或备注里的「羊肉汤底」干扰；
+       name 命中为「确定归属」，店名命中仅计数不替换（避免共享店名误删/误换）；
+       多个 name 互为子串（如「海鲜」⊂「海鲜水饺」）时取最长者 */
+    function hitFood(txt) {
+      var t = txt.replace(/（[^）]*）/g, '').replace(/\([^)]*\)/g, '').replace(/·.*$/g, '');
+      var best = null;
+      for (var i = 0; i < foods.length; i++) {
+        var nm = foods[i].name;
+        if (t.indexOf(nm) > -1 && (!best || nm.length > best.f.name.length)) {
+          best = { f: foods[i], byName: true };
+        }
+      }
+      if (best) return best;
+      for (var i = 0; i < foods.length; i++) {
+        var shops = String(foods[i].shop || '').split(/[、,，\/]/);
+        for (var m = 0; m < shops.length; m++) {
+          var s = shops[m].trim();
+          if (s.length >= 2 && t.indexOf(s) > -1) return { f: foods[i], byName: false };
+        }
+      }
+      return null;
+    }
+
+    var rows = [];
+    plan.forEach(function (day, di) {
+      (day.items || []).forEach(function (it) {
+        if (/[\u{1F37D}\u{1F35C}]/u.test(it.x)) { /* 🍽 / 🍜 餐饮行 */
+          rows.push({ day: di, it: it, h: hitFood(it.x) });
+        }
+      });
+    });
+
+    var seenTotal = {};   /* 已处理行中：美食名 -> 全程累计次数 */
+    var seenPerDay = {};  /* 已处理行中：day|美食名 -> 当天次数 */
+    function pickAlt(day) {
+      var best = null;
+      for (var i = 0; i < altPool.length; i++) {
+        var f = altPool[i];
+        if (seenPerDay[day + '|' + f.name]) continue;          /* 当天已出现 */
+        var cnt = seenTotal[f.name] || 0;
+        if (cnt >= 2) continue;                                /* 全程已达热门上限 */
+        if (!best || cnt < (seenTotal[best.name] || 0)) best = f;
+      }
+      return best;
+    }
+
+    rows.forEach(function (r) {
+      if (!r.h) return;
+      var f = r.h.f;
+      var key = r.day + '|' + f.name;
+      seenTotal[f.name] = (seenTotal[f.name] || 0) + 1;
+      seenPerDay[key] = (seenPerDay[key] || 0) + 1;
+      /* 当天第 2 次 或 全程第 3 次起，视为重复需要替换（保留前 2 次 = 热门推荐）。
+         仅 name 确定归属的行才替换，避免误伤作者店名写法 */
+      var dup = seenPerDay[key] > 1 || seenTotal[f.name] > 2;
+      if (!dup || !r.h.byName) return;
+      var alt = pickAlt(r.day);
+      if (!alt) return; /* 无可替换美食，保留原样 */
+      seenTotal[alt.name] = (seenTotal[alt.name] || 0) + 1;
+      seenPerDay[r.day + '|' + alt.name] = (seenPerDay[r.day + '|' + alt.name] || 0) + 1;
+      var emoji = /[\u{1F35C}]/u.test(r.it.x) ? '🍜' : '🍽️';
+      r.it.x = emoji + ' ' + alt.name + '（' + alt.shop + '，' + perTxt(alt.per) + '）' + (alt.note ? ' · ' + alt.note : '');
+    });
+    return plan;
+  }
+
   function init() {
     /* 填充目的地下拉框 */
     var toSel = document.getElementById('f-to');
@@ -707,6 +945,8 @@
       if (qs.get('days')) document.getElementById('f-days').value = qs.get('days');
       if (qs.get('persons')) document.getElementById('f-persons').value = qs.get('persons');
       if (qs.get('from')) document.getElementById('f-from').value = qs.get('from');
+      var qBudget = qs.get('budget');
+      if (qBudget && BUDGET_LEVELS.hasOwnProperty(qBudget)) document.getElementById('f-budget').value = qBudget;
       build();
     }
   }
@@ -728,20 +968,46 @@
       return;
     }
 
+    /* 人均预算档位（选择档位后，预算数字、住宿、美食、景点、每日餐饮均按档位调整） */
+    var budgetSel = document.getElementById('f-budget');
+    var levelId = budgetSel ? budgetSel.value : 'auto';
+    var level = BUDGET_LEVELS[levelId] || null;
+    var levelFoods = foodPoolForLevel(city.foods || [], level);
+    var levelSpots = spotPoolForLevel(city.spots || [], level);
+
     var plan = getPlan(city, days);
     var origPlanDays = plan.length;
-    plan = extendPlan(city, plan, days); /* 模板天数不足时自动补足 */
+    /* 深拷贝行程模板，避免后续按档位替换/补午餐时污染城市数据（否则切换档位后内容会残留） */
+    plan = plan.map(function (day) {
+      return { title: day.title, tag: day.tag, items: (day.items || []).map(function (it) { return { t: it.t, x: it.x }; }) };
+    });
+    plan = extendPlan(city, plan, days, levelFoods, levelSpots); /* 模板天数不足时自动补足 */
     var planDays = plan.length;
     var fallbackDays = planDays !== days;
     var nights = days - 1;
-    ensureLunch(city, plan); /* 参考青岛，为行程补上「值得吃的中午饭」 */
+    ensureLunch(city, plan, levelFoods); /* 参考青岛，为行程补上「值得吃的中午饭」 */
+    applyBudgetToPlan(plan, city, level); /* 按档位替换每日行程中的餐饮 */
+    plan = dedupePlan(plan, city.foods || [], levelFoods); /* 最终去重巡检：吃喝每天不重样，热门推荐最多保留 2 次 */
 
-    /* 预算 */
     var b = city.budget || { perDay: [350, 450], transport: [500, 800] };
-    var perLow = b.perDay[0] * days + b.transport[0];
-    var perHigh = b.perDay[1] * days + b.transport[1];
+    var perLow, perHigh;
+    if (level) {
+      perLow = level.range[0];
+      perHigh = level.range[1];
+    } else {
+      perLow = b.perDay[0] * days + b.transport[0];
+      perHigh = b.perDay[1] * days + b.transport[1];
+    }
+    var perDayLv = [
+      Math.max(100, Math.round((perLow - b.transport[0]) / days)),
+      Math.max(150, Math.round((perHigh - b.transport[1]) / days))
+    ];
     var totalLow = perLow * persons;
     var totalHigh = perHigh * persons;
+    var hotelPick = pickHotels(city.hotels || [], level, days, b.transport);
+    var shownHotels = hotelPick.hotels;
+    var hotelFallback = hotelPick.fallback;
+    var hotelTrimmed = shownHotels.length < (city.hotels || []).length;
 
     var html = '';
 
@@ -754,8 +1020,9 @@
           '<span class="chip">🌤️ ' + esc(city.bestMonths) + ' 最佳</span>' +
           '<span class="chip">🗓️ ' + days + '天' + nights + '晚</span>' +
           '<span class="chip">👥 ' + persons + ' 人</span>' +
-          '<span class="chip">💰 人均 ' + fmt(perLow) + ' - ' + fmt(perHigh) + '</span>' +
-          '<span class="chip">💰 总计 ' + fmt(totalLow) + ' - ' + fmt(totalHigh) + '</span>' +
+          (level ? '<span class="chip">💎 ' + level.label + '档</span>' : '') +
+          '<span class="chip">💰 人均 ' + fmt(perLow) + ' - ' + (level && level.displayHigh ? level.displayHigh : fmt(perHigh)) + '</span>' +
+          '<span class="chip">💰 总计 ' + fmt(totalLow) + ' - ' + (level && level.displayHigh ? fmt(level.range[1] * persons) + '+' : fmt(totalHigh)) + '</span>' +
         '</div>' +
       '</div>';
 
@@ -798,14 +1065,20 @@
 
     /* -------- 住宿 -------- */
     html += '<div class="section" id="sec-hotel"><h2>🏨 住宿推荐</h2><div class="table-wrap"><table><tr><th>类型</th><th>推荐区域</th><th>参考价/晚</th><th>特点</th></tr>';
-    (city.hotels || []).forEach(function (h) {
+    shownHotels.forEach(function (h) {
       html += '<tr><td><strong>' + esc(h.type) + '</strong></td><td>' + esc(h.rec) + '</td><td>' + esc(h.price) + '</td><td>' + esc(h.note) + '</td></tr>';
     });
     html += '</table></div>';
-    html += '<div class="callout callout-tip"><strong>住宿总预算</strong>（' + nights + '晚 × ' + persons + '人，按人均核算）：约 <strong>' + fmt(b.perDay[0] * 0.45 * nights) + ' - ' + fmt(b.perDay[1] * 0.45 * nights) + ' /人</strong>，已计入人均每日预算。</div></div>';
+    if (hotelTrimmed) {
+      html += '<div class="callout callout-info">💡 已按「' + level.label + '」预算档位筛除超出预算范围的酒店' + (hotelFallback ? '；该档位下预算内选择有限，以下为最接近预算的选项' : '') + '。</div>';
+    }
+    html += '<div class="callout callout-tip"><strong>住宿总预算</strong>（' + nights + '晚 × ' + persons + '人，按人均核算）：约 <strong>' + fmt(perDayLv[0] * 0.45 * nights) + ' - ' + fmt(perDayLv[1] * 0.45 * nights) + ' /人</strong>，已计入人均每日预算。</div></div>';
 
     /* -------- 每日行程 -------- */
     html += '<div class="section" id="sec-days"><h2>📋 每日详细行程</h2>';
+    if (level) {
+      html += '<div class="callout callout-info">💡 本行程已按「' + level.label + '」档位生成：每日餐饮替换为' + (level.id === 'economy' ? '高性价比' : level.id === 'quality' ? '高品质' : '舒适') + '价位的当地推荐，整体消费控制在所选预算内。</div>';
+    }
     plan.forEach(function (day, i) {
       html += '<div class="day-card" id="day-' + (i + 1) + '">' +
         '<div class="day-header"><div class="day-num">D' + (i + 1) + '</div><div class="day-title">' + esc(day.title) + '</div>' +
@@ -819,28 +1092,44 @@
     });
     html += '</div>';
 
-    /* -------- 美食 -------- */
+    /* -------- 美食（按档位精选） -------- */
     html += '<div class="section" id="sec-food"><h2>🍴 地道美食清单</h2><div class="table-wrap"><table><tr><th>美食</th><th>推荐店铺</th><th>人均</th><th>备注</th></tr>';
-    (city.foods || []).forEach(function (f) {
+    levelFoods.forEach(function (f) {
       html += '<tr><td><strong>' + esc(f.name) + '</strong></td><td>' + esc(f.shop) + '</td><td>' + esc(f.per) + '</td><td>' + esc(f.note) + '</td></tr>';
     });
-    html += '</table></div></div>';
+    html += '</table></div>';
+    if (level && levelFoods.length < (city.foods || []).length) {
+      html += '<div class="callout callout-info">💡 已按「' + level.label + '」档位精选' + levelFoods.length + '/' + (city.foods || []).length + ' 项' + (level.id === 'economy' ? '高性价比小吃' : level.id === 'quality' ? '高品质正餐' : '主流美食') + '，其余超出档位区间未列出。</div>';
+    } else if (level) {
+      html += '<div class="callout callout-info">💡 已按「' + level.label + '」档位调整排序' + (level.id === 'quality' ? '，高价位推荐靠前' : '，低价亲民推荐靠前') + '。</div>';
+    }
+    html += '</div>';
 
-    /* -------- 景点 -------- */
+    /* -------- 景点（按档位排序） -------- */
     html += '<div class="section" id="sec-spots"><h2>🎫 景点 & 活动参考</h2><div class="table-wrap"><table><tr><th>景点/项目</th><th>参考费用</th><th>建议时长</th><th>亮点</th></tr>';
-    (city.spots || []).forEach(function (s) {
+    levelSpots.forEach(function (s) {
       html += '<tr><td><strong>' + esc(s.name) + '</strong></td><td>' + esc(s.ticket) + '</td><td>' + esc(s.time) + '</td><td>' + esc(s.note) + '</td></tr>';
     });
-    html += '</table></div></div>';
+    html += '</table></div>';
+    if (level && level.id === 'economy') {
+      html += '<div class="callout callout-info">💡 已按「经济实惠」档位将免费/低价景点前置，方便控制门票开销；标志性景点仍全部保留。</div>';
+    } else if (level && level.id === 'quality') {
+      html += '<div class="callout callout-info">💡 已按「品质尊享」档位将高价值付费项目前置，可重点体验深度玩法。</div>';
+    }
+    html += '</div>';
 
     /* -------- 预算 -------- */
     html += '<div class="section" id="sec-budget"><h2>💰 预算估算</h2>';
     html += '<div class="budget-grid">' +
-      '<div class="bud-item"><div class="amt">' + fmt(perLow) + ' - ' + fmt(perHigh) + '</div><div class="lbl">⭐ 人均总预算（' + days + '天，含往返大交通）</div></div>' +
-      '<div class="bud-item"><div class="amt">' + fmt(totalLow) + ' - ' + fmt(totalHigh) + '</div><div class="lbl">👥 ' + persons + ' 人总计</div></div>' +
+      '<div class="bud-item"><div class="amt">' + fmt(perLow) + ' - ' + (level && level.displayHigh ? level.displayHigh : fmt(perHigh)) + '</div><div class="lbl">⭐ 人均总预算（' + days + '天，含往返大交通）</div></div>' +
+      '<div class="bud-item"><div class="amt">' + fmt(totalLow) + ' - ' + (level && level.displayHigh ? fmt(level.range[1] * persons) + '+' : fmt(totalHigh)) + '</div><div class="lbl">👥 ' + persons + ' 人总计</div></div>' +
       '<div class="bud-item"><div class="amt">' + fmt(perLow - b.transport[0]) + ' - ' + fmt(perHigh - b.transport[1]) + '</div><div class="lbl">💡 人均目的地消费（不含往返大交通）</div></div>' +
     '</div>';
-    html += '<div class="callout callout-tip"><strong>说明</strong>：' + esc(b.note) + ' 人均每日参考 ' + fmt(b.perDay[0]) + ' - ' + fmt(b.perDay[1]) + '，往返大交通人均 ' + fmt(b.transport[0]) + ' - ' + fmt(b.transport[1]) + '。人数越多住宿分摊越省，实际以出行时价格为准。</div>';
+    html += '<div class="callout callout-tip"><strong>说明</strong>：' +
+      (level
+        ? '本攻略已按「' + level.label + '」档位生成（' + level.desc + '，人均总预算 ' + fmt(perLow) + ' - ' + (level.displayHigh || fmt(perHigh)) + ' 元）。每日人均参考 ' + fmt(perDayLv[0]) + ' - ' + fmt(perDayLv[1]) + '（含住宿/餐饮/市内交通/门票），往返大交通人均 ' + fmt(b.transport[0]) + ' - ' + fmt(b.transport[1]) + '；住宿已按档位筛选，整体不超出所选预算。'
+        : esc(b.note) + ' 人均每日参考 ' + fmt(b.perDay[0]) + ' - ' + fmt(b.perDay[1]) + '，往返大交通人均 ' + fmt(b.transport[0]) + ' - ' + fmt(b.transport[1]) + '。'
+      ) + '人数越多住宿分摊越省，实际以出行时价格为准。</div>';
     html += '</div>';
 
     /* -------- 避坑 -------- */
