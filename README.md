@@ -132,8 +132,8 @@ window.CITY_DATA['青岛'] = {
   intro:      '城市简介 1-2 句',
   transport:  [ { mode: '🚄 高铁（推荐）', line: '班次/路线', time: '耗时', price: '参考价' } ],
   hotels:     [ { type: '经济型', rec: '推荐区域/酒店', price: '参考价/晚', note: '特点' } ],
-  foods:      [ { name: '美食名', shop: '推荐店铺', per: '人均', note: '备注' } ],
-  spots:      [ { name: '景点/项目', ticket: '参考费用', time: '建议时长', note: '亮点' } ],
+  foods:      [ { name: '美食名', shop: '推荐店铺', per: '人均', note: '备注', must: true } ],
+  spots:      [ { name: '景点/项目', ticket: '参考费用', time: '建议时长', note: '亮点', must: true, lat: 39.9, lng: 116.4 } ],
   days: {  // 3-7 天行程模板，键为天数
     3:  [ { title: 'D1 主题', tag: '标签', items: [ { t: '上午', x: '安排' }, ... ] } ],
     4:  [ ... ],
@@ -148,6 +148,12 @@ window.CITY_DATA['青岛'] = {
   },
   tips: [ '避坑/实用贴士（数组）' ]
 };
+```
+
+> 字段说明（就近不绕路 + 必去优先）：
+> - `spots[].must`：`true` 表示「必去」景点，天数少时也优先保留，不会因天数不足被砍掉
+> - `spots[].lat` / `spots[].lng`：经纬度坐标，用于行程生成时做「就近贪心排序」，保证路线不绕路（可省略，省略时该点排到末尾并仅按 must 优先）
+> - `foods[].must`：`true` 表示「必吃/必喝」，优先进入每日餐饮清单
 ```
 
 ## ➕ 如何新增城市

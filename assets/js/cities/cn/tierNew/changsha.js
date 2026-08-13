@@ -16,10 +16,10 @@
       { type: '特色民宿', rec: '岳麓山/湘江边', price: '350-700 元/晚', note: '江景或山景，安静些' }
     ],
     foods: [
-      { name: '臭豆腐', shop: '黑色经典、文和友老长沙', per: '10-20 元', note: '外酥里嫩，配剁椒汁' },
-      { name: '糖油粑粑', shop: '糖油坨坨、火宫殿', per: '8-15 元', note: '糯米团炸后裹糖浆' },
-      { name: '口味虾', shop: '文和友、靓虾二哥', per: '80-150 元/人', note: '麻辣鲜香，夜宵之王' },
-      { name: '剁椒鱼头', shop: '坛宗剁椒鱼头', per: '80-130 元/人', note: '湘菜招牌，辣得过瘾' },
+      { name: '臭豆腐', shop: '黑色经典、文和友老长沙', per: '10-20 元', note: '外酥里嫩，配剁椒汁', must: true },
+      { name: '糖油粑粑', shop: '糖油坨坨、火宫殿', per: '8-15 元', note: '糯米团炸后裹糖浆', must: true },
+      { name: '口味虾', shop: '文和友、靓虾二哥', per: '80-150 元/人', note: '麻辣鲜香，夜宵之王', must: true },
+      { name: '剁椒鱼头', shop: '坛宗剁椒鱼头', per: '80-130 元/人', note: '湘菜招牌，辣得过瘾', must: true },
       { name: '长沙米粉', shop: '公交新村粉店、刘聋子', per: '10-20 元', note: '扁粉配码子，早餐标配' },
       { name: '辣椒炒肉', shop: '费大厨辣椒炒肉', per: '40-70 元', note: '湘菜灵魂，拌饭吃绝' },
       { name: '茶颜悦色', shop: '五一广场各门店', per: '15-20 元', note: '长沙奶茶名片，幽兰拿铁' },
@@ -28,14 +28,14 @@
       { name: '刮凉粉', shop: '火宫殿、街边摊', per: '8-12 元', note: '豌豆粉配花生腐乳' }
     ],
     spots: [
-      { name: '橘子洲', ticket: '免费（观光车20）', time: '2-3h', note: '青年毛泽东雕像，湘江中洲' },
-      { name: '岳麓山', ticket: '免费', time: '3-4h', note: '爱晚亭+岳麓书院（40元）' },
-      { name: '湖南省博物馆', ticket: '免费（需预约）', time: '2-3h', note: '马王堆汉墓辛追夫人' },
-      { name: '太平街', ticket: '免费', time: '2h', note: '长沙小吃老街，贾谊故居' },
-      { name: '坡子街', ticket: '免费', time: '1-2h', note: '火宫殿所在地，美食集中' },
-      { name: 'IFS国金中心', ticket: '免费（观景台）', time: '1-2h', note: '7楼KAWS雕塑打卡' },
-      { name: '天心阁', ticket: '32 元', time: '1h', note: '古城墙遗迹' },
-      { name: '世界之窗', ticket: '200 元', time: '一整天', note: '主题乐园+摩天轮' }
+      { name: '橘子洲', ticket: '免费（观光车20）', time: '2-3h', note: '青年毛泽东雕像，湘江中洲', must: true, lat: 28.1900, lng: 112.9620 },
+      { name: '岳麓山', ticket: '免费', time: '3-4h', note: '爱晚亭+岳麓书院（40元）', must: true, lat: 28.1830, lng: 112.9270 },
+      { name: '湖南省博物馆', ticket: '免费（需预约）', time: '2-3h', note: '马王堆汉墓辛追夫人', must: true, lat: 28.2160, lng: 112.9890 },
+      { name: '太平街', ticket: '免费', time: '2h', note: '长沙小吃老街，贾谊故居', lat: 28.1900, lng: 112.9730 },
+      { name: '坡子街', ticket: '免费', time: '1-2h', note: '火宫殿所在地，美食集中', lat: 28.1880, lng: 112.9760 },
+      { name: 'IFS国金中心', ticket: '免费（观景台）', time: '1-2h', note: '7楼KAWS雕塑打卡', lat: 28.1930, lng: 112.9760 },
+      { name: '天心阁', ticket: '32 元', time: '1h', note: '古城墙遗迹', lat: 28.1830, lng: 112.9800 },
+      { name: '世界之窗', ticket: '200 元', time: '一整天', note: '主题乐园+摩天轮', lat: 28.2350, lng: 113.0260 }
     ],
     days: {
       3: [

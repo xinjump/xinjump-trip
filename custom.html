@@ -920,6 +920,64 @@
     return plan;
   }
 
+  /* ===== 就近不绕路 · 必去优先排序 ===== */
+
+  /* 两点球面距离（米）。缺经纬度时返回 Infinity，触发降级排序 */
+  function haversine(a, b) {
+    if (!a || !b || a.lat == null || a.lng == null || b.lat == null || b.lng == null) return Infinity;
+    var R = 6371000;
+    var dLat = (b.lat - a.lat) * Math.PI / 180;
+    var dLng = (b.lng - a.lng) * Math.PI / 180;
+    var s = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) *
+            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return 2 * R * Math.asin(Math.sqrt(s));
+  }
+
+  /* 贪心最近邻排序：从起点出发，每次选距当前点最近的下一个，得到不绕路的访问顺序。
+     - 必去(must)点优先：先全部纳入，再按就近排；可选项跟在后面继续就近排
+     - 缺经纬度的点距离视为 Infinity，排到末尾（保序）
+     返回排序后的新数组（不修改原数组） */
+  function nearestOrder(list, start) {
+    list = (list || []).slice();
+    if (list.length < 2) return list;
+    var hasCoord = list.some(function (p) { return p.lat != null && p.lng != null; });
+    if (!hasCoord) {
+      /* 无任何经纬度：仅按 must 优先、其余保序 */
+      return list.slice().sort(function (a, b) {
+        return (b.must ? 1 : 0) - (a.must ? 1 : 0);
+      });
+    }
+    var cur = start && start.lat != null ? start : null;
+    var result = [];
+    var pool = list.slice();
+    while (pool.length) {
+      var best = 0;
+      var bestD = cur ? haversine(cur, pool[0]) : Infinity;
+      for (var i = 1; i < pool.length; i++) {
+        var d = cur ? haversine(cur, pool[i]) : Infinity;
+        if (d < bestD) { bestD = d; best = i; }
+      }
+      var pick = pool.splice(best, 1)[0];
+      result.push(pick);
+      /* 下一站从当前选中的点继续延伸 */
+      cur = (pick.lat != null && pick.lng != null) ? pick : cur;
+    }
+    /* must 优先重排：must 项整体前置，组内保持就近顺序 */
+    result.sort(function (a, b) { return (b.must ? 1 : 0) - (a.must ? 1 : 0); });
+    return result;
+  }
+
+  /* 从景点列表挑选「必去 + 就近」的核心清单：先保证 must 全部入选，
+     剩余名额按就近顺序补充（天数越少，砍掉的是可选项而非必去项） */
+  function coreSpots(spots, maxCount) {
+    var list = (spots || []).slice();
+    var musts = list.filter(function (s) { return s.must; });
+    var others = nearestOrder(list.filter(function (s) { return !s.must; }), musts.length ? musts[musts.length - 1] : null);
+    var picked = musts.concat(others).slice(0, maxCount);
+    return nearestOrder(picked, musts.length ? musts[0] : null);
+  }
+
   function init() {
     /* 填充目的地下拉框 */
     var toSel = document.getElementById('f-to');
@@ -974,6 +1032,13 @@
     var level = BUDGET_LEVELS[levelId] || null;
     var levelFoods = foodPoolForLevel(city.foods || [], level);
     var levelSpots = spotPoolForLevel(city.spots || [], level);
+
+    /* 就近不绕路 + 必去优先：景点按「必去优先 + 就近贪心」排序，美食按「必吃优先」排序，
+       保证天数少时必去项仍在、且路线不绕路（缺经纬度时自动降级为仅 must 优先） */
+    levelSpots = nearestOrder(levelSpots, null);
+    levelFoods = levelFoods.slice().sort(function (a, b) {
+      return (b.must ? 1 : 0) - (a.must ? 1 : 0);
+    });
 
     var plan = getPlan(city, days);
     var origPlanDays = plan.length;

@@ -16,8 +16,8 @@
       { type: '特色民宿', rec: '锦里/宽窄巷子周边', price: '300-600 元/晚', note: '老院坝风格，体验慢生活' }
     ],
     foods: [
-      { name: '四川火锅', shop: '小龙坎、大龙燚、蜀大侠', per: '80-130 元/人', note: '牛油锅底，毛肚鸭肠必点' },
-      { name: '串串香', shop: '钢管厂五区小郡肝', per: '50-90 元/人', note: '冷锅热锅都有，按签计费' },
+      { name: '四川火锅', shop: '小龙坎、大龙燚、蜀大侠', per: '80-130 元/人', note: '牛油锅底，毛肚鸭肠必点', must: true },
+      { name: '串串香', shop: '钢管厂五区小郡肝', per: '50-90 元/人', note: '冷锅热锅都有，按签计费', must: true },
       { name: '担担面', shop: '谭豆花、洞子口张老二凉粉', per: '10-20 元', note: '麻辣干香，芽菜肉臊' },
       { name: '龙抄手', shop: '龙抄手总店', per: '15-30 元', note: '皮薄馅嫩，红油抄手经典' },
       { name: '钟水饺', shop: '钟水饺、协茂森老钟家', per: '15-25 元', note: '甜辣红油，全肉馅' },
@@ -28,14 +28,14 @@
       { name: '甜水面', shop: '洞子口张老二凉粉', per: '10-15 元', note: '甜辣酱香，粗面筋道' }
     ],
     spots: [
-      { name: '成都大熊猫繁育研究基地', ticket: '55 元', time: '3-4h', note: '看熊猫要早去，7:30 开园' },
-      { name: '宽窄巷子', ticket: '免费', time: '2h', note: '清朝古街，茶馆+小吃+文创' },
-      { name: '锦里古街', ticket: '免费', time: '2h', note: '武侯祠旁，夜景灯笼很美' },
-      { name: '武侯祠', ticket: '50 元', time: '1-2h', note: '三国圣地，红墙竹影' },
-      { name: '杜甫草堂', ticket: '50 元', time: '1-2h', note: '诗圣故居，竹林幽静' },
-      { name: '都江堰', ticket: '80 元', time: '3-4h', note: '2000年水利工程奇迹' },
-      { name: '青城山', ticket: '80 元', time: '4-6h', note: '道教名山，前山道观后山清幽' },
-      { name: '春熙路太古里', ticket: '免费', time: '2h', note: 'IFS熊猫爬墙必打卡' }
+      { name: '成都大熊猫繁育研究基地', ticket: '55 元', time: '3-4h', note: '看熊猫要早去，7:30 开园', must: true, lat: 30.7350, lng: 104.1450 },
+      { name: '宽窄巷子', ticket: '免费', time: '2h', note: '清朝古街，茶馆+小吃+文创', must: true, lat: 30.6720, lng: 104.0550 },
+      { name: '锦里古街', ticket: '免费', time: '2h', note: '武侯祠旁，夜景灯笼很美', lat: 30.6450, lng: 104.0460 },
+      { name: '武侯祠', ticket: '50 元', time: '1-2h', note: '三国圣地，红墙竹影', lat: 30.6450, lng: 104.0460 },
+      { name: '杜甫草堂', ticket: '50 元', time: '1-2h', note: '诗圣故居，竹林幽静', lat: 30.6620, lng: 104.0260 },
+      { name: '都江堰', ticket: '80 元', time: '3-4h', note: '2000年水利工程奇迹', must: true, lat: 31.0010, lng: 103.6110 },
+      { name: '青城山', ticket: '80 元', time: '4-6h', note: '道教名山，前山道观后山清幽', lat: 30.8990, lng: 103.5660 },
+      { name: '春熙路太古里', ticket: '免费', time: '2h', note: 'IFS熊猫爬墙必打卡', lat: 30.6570, lng: 104.0820 }
     ],
     days: {
       3: [

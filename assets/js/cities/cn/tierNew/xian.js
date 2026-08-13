@@ -16,10 +16,10 @@
       { type: '特色住宿', rec: '城墙内民宿/书院门', price: '350-700 元/晚', note: '老城院落，别有风味' }
     ],
     foods: [
-      { name: '肉夹馍', shop: '子午路张记、秦豫肉夹馍', per: '12-20 元', note: '白吉馍夹腊汁肉，肥瘦相间' },
-      { name: '羊肉泡馍', shop: '老孙家、同盛祥', per: '30-50 元', note: '自己掰馍才有灵魂' },
-      { name: '凉皮', shop: '魏家凉皮、秦镇米皮', per: '8-15 元', note: '米皮/面皮，酸辣开胃' },
-      { name: 'biangbiang面', shop: '老碗会、关中面馆', per: '15-25 元', note: '裤带面油泼辣子，陕西名片' },
+      { name: '肉夹馍', shop: '子午路张记、秦豫肉夹馍', per: '12-20 元', note: '白吉馍夹腊汁肉，肥瘦相间', must: true },
+      { name: '羊肉泡馍', shop: '老孙家、同盛祥', per: '30-50 元', note: '自己掰馍才有灵魂', must: true },
+      { name: '凉皮', shop: '魏家凉皮、秦镇米皮', per: '8-15 元', note: '米皮/面皮，酸辣开胃', must: true },
+      { name: 'biangbiang面', shop: '老碗会、关中面馆', per: '15-25 元', note: '裤带面油泼辣子，陕西名片', must: true },
       { name: '葫芦头', shop: '春发生', per: '25-40 元', note: '猪大肠泡馍，老陕最爱' },
       { name: '甑糕', shop: '回民街老甑糕摊', per: '5-10 元', note: '糯米红枣，枣香浓郁' },
       { name: '镜糕', shop: '回民街', per: '3-5 元', note: '江米小蒸糕，甜糯' },
@@ -28,14 +28,14 @@
       { name: '柿子饼', shop: '回民街', per: '3-6 元', note: '黄桂柿子饼，外脆里糯' }
     ],
     spots: [
-      { name: '秦始皇帝陵博物院（兵马俑）', ticket: '120 元', time: '3-4h', note: '世界第八大奇迹，须提前预约' },
-      { name: '大雁塔+大唐不夜城', ticket: '大雁塔 50 元', time: '3-4h', note: '玄奘译经地，不夜城灯光秀' },
-      { name: '西安城墙', ticket: '54 元', time: '2-3h', note: '骑行一圈约1.5h，傍晚最美' },
-      { name: '钟鼓楼', ticket: '联票 50 元', time: '1-2h', note: '古城地标，登楼望街' },
-      { name: '回民街', ticket: '免费', time: '2h', note: '美食街，注意比价' },
-      { name: '陕西历史博物馆', ticket: '免费（需抢票）', time: '2-3h', note: '珍宝馆30元，提前7天预约' },
-      { name: '华清宫', ticket: '120 元', time: '2-3h', note: '杨贵妃沐浴处+长恨歌演出' },
-      { name: '大唐芙蓉园', ticket: '120 元', time: '2-3h', note: '皇家园林，夜景仿唐建筑' }
+      { name: '秦始皇帝陵博物院（兵马俑）', ticket: '120 元', time: '3-4h', note: '世界第八大奇迹，须提前预约', must: true, lat: 34.3840, lng: 109.2790 },
+      { name: '大雁塔+大唐不夜城', ticket: '大雁塔 50 元', time: '3-4h', note: '玄奘译经地，不夜城灯光秀', must: true, lat: 34.2170, lng: 108.9680 },
+      { name: '西安城墙', ticket: '54 元', time: '2-3h', note: '骑行一圈约1.5h，傍晚最美', must: true, lat: 34.2650, lng: 108.9470 },
+      { name: '钟鼓楼', ticket: '联票 50 元', time: '1-2h', note: '古城地标，登楼望街', lat: 34.2620, lng: 108.9430 },
+      { name: '回民街', ticket: '免费', time: '2h', note: '美食街，注意比价', lat: 34.2640, lng: 108.9380 },
+      { name: '陕西历史博物馆', ticket: '免费（需抢票）', time: '2-3h', note: '珍宝馆30元，提前7天预约', must: true, lat: 34.2220, lng: 108.9540 },
+      { name: '华清宫', ticket: '120 元', time: '2-3h', note: '杨贵妃沐浴处+长恨歌演出', lat: 34.3640, lng: 109.2070 },
+      { name: '大唐芙蓉园', ticket: '120 元', time: '2-3h', note: '皇家园林，夜景仿唐建筑', lat: 34.2110, lng: 108.9780 }
     ],
     days: {
       3: [

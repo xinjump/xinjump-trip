@@ -16,8 +16,8 @@
       { type: '特色住宿', rec: '下坝坊/可园周边', price: '300-600 元/晚', note: '文艺街区氛围' }
     ],
     foods: [
-      { name: '烧鹅濑粉', shop: '永发烧鹅、荔枝柴烧鹅', per: '25-45 元', note: '烧鹅配濑粉，东莞代表' },
-      { name: '厚街腊肠', shop: '厚街老字号', per: '30-60 元', note: '短粗腊肠，甜咸适中' },
+      { name: '烧鹅濑粉', shop: '永发烧鹅、荔枝柴烧鹅', per: '25-45 元', note: '烧鹅配濑粉，东莞代表', must: true },
+      { name: '厚街腊肠', shop: '厚街老字号', per: '30-60 元', note: '短粗腊肠，甜咸适中', must: true },
       { name: '白沙油鸭', shop: '白沙市场', per: '40-80 元/只', note: '腊鸭皇，秋冬当造' },
       { name: '道滘裹蒸粽', shop: '道滘镇老字号', per: '10-25 元', note: '咸蛋黄绿豆糯米粽' },
       { name: '东莞米粉', shop: '老字号粉面店', per: '10-20 元', note: '汤粉/炒粉，米香浓' },
@@ -28,14 +28,14 @@
       { name: '矮仔腊味煲仔饭', shop: '腊味煲仔饭老店', per: '25-40 元', note: '锅巴香脆' }
     ],
     spots: [
-      { name: '松山湖', ticket: '免费', time: '3-4h', note: '科技新城+湖光绿道，骑行' },
-      { name: '可园', ticket: '10 元', time: '1-2h', note: '岭南四大名园之一' },
-      { name: '鸦片战争博物馆（虎门）', ticket: '免费（需预约）', time: '2h', note: '销烟池+威远炮台' },
-      { name: '南社古村落', ticket: '30 元', time: '2h', note: '明清古村，谢氏宗祠' },
-      { name: '下坝坊', ticket: '免费', time: '1-2h', note: '岭南风格酒吧文艺街区' },
-      { name: '银瓶山', ticket: '免费', time: '3-4h', note: '东莞第一峰，登高望远' },
-      { name: '东莞植物园', ticket: '免费', time: '2h', note: '热带植物园，亲子友好' },
-      { name: '东莞国贸/民盈商圈', ticket: '免费', time: '2h', note: '潮流打卡，夜景灯光' }
+      { name: '松山湖', ticket: '免费', time: '3-4h', note: '科技新城+湖光绿道，骑行', must: true, lat: 22.9180, lng: 113.8840 },
+      { name: '可园', ticket: '10 元', time: '1-2h', note: '岭南四大名园之一', must: true, lat: 23.0420, lng: 113.7390 },
+      { name: '鸦片战争博物馆（虎门）', ticket: '免费（需预约）', time: '2h', note: '销烟池+威远炮台', must: true, lat: 22.8160, lng: 113.6490 },
+      { name: '南社古村落', ticket: '30 元', time: '2h', note: '明清古村，谢氏宗祠', lat: 23.0340, lng: 113.7800 },
+      { name: '下坝坊', ticket: '免费', time: '1-2h', note: '岭南风格酒吧文艺街区', lat: 23.0520, lng: 113.7330 },
+      { name: '银瓶山', ticket: '免费', time: '3-4h', note: '东莞第一峰，登高望远', lat: 23.0830, lng: 114.0780 },
+      { name: '东莞植物园', ticket: '免费', time: '2h', note: '热带植物园，亲子友好', lat: 22.9630, lng: 113.7670 },
+      { name: '东莞国贸/民盈商圈', ticket: '免费', time: '2h', note: '潮流打卡，夜景灯光', lat: 23.0260, lng: 113.7440 }
     ],
     days: {
       3: [

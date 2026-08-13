@@ -17,9 +17,9 @@
       { type: '海棠湾', rec: '奢华酒店+免税城', price: '900-3000 元/晚', note: '购物+度假一体，清静' }
     ],
     foods: [
-      { name: '海鲜加工', shop: '第一市场/火车头万人海鲜广场', per: '100-180 元/人', note: '自购海鲜+加工，明码标价' },
-      { name: '椰子鸡火锅', shop: '嗲嗲的椰子鸡等', per: '80-120 元/人', note: '清甜椰汁涮文昌鸡' },
-      { name: '清补凉', shop: '街边老店', per: '10-20 元', note: '椰奶/冰沙，解暑神器' },
+      { name: '海鲜加工', shop: '第一市场/火车头万人海鲜广场', per: '100-180 元/人', note: '自购海鲜+加工，明码标价', must: true },
+      { name: '椰子鸡火锅', shop: '嗲嗲的椰子鸡等', per: '80-120 元/人', note: '清甜椰汁涮文昌鸡', must: true },
+      { name: '清补凉', shop: '街边老店', per: '10-20 元', note: '椰奶/冰沙，解暑神器', must: true },
       { name: '抱罗粉', shop: '早餐店', per: '15-25 元', note: '海南特色粉' },
       { name: '文昌鸡', shop: '琼菜馆', per: '60-100 元/人', note: '白切蘸料，鲜嫩' },
       { name: '海南粉/陵水酸粉', shop: '老街早餐店', per: '15-25 元', note: '海南粉卤汁浓郁，酸粉酸爽' },
@@ -28,14 +28,14 @@
       { name: '椰子饭', shop: '海鲜店/椰林餐厅', per: '20-40 元', note: '糯米灌椰壳，椰香软糯' }
     ],
     spots: [
-      { name: '亚龙湾', ticket: '免费', time: '2-3h', note: '沙质细腻海水清澈，可下水' },
-      { name: '三亚湾椰梦长廊', ticket: '免费', time: '1-2h', note: '日落最佳观赏点' },
-      { name: '蜈支洲岛', ticket: '门票+船票 144 元', time: '1天', note: '潜水胜地，情人桥' },
-      { name: '南山文化旅游区', ticket: '108 元', time: '3-4h', note: '108米海上观音' },
-      { name: '天涯海角', ticket: '68 元', time: '2-3h', note: '"天涯""海角"石刻' },
-      { name: '亚特兰蒂斯水世界', ticket: '358 元', time: '半天', note: '网红水上乐园，刺激滑道' },
-      { name: '海棠湾免税城', ticket: '免费', time: '2-3h', note: '全球最大单体免税店' },
-      { name: '后海村', ticket: '免费', time: '半天', note: '冲浪+渔村慢生活' }
+      { name: '亚龙湾', ticket: '免费', time: '2-3h', note: '沙质细腻海水清澈，可下水', must: true, lat: 18.2120, lng: 109.6420 },
+      { name: '三亚湾椰梦长廊', ticket: '免费', time: '1-2h', note: '日落最佳观赏点', lat: 18.2690, lng: 109.4500 },
+      { name: '蜈支洲岛', ticket: '门票+船票 144 元', time: '1天', note: '潜水胜地，情人桥', must: true, lat: 18.3170, lng: 109.7730 },
+      { name: '南山文化旅游区', ticket: '108 元', time: '3-4h', note: '108米海上观音', must: true, lat: 18.2950, lng: 109.2070 },
+      { name: '天涯海角', ticket: '68 元', time: '2-3h', note: '"天涯""海角"石刻', must: true, lat: 18.2820, lng: 109.3450 },
+      { name: '亚特兰蒂斯水世界', ticket: '358 元', time: '半天', note: '网红水上乐园，刺激滑道', lat: 18.2850, lng: 109.7420 },
+      { name: '海棠湾免税城', ticket: '免费', time: '2-3h', note: '全球最大单体免税店', lat: 18.2850, lng: 109.7150 },
+      { name: '后海村', ticket: '免费', time: '半天', note: '冲浪+渔村慢生活', lat: 18.3110, lng: 109.7600 }
     ],
     days: {
       3: [
