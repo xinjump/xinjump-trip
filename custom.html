@@ -935,16 +935,16 @@
   }
 
   /* 贪心最近邻排序：从起点出发，每次选距当前点最近的下一个，得到不绕路的访问顺序。
-     - 必去(must)点优先：先全部纳入，再按就近排；可选项跟在后面继续就近排
+     - mustFirst 为 true 时，must 点优先（整体前置，组内保持就近）；为 false 时不做 must 前置
      - 缺经纬度的点距离视为 Infinity，排到末尾（保序）
      返回排序后的新数组（不修改原数组） */
-  function nearestOrder(list, start) {
+  function nearestOrder(list, start, mustFirst) {
     list = (list || []).slice();
     if (list.length < 2) return list;
     var hasCoord = list.some(function (p) { return p.lat != null && p.lng != null; });
     if (!hasCoord) {
-      /* 无任何经纬度：仅按 must 优先、其余保序 */
-      return list.slice().sort(function (a, b) {
+      /* 无任何经纬度：must 优先（若开启）、其余保序 */
+      return mustFirst === false ? list : list.slice().sort(function (a, b) {
         return (b.must ? 1 : 0) - (a.must ? 1 : 0);
       });
     }
@@ -963,9 +963,40 @@
       /* 下一站从当前选中的点继续延伸 */
       cur = (pick.lat != null && pick.lng != null) ? pick : cur;
     }
-    /* must 优先重排：must 项整体前置，组内保持就近顺序 */
-    result.sort(function (a, b) { return (b.must ? 1 : 0) - (a.must ? 1 : 0); });
+    /* must 优先重排：must 项整体前置，组内保持就近顺序（mustFirst=false 时跳过） */
+    if (mustFirst !== false) {
+      result.sort(function (a, b) { return (b.must ? 1 : 0) - (a.must ? 1 : 0); });
+    }
     return result;
+  }
+
+  /* 按「组」就近排序：list 已按某规则排序（如档位：economy 免费优先 / quality 贵优先），
+     按 groupKey 把相邻同组项切成若干组，组间保持原顺序（档位顺序不变），
+     仅组内做就近贪心排序，避免就近算法覆盖档位排序。
+     groupKey 返回分组标识（字符串）；返回 null/undefined 的项不分组、原样保留位置。 */
+  function nearestWithinGroups(list, groupKey) {
+    list = (list || []).slice();
+    if (list.length < 2) return list;
+    /* 先按 groupKey 切分：相邻相同组的项归为一组 */
+    var groups = [];
+    var curKey = null, curGroup = null;
+    list.forEach(function (item) {
+      var k = groupKey ? groupKey(item) : null;
+      k = k == null ? '' : k;
+      if (curGroup === null || k !== curKey) {
+        curGroup = { key: k, items: [] };
+        groups.push(curGroup);
+        curKey = k;
+      }
+      curGroup.items.push(item);
+    });
+    /* 每组内做就近排序（不做 must 前置，保持组内价格序；must 由档位分组之外的
+       必去清单逻辑负责），再按组顺序拼回 */
+    var out = [];
+    groups.forEach(function (g) {
+      out = out.concat(nearestOrder(g.items, null, false));
+    });
+    return out;
   }
 
   /* 从景点列表挑选「必去 + 就近」的核心清单：先保证 must 全部入选，
@@ -1033,9 +1064,33 @@
     var levelFoods = foodPoolForLevel(city.foods || [], level);
     var levelSpots = spotPoolForLevel(city.spots || [], level);
 
-    /* 就近不绕路 + 必去优先：景点按「必去优先 + 就近贪心」排序，美食按「必吃优先」排序，
-       保证天数少时必去项仍在、且路线不绕路（缺经纬度时自动降级为仅 must 优先） */
-    levelSpots = nearestOrder(levelSpots, null);
+    /* 就近不绕路 + 档位排序共存（方案一）：
+       景点先按档位排序（economy 免费优先 / quality 高票价优先），再按「价格档」分组、
+       组内就近贪心，既保留档位排序又保证同价位段内不绕路；必去项在组内前置。
+       美食按「必吃优先」排序（不涉及经纬度，无需就近）。 */
+    if (level) {
+      levelSpots = nearestWithinGroups(levelSpots, function (s) {
+        var p = priceMid(s.ticket);
+        if (level.id === 'economy') {
+          /* 免费 -> 低价 -> 中价 -> 高价（升序分组） */
+          if (p == null || p === 0) return '0-免费';
+          if (p <= 30) return '1-低价';
+          if (p <= 80) return '2-中价';
+          return '3-高价';
+        }
+        if (level.id === 'quality') {
+          /* 高价 -> 中价 -> 低价 -> 免费（降序分组） */
+          if (p == null || p === 0) return '3-免费';
+          if (p <= 30) return '2-低价';
+          if (p <= 80) return '1-中价';
+          return '0-高价';
+        }
+        return ''; /* comfort 档：不分组，整体就近 */
+      });
+    } else {
+      /* auto 档：无档位约束，直接就近不绕路 + 必去优先 */
+      levelSpots = nearestOrder(levelSpots, null);
+    }
     levelFoods = levelFoods.slice().sort(function (a, b) {
       return (b.must ? 1 : 0) - (a.must ? 1 : 0);
     });
