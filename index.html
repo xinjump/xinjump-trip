@@ -99,6 +99,41 @@
     color: #94a3b8;
   }
 
+  /* ===== 目的地搜索下拉 ===== */
+  .city-search { position: relative; }
+  .city-search input[type="text"] { width: 100%; }
+  .city-search-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 4px 0 0;
+    padding: 4px 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #e5e9ef;
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 30;
+    display: none;
+  }
+  .city-search-list.open { display: block; }
+  .city-search-list li {
+    padding: 9px 14px;
+    font-size: 0.9rem;
+    color: #334155;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .city-search-list li:hover,
+  .city-search-list li.active { background: #eff6ff; }
+  .city-search-list li .cs-emoji { margin-right: 4px; }
+  .city-search-list li .cs-name { font-weight: 600; }
+  .city-search-list li.empty { color: #94a3b8; cursor: default; }
+  .city-search-list li.empty:hover { background: transparent; }
+
   .s-btn {
     width: 100%;
     margin-top: 20px;
@@ -125,11 +160,17 @@
   }
 
   /* ===== 热门目的地快捷标签 ===== */
-  .hot-tip {
+  .hot-section {
+    margin-top: 20px;
     text-align: center;
-    margin: 18px 0 10px;
+  }
+  .hot-tip {
+    margin: 0 0 10px;
     font-size: 0.85rem;
-    color: #64748b;
+    color: #94a3b8;
+  }
+  .hot-tip-line {
+    display: none;
   }
   .hot-tag {
     display: inline-block;
@@ -149,7 +190,6 @@
     border-color: #2563eb;
     color: #2563eb;
     background: #eff6ff;
-    transform: translateY(-1px);
   }
 
   /* ===== Footer ===== */
@@ -169,9 +209,13 @@
   body.dark .sc-field select { background: #0f172a; border-color: #334155; color: #e2e8f0; }
   body.dark .sc-field input[disabled] { background: #16213a; color: #64748b; border-color: #1e293b; }
   body.dark .sc-lock { color: #64748b; }
-  body.dark .hot-tip { color: #94a3b8; }
+  body.dark .city-search-list { background: #1e293b; border-color: #334155; }
+  body.dark .city-search-list li { color: #cbd5e1; }
+  body.dark .city-search-list li:hover,
+  body.dark .city-search-list li.active { background: #16213a; }
+  body.dark .hot-tip { color: #64748b; }
   body.dark .hot-tag { background: #1e293b; border-color: #334155; color: #cbd5e1; }
-  body.dark .hot-tag:hover { border-color: #60a5fa; color: #60a5fa; background: #1e3a5f; }
+  body.dark .hot-tag:hover { border-color: #60a5fa; color: #60a5fa; background: #16213a; }
   body.dark .footer { color: #64748b; }
   body.dark .footer strong { color: #94a3b8; }
 
@@ -255,9 +299,11 @@
         </div>
         <div class="sc-field">
           <label for="s-to">目的地</label>
-          <select id="s-to">
-            <option value="">请选择目的地</option>
-          </select>
+          <div class="city-search">
+            <input type="text" id="s-to" placeholder="输入城市名搜索，如：北京" autocomplete="off">
+            <input type="hidden" id="s-to-val">
+            <ul class="city-search-list" id="s-to-list"></ul>
+          </div>
         </div>
         <div class="sc-field">
           <label for="s-days">旅游天数</label>
@@ -301,9 +347,11 @@
     </form>
   </section>
 
-  <!-- ==================== 热门目的地快捷选择（一线+新一线，由 JS 渲染） ==================== -->
-  <div class="hot-tip">或直接选择热门目的地：</div>
-  <div id="hot-tags"></div>
+  <!-- ==================== 热门目的地快捷选择（常年热门旅游城市，由 JS 渲染） ==================== -->
+  <div class="hot-section">
+    <div class="hot-tip">或直接选择热门目的地</div>
+    <div id="hot-tags"></div>
+  </div>
 
   <!-- ==================== Footer ==================== -->
   <div class="footer">
@@ -327,7 +375,9 @@
    * ================================================================ */
 
   var fromSel = document.getElementById('s-from');
-  var toSel = document.getElementById('s-to');
+  var toInput = document.getElementById('s-to');
+  var toVal = document.getElementById('s-to-val');
+  var toList = document.getElementById('s-to-list');
   var daysSel = document.getElementById('s-days');
   var personsSel = document.getElementById('s-persons');
   var budgetSel = document.getElementById('s-budget');
@@ -349,18 +399,18 @@
   /* 校验并提交 */
   document.getElementById('search-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    var to = toSel.value;
+    var to = toVal.value;
     if (!to) {
       btn.classList.remove('shake');
       void btn.offsetWidth;
       btn.classList.add('shake');
-      toSel.focus();
+      toInput.focus();
       return;
     }
     go(to);
   });
 
-  /* ===== 加载城市数据并填充目的地下拉（与生成器页一致，含 emoji） ===== */
+  /* ===== 加载城市数据并构建目的地搜索下拉（支持按名称搜索） ===== */
   var loader = document.createElement('script');
   loader.src = 'assets/js/cities.js';
   loader.onload = function() {
@@ -370,32 +420,83 @@
     var loaded = 0;
     function fill() {
       if (loaded < list.length) return;
-      var opts = [];
-      list.forEach(function(c) {
-        var emoji = window.CITY_DATA && window.CITY_DATA[c.name] ? window.CITY_DATA[c.name].emoji : '';
-        opts.push('<option value="' + c.name + '">' + c.name + '（' + emoji + '）</option>');
-      });
-      toSel.insertAdjacentHTML('beforeend', opts.join(''));
+      initCitySearch();
 
-      /* 热门目的地：仅展示一线+新一线城市（存在才渲染） */
-      var hotNames = ['北京', '上海', '广州', '深圳', '成都', '杭州', '重庆', '武汉',
-                      '苏州', '西安', '南京', '长沙', '天津', '郑州', '东莞',
-                      '青岛', '沈阳', '宁波', '昆明'];
+      /* 热门目的地：只展示常年热门的旅游城市（精选清单，非按线级全量机械推导） */
       var hotTags = document.getElementById('hot-tags');
-      hotNames.forEach(function(name) {
-        if (window.CITY_DATA && window.CITY_DATA[name]) {
-          var el = document.createElement('div');
-          el.className = 'hot-tag';
-          el.setAttribute('data-to', name);
-          el.textContent = name;
-          el.addEventListener('click', function() {
-            toSel.value = name;
-            go(name);
-          });
-          hotTags.appendChild(el);
+      var HOT_NAMES = [
+        '北京', '上海', '广州', '深圳', '香港', '澳门',
+        '成都', '重庆', '西安', '杭州', '苏州', '南京',
+        '长沙', '青岛', '厦门', '三亚', '丽江', '大理'
+      ];
+
+      function makeTag(name) {
+        var el = document.createElement('div');
+        el.className = 'hot-tag';
+        el.setAttribute('data-to', name);
+        el.textContent = name;
+        el.addEventListener('click', function() {
+          setTo(name);
+          go(name);
+        });
+        return el;
+      }
+
+      HOT_NAMES.forEach(function(name) {
+        /* 城市存在且已加载数据时才渲染 */
+        var exists = list.some(function(c) { return c.name === name; });
+        if (exists && window.CITY_DATA && window.CITY_DATA[name]) {
+          hotTags.appendChild(makeTag(name));
         }
       });
     }
+
+    /* 选中城市：回填输入框 + 隐藏值 + 收起下拉 */
+    function setTo(name) {
+      toVal.value = name;
+      toInput.value = name;
+      toList.classList.remove('open');
+    }
+
+    /* 渲染下拉列表（按名称过滤） */
+    function renderCityList(keyword) {
+      keyword = (keyword || '').trim();
+      var matched = list.filter(function(c) {
+        if (!keyword) return true;
+        return c.name.indexOf(keyword) > -1 || c.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1;
+      });
+      var html = '';
+      if (!matched.length) {
+        html = '<li class="empty">未找到匹配城市</li>';
+      } else {
+        matched.forEach(function(c) {
+          var emoji = window.CITY_DATA && window.CITY_DATA[c.name] ? window.CITY_DATA[c.name].emoji : '';
+          html += '<li data-name="' + c.name + '"><span class="cs-emoji">' + emoji + '</span><span class="cs-name">' + c.name + '</span></li>';
+        });
+      }
+      toList.innerHTML = html;
+      toList.classList.add('open');
+    }
+
+    function initCitySearch() {
+      toInput.addEventListener('focus', function() {
+        /* 聚焦即展示全部城市，并选中已输入文字便于直接覆盖重选 */
+        renderCityList('');
+        toInput.select();
+      });
+      toInput.addEventListener('input', function() {
+        toVal.value = ''; /* 输入即视为重新选择 */
+        renderCityList(toInput.value);
+      });
+      toList.addEventListener('mousedown', function(e) {
+        var li = e.target.closest('li[data-name]');
+        if (li) setTo(li.getAttribute('data-name'));
+      });
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.city-search')) toList.classList.remove('open');
+      });
+    }
+
     list.forEach(function(c) {
       var s = document.createElement('script');
       s.src = 'assets/js/cities/' + c.file;

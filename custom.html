@@ -97,6 +97,41 @@
     border-color: #e5e9ef;
     cursor: not-allowed;
   }
+
+  /* ===== 目的地搜索下拉 ===== */
+  .city-search { position: relative; }
+  .city-search input[type="text"] { width: 100%; }
+  .city-search-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 4px 0 0;
+    padding: 4px 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #e5e9ef;
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 30;
+    display: none;
+  }
+  .city-search-list.open { display: block; }
+  .city-search-list li {
+    padding: 9px 14px;
+    font-size: 0.9rem;
+    color: #334155;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .city-search-list li:hover,
+  .city-search-list li.active { background: #eff6ff; }
+  .city-search-list li .cs-emoji { margin-right: 4px; }
+  .city-search-list li .cs-name { font-weight: 600; }
+  .city-search-list li.empty { color: #94a3b8; cursor: default; }
+  .city-search-list li.empty:hover { background: transparent; }
   .btn-generate {
     height: 42px;
     padding: 0 28px;
@@ -319,10 +354,17 @@
 
   /* ===== Dark Mode ===== */
   body.dark { background: #0f172a; color: #cbd5e1; }
+  body.dark .hero::before {
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 1200 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,40 C200,100 400,0 600,40 C800,80 1000,0 1200,40 L1200,120 L0,120 Z' fill='%230f172a'/%3E%3C/svg%3E") no-repeat bottom/cover;
+  }
   body.dark .builder-card { background: #1e293b; box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
   body.dark .field label { color: #94a3b8; }
   body.dark .field input[disabled] { background: #16213a; color: #64748b; border-color: #1e293b; }
   body.dark .field input, body.dark .field select { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+  body.dark .city-search-list { background: #1e293b; border-color: #334155; }
+  body.dark .city-search-list li { color: #cbd5e1; }
+  body.dark .city-search-list li:hover,
+  body.dark .city-search-list li.active { background: #16213a; }
   body.dark .section { background: #1e293b; box-shadow: 0 2px 14px rgba(0,0,0,0.3); }
   body.dark .section h2 { color: #e2e8f0; }
   body.dark .section h3 { color: #cbd5e1; }
@@ -332,6 +374,7 @@
   body.dark tr.best { background: #064e3b; }
   body.dark .day-header { background: linear-gradient(135deg, #1e3a5f, #164e63); }
   body.dark .day-title { color: #e2e8f0; }
+  body.dark .tag { background: #1e3a5f; color: #93c5fd; }
   body.dark .tl-time { background: #334155; color: #cbd5e1; }
   body.dark .callout-tip { background: #1e3a5f; border-left-color: #93c5fd; }
   body.dark .callout-warn { background: #78350f; border-left-color: #fcd34d; }
@@ -339,6 +382,9 @@
   body.dark .bud-item { background: linear-gradient(135deg, #1e3a5f, #064e3b); }
   body.dark .bud-item .lbl { color: #94a3b8; }
   body.dark .btn { background: #1e293b; border-color: #334155; color: #cbd5e1; }
+  body.dark .btn-primary { background: linear-gradient(135deg, #2563eb, #0ea5e9); color: #fff; }
+  body.dark .notice { background: #3a2e12; border-color: #5c4517; color: #fcd34d; }
+  body.dark .bud-item .amt { color: #93c5fd; }
   body.dark .footer { color: #64748b; }
 
   /* ===== Floating ===== */
@@ -422,7 +468,11 @@
       </div>
       <div class="field">
         <label for="f-to">目的地</label>
-        <select id="f-to"></select>
+        <div class="city-search">
+          <input type="text" id="f-to" placeholder="输入城市名搜索，如：北京" autocomplete="off">
+          <input type="hidden" id="f-to-val">
+          <ul class="city-search-list" id="f-to-list"></ul>
+        </div>
       </div>
       <div class="field">
         <label for="f-days">旅游天数</label>
@@ -1010,13 +1060,51 @@
   }
 
   function init() {
-    /* 填充目的地下拉框 */
-    var toSel = document.getElementById('f-to');
-    list.forEach(function (c, i) {
-      var opt = document.createElement('option');
-      opt.value = c.name;
-      opt.textContent = c.name + '（' + (CITY_DATA[c.name] ? CITY_DATA[c.name].emoji : '') + '）';
-      toSel.appendChild(opt);
+    /* 目的地搜索下拉（支持按名称搜索） */
+    var toInput = document.getElementById('f-to');
+    var toVal = document.getElementById('f-to-val');
+    var toList = document.getElementById('f-to-list');
+
+    function setTo(name) {
+      toVal.value = name;
+      toInput.value = name;
+      toList.classList.remove('open');
+    }
+
+    function renderCityList(keyword) {
+      keyword = (keyword || '').trim();
+      var matched = list.filter(function (c) {
+        if (!keyword) return true;
+        return c.name.indexOf(keyword) > -1 || c.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1;
+      });
+      var html = '';
+      if (!matched.length) {
+        html = '<li class="empty">未找到匹配城市</li>';
+      } else {
+        matched.forEach(function (c) {
+          var emoji = CITY_DATA[c.name] ? CITY_DATA[c.name].emoji : '';
+          html += '<li data-name="' + c.name + '"><span class="cs-emoji">' + emoji + '</span><span class="cs-name">' + c.name + '</span></li>';
+        });
+      }
+      toList.innerHTML = html;
+      toList.classList.add('open');
+    }
+
+    toInput.addEventListener('focus', function () {
+      /* 聚焦即展示全部城市，并选中已输入文字便于直接覆盖重选 */
+      renderCityList('');
+      toInput.select();
+    });
+    toInput.addEventListener('input', function () {
+      toVal.value = ''; /* 输入即视为重新选择 */
+      renderCityList(toInput.value);
+    });
+    toList.addEventListener('mousedown', function (e) {
+      var li = e.target.closest('li[data-name]');
+      if (li) setTo(li.getAttribute('data-name'));
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.city-search')) toList.classList.remove('open');
     });
 
     /* 提交生成 */
@@ -1030,7 +1118,7 @@
     if (qs.get('to')) {
       var qTo = qs.get('to');
       var found = list.some(function (c) { return c.name === qTo; });
-      if (found) toSel.value = qTo;
+      if (found) setTo(qTo);
       if (qs.get('days')) document.getElementById('f-days').value = qs.get('days');
       if (qs.get('persons')) document.getElementById('f-persons').value = qs.get('persons');
       if (qs.get('from')) document.getElementById('f-from').value = qs.get('from');
@@ -1045,7 +1133,7 @@
     var from = fromInput.value.trim() || '西安';
     fromInput.value = from;
     fromInput.disabled = true; /* 生成后锁定出发地 */
-    var to = document.getElementById('f-to').value;
+    var to = document.getElementById('f-to-val').value;
     var days = parseInt(document.getElementById('f-days').value, 10) || 5;
     var persons = parseInt(document.getElementById('f-persons').value, 10) || 2;
 

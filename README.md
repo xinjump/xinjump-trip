@@ -57,20 +57,20 @@ custom.html?from=西安&to=青岛&days=5&persons=2&budget=comfort
 | `index.html` | 首页入口：选择目的地 / 天数 / 人数 / 人均预算，或点击热门目的地标签，跳转生成 |
 | `custom.html` | 攻略生成器：读取 URL 参数自动生成，也支持在页面内修改参数重新生成 |
 
-## 🏙️ 目的地（27 城）
+## 🏙️ 目的地（37 城）
 
 首页目的地下拉与生成器选项均由 `assets/js/cities.js` 的 `CITY_LIST` 驱动，运行时自动按 **线级 → 地区 → 名称拼音** 排序：
 
 | 线级 | 地区 | 城市 |
 | ---- | ---- | ---- |
 | **一线** | 中国内地 | 北京、上海、广州、深圳 |
-| **一线** | 港澳台 | 香港 |
-| **新一线** | 中国内地 | 成都、杭州、重庆、武汉、苏州、西安、南京、长沙、天津、郑州、东莞、青岛、沈阳、宁波、昆明 |
-| **二线** | 中国内地 | 厦门、大连 |
-| **三线及以下** | 中国内地 | 三亚、威海、大理、丽江、西双版纳 |
+| **一线** | 港澳台 | 香港、澳门、台湾 |
+| **新一线** | 中国内地 | 成都、杭州、重庆、武汉、苏州、西安、南京、长沙、天津、郑州、东莞、佛山、青岛、沈阳、合肥 |
+| **二线** | 中国内地 | 厦门、大连、哈尔滨、宁波、昆明、贵阳 |
+| **三线及以下** | 中国内地 | 三亚、威海、大理、丽江、西双版纳、榆林、延安、洛阳、开封 |
 | **海外** | 预留 | （未来扩展，如东京 / 曼谷 / 巴黎） |
 
-> 首页「热门目的地」标签取自一线 + 新一线清单（`index.html` 中 `hotNames` 变量），新增城市如需上榜请同步维护。
+> 首页「热门目的地」标签展示**常年热门的旅游城市**（精选清单，见 `index.html` 的 `HOT_NAMES`），而非按线级全量机械推导；如需增删热门城市，维护该清单即可。
 
 ## 📁 项目结构
 
@@ -82,7 +82,7 @@ xinjump-trip/
 └── assets/
     └── js/
         ├── cities.js       # 城市注册表 CITY_LIST（线级/地区排序）与数据结构说明
-        └── cities/         # 城市数据，按 地区 → 线级 分层（共 27 城）
+        └── cities/         # 城市数据，按 地区 → 线级 分层（共 37 城）
             ├── cn/                     # 中国内地
             │   ├── tier1/              #   一线（4）
             │   │   ├── beijing.js      # 北京
@@ -93,6 +93,7 @@ xinjump-trip/
             │   │   ├── chengdu.js      # 成都
             │   │   ├── hangzhou.js     # 杭州
             │   │   ├── chongqing.js    # 重庆
+            │   │   ├── hefei.js        # 合肥
             │   │   ├── wuhan.js        # 武汉
             │   │   ├── suzhou.js       # 苏州
             │   │   ├── xian.js         # 西安
@@ -101,21 +102,30 @@ xinjump-trip/
             │   │   ├── tianjin.js      # 天津
             │   │   ├── zhengzhou.js    # 郑州
             │   │   ├── dongguan.js     # 东莞
+            │   │   ├── foshan.js       # 佛山
             │   │   ├── qingdao.js      # 青岛
-            │   │   ├── shenyang.js     # 沈阳
-            │   │   ├── ningbo.js       # 宁波
-            │   │   └── kunming.js      # 昆明
-            │   ├── tier2/              #   二线（2）
+            │   │   └── shenyang.js     # 沈阳
+            │   ├── tier2/              #   二线（6）
             │   │   ├── xiamen.js       # 厦门
-            │   │   └── dalian.js       # 大连
-            │   └── tier3/              #   三线及以下（5）
+            │   │   ├── dalian.js       # 大连
+            │   │   ├── haerbin.js      # 哈尔滨
+            │   │   ├── ningbo.js       # 宁波
+            │   │   ├── kunming.js      # 昆明
+            │   │   └── guiyang.js      # 贵阳
+            │   └── tier3/              #   三线及以下（9）
             │       ├── sanya.js        # 三亚
             │       ├── weihai.js       # 威海
             │       ├── dali.js         # 大理
             │       ├── lijiang.js      # 丽江
-            │       └── xishuangbanna.js # 西双版纳
-            ├── hk-mo-tw/               # 港澳台（1）
-            │   └── hongkong.js         # 香港
+            │       ├── xishuangbanna.js # 西双版纳
+            │       ├── yulin.js        # 榆林
+            │       ├── yanan.js        # 延安
+            │       ├── luoyang.js      # 洛阳
+            │       └── kaifeng.js      # 开封
+            ├── hk-mo-tw/               # 港澳台（3）
+            │   ├── hongkong.js         # 香港
+            │   ├── macau.js            # 澳门
+            │   └── taiwan.js           # 台湾
             └── overseas/               # 海外（预留，未来按国家/大洲再建子目录）
 ```
 
@@ -186,7 +196,7 @@ window.CITY_LIST = [
 | `tier` | `tier1`(一线) / `tierNew`(新一线) / `tier2`(二线) / `tier3`(三线及以下) / `overseas`(海外) | 线级，决定下拉排序 |
 | `file` | 相对 `assets/js/cities/` 的路径 | 与 `region`/`tier` 对应的实际文件位置 |
 
-保存刷新后，新城市会自动出现在首页目的地下拉与生成器的目的地选项中，并按线级自动排序（热门标签为独立清单，如需上榜请同步 `index.html` 的 `hotNames`）。
+保存刷新后，新城市会自动出现在首页目的地下拉与生成器的目的地选项中，并按线级自动排序（首页热门目的地为独立精选清单，如需上榜请同步 `index.html` 的 `HOT_NAMES`）。
 
 ## 🛠️ 技术要点
 
