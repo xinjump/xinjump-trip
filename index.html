@@ -99,40 +99,10 @@
     color: #94a3b8;
   }
 
-  /* ===== 目的地搜索下拉 ===== */
+  /* ===== 目的地输入框 ===== */
   .city-search { position: relative; }
-  .city-search input[type="text"] { width: 100%; }
-  .city-search-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    margin: 4px 0 0;
-    padding: 4px 0;
-    list-style: none;
-    background: #fff;
-    border: 1px solid #e5e9ef;
-    border-radius: 10px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.14);
-    max-height: 240px;
-    overflow-y: auto;
-    z-index: 30;
-    display: none;
-  }
-  .city-search-list.open { display: block; }
-  .city-search-list li {
-    padding: 9px 14px;
-    font-size: 0.9rem;
-    color: #334155;
-    cursor: pointer;
-    transition: background 0.12s;
-  }
-  .city-search-list li:hover,
-  .city-search-list li.active { background: #eff6ff; }
-  .city-search-list li .cs-emoji { margin-right: 4px; }
-  .city-search-list li .cs-name { font-weight: 600; }
-  .city-search-list li.empty { color: #94a3b8; cursor: default; }
-  .city-search-list li.empty:hover { background: transparent; }
+  .city-search input[type="text"] { width: 100%; cursor: pointer; }
+  .city-search input[type="text"]::placeholder { color: #b0b8c4; }
 
   .s-btn {
     width: 100%;
@@ -159,38 +129,64 @@
     75% { transform: translateX(-4px); }
   }
 
-  /* ===== 热门目的地快捷标签 ===== */
-  .hot-section {
-    margin-top: 20px;
-    text-align: center;
-  }
-  .hot-tip {
-    margin: 0 0 10px;
-    font-size: 0.85rem;
-    color: #94a3b8;
-  }
-  .hot-tip-line {
+  /* ===== 我的足迹（历史 + 收藏） ===== */
+  .footprint {
+    margin-top: 28px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+    padding: 22px 24px;
     display: none;
   }
-  .hot-tag {
-    display: inline-block;
-    margin: 4px;
-    padding: 4px 14px;
-    border-radius: 16px;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    color: #475569;
-    font-size: 0.82rem;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
+  .footprint.show { display: block; }
+  .fp-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
   }
-  .hot-tag:hover {
-    border-color: #2563eb;
-    color: #2563eb;
-    background: #eff6ff;
+  .fp-head h2 {
+    font-size: 1.05rem; font-weight: 800; color: #2d3748;
+    display: flex; align-items: center; gap: 6px;
   }
+  .fp-clear {
+    font-size: 0.78rem; color: #94a3b8; cursor: pointer;
+    background: none; border: none; padding: 4px 8px;
+    border-radius: 8px; transition: color 0.15s;
+  }
+  .fp-clear:hover { color: #ef4444; }
+  .fp-group { margin-bottom: 14px; }
+  .fp-group:last-child { margin-bottom: 0; }
+  .fp-group-title {
+    font-size: 0.8rem; font-weight: 700; color: #64748b;
+    letter-spacing: 1px; margin-bottom: 8px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .fp-group-title .fp-clear {
+    font-size: 0.74rem; color: #94a3b8; cursor: pointer;
+    background: none; border: none; padding: 2px 6px;
+    border-radius: 6px; letter-spacing: 0;
+    transition: color 0.15s;
+  }
+  .fp-group-title .fp-clear:hover { color: #ef4444; }
+  .fp-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .fp-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 20px;
+    background: #f8fafc; border: 1px solid #e2e8f0;
+    color: #334155; font-size: 0.84rem;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.18s; user-select: none;
+  }
+  .fp-tag:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+  .fp-tag .fp-emoji { font-size: 1rem; }
+  .fp-tag .fp-meta { color: #94a3b8; font-size: 0.74rem; }
+  .fp-tag .fp-del {
+    margin-left: 2px; padding: 0 2px; color: #cbd5e1;
+    font-size: 0.9rem; cursor: pointer; border-radius: 50%;
+    transition: color 0.15s;
+  }
+  .fp-tag .fp-del:hover { color: #ef4444; }
+  .fp-empty { color: #94a3b8; font-size: 0.82rem; }
+  .fp-fav-on { border-color: #f59e0b; background: #fffbeb; color: #b45309; }
 
   /* ===== Footer ===== */
   .footer {
@@ -209,15 +205,233 @@
   body.dark .sc-field select { background: #0f172a; border-color: #334155; color: #e2e8f0; }
   body.dark .sc-field input[disabled] { background: #16213a; color: #64748b; border-color: #1e293b; }
   body.dark .sc-lock { color: #64748b; }
-  body.dark .city-search-list { background: #1e293b; border-color: #334155; }
-  body.dark .city-search-list li { color: #cbd5e1; }
-  body.dark .city-search-list li:hover,
-  body.dark .city-search-list li.active { background: #16213a; }
-  body.dark .hot-tip { color: #64748b; }
-  body.dark .hot-tag { background: #1e293b; border-color: #334155; color: #cbd5e1; }
-  body.dark .hot-tag:hover { border-color: #60a5fa; color: #60a5fa; background: #16213a; }
+  body.dark .footprint { background: #1e293b; box-shadow: 0 8px 28px rgba(0,0,0,0.4); }
+  body.dark .fp-head h2 { color: #e2e8f0; }
+  body.dark .fp-clear { color: #64748b; }
+  body.dark .fp-clear:hover { color: #f87171; }
+  body.dark .fp-group-title { color: #94a3b8; }
+  body.dark .fp-tag { background: #16213a; border-color: #334155; color: #cbd5e1; }
+  body.dark .fp-tag:hover { border-color: #60a5fa; color: #60a5fa; background: #1e293b; }
+  body.dark .fp-tag .fp-meta { color: #64748b; }
+  body.dark .fp-tag .fp-del { color: #475569; }
+  body.dark .fp-tag .fp-del:hover { color: #f87171; }
+  body.dark .fp-empty { color: #64748b; }
+  body.dark .fp-fav-on { border-color: #f59e0b; background: #2a2414; color: #fbbf24; }
   body.dark .footer { color: #64748b; }
   body.dark .footer strong { color: #94a3b8; }
+
+  /* ===== 自定义确认弹窗（替代浏览器默认 confirm） ===== */
+  .confirm-mask {
+    position: fixed; inset: 0; z-index: 10000;
+    background: rgba(15,23,42,0.45);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .confirm-mask.show { opacity: 1; pointer-events: auto; }
+  .confirm-box {
+    width: 100%; max-width: 340px;
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 24px 22px 18px;
+    transform: translateY(16px) scale(0.96);
+    transition: transform 0.2s;
+    text-align: center;
+  }
+  .confirm-mask.show .confirm-box { transform: translateY(0) scale(1); }
+  .confirm-icon {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px; font-size: 1.5rem;
+  }
+  .confirm-icon.warn { background: #fff7ed; }
+  .confirm-icon.danger { background: #fef2f2; }
+  .confirm-title { font-size: 1.02rem; font-weight: 800; color: #1e293b; margin-bottom: 8px; }
+  .confirm-msg { font-size: 0.86rem; color: #64748b; line-height: 1.6; margin-bottom: 20px; }
+  .confirm-actions { display: flex; gap: 10px; }
+  .confirm-actions button {
+    flex: 1; padding: 10px 0; border-radius: 10px;
+    font-size: 0.88rem; font-weight: 700; cursor: pointer;
+    border: none; transition: filter 0.15s, background 0.15s;
+  }
+  .confirm-cancel { background: #f1f5f9; color: #475569; }
+  .confirm-cancel:hover { background: #e2e8f0; }
+  .confirm-ok { background: #ef4444; color: #fff; }
+  .confirm-ok:hover { filter: brightness(1.08); }
+  .confirm-ok.primary { background: linear-gradient(135deg, #2563eb, #0ea5e9); }
+  body.dark .confirm-box { background: #1e293b; }
+  body.dark .confirm-title { color: #e2e8f0; }
+  body.dark .confirm-msg { color: #94a3b8; }
+  body.dark .confirm-icon.warn { background: #2a2414; }
+  body.dark .confirm-icon.danger { background: #2a1a1a; }
+  body.dark .confirm-cancel { background: #334155; color: #cbd5e1; }
+  body.dark .confirm-cancel:hover { background: #475569; }
+
+  /* ===== 城市选择面板 ===== */
+  .city-panel-mask {
+    position: fixed; inset: 0; z-index: 9000;
+    background: rgba(15,23,42,0.45);
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.22s;
+  }
+  .city-panel-mask.show { opacity: 1; pointer-events: auto; }
+  .city-panel {
+    width: 100%; max-width: 720px;
+    max-height: 82vh;
+    background: #fff; border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+    display: flex; flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.25s;
+    overflow: hidden;
+    position: relative;
+  }
+  .city-panel-mask.show .city-panel { transform: translateY(0); }
+  .city-panel-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .city-panel-head .cp-title { font-size: 1.05rem; font-weight: 800; color: #1e293b; white-space: nowrap; }
+  .city-panel-head .cp-search {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+    background: #f1f5f9; border-radius: 10px; padding: 9px 12px;
+  }
+  .city-panel-head .cp-search input {
+    flex: 1; border: none; background: transparent; outline: none;
+    font-size: 0.9rem; color: #1e293b;
+  }
+  .city-panel-head .cp-search .cp-search-ico { color: #94a3b8; font-size: 0.9rem; }
+  .cp-search-clear {
+    border: none; background: #cbd5e1; color: #fff;
+    width: 18px; height: 18px; border-radius: 50%;
+    font-size: 0.7rem; line-height: 1; cursor: pointer;
+    display: none; align-items: center; justify-content: center;
+    flex-shrink: 0; padding: 0;
+    transition: background 0.15s;
+  }
+  .cp-search-clear.show { display: flex; }
+  .cp-search-clear:hover { background: #94a3b8; }
+  body.dark .cp-search-clear { background: #475569; }
+  body.dark .cp-search-clear:hover { background: #64748b; }
+  .city-panel-close {
+    border: none; background: #f1f5f9; color: #64748b;
+    width: 34px; height: 34px; border-radius: 50%;
+    font-size: 1.1rem; cursor: pointer; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .city-panel-close:hover { background: #e2e8f0; }
+  .city-panel-body {
+    flex: 1; overflow-y: auto; padding: 6px 36px 24px 18px; /* 右侧留出字母索引条空间 */
+    position: relative;
+  }
+  .cp-section { margin-top: 14px; }
+  .cp-section-title {
+    font-size: 0.76rem; font-weight: 700; color: #94a3b8;
+    letter-spacing: 1px; margin-bottom: 8px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cp-history-clear {
+    font-size: 0.7rem; color: #94a3b8; cursor: pointer;
+    background: none; border: none; padding: 2px 6px;
+    border-radius: 6px; letter-spacing: 0;
+    transition: color 0.15s, background 0.15s;
+  }
+  .cp-history-clear:hover { color: #ef4444; background: #fef2f2; }
+  body.dark .cp-history-clear { color: #64748b; }
+  body.dark .cp-history-clear:hover { color: #f87171; background: #2a1a1a; }
+  .cp-history, .cp-hot {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .cp-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 20px;
+    background: #f8fafc; border: 1px solid #e2e8f0;
+    color: #334155; font-size: 0.86rem; cursor: pointer;
+    transition: all 0.15s; user-select: none;
+  }
+  .cp-chip:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+  .cp-chip .cp-emoji { font-size: 0.95rem; }
+  /* 字母分组列表 */
+  .cp-group { margin-top: 12px; }
+  .cp-group-letter {
+    font-size: 0.78rem; font-weight: 800; color: #2563eb;
+    padding: 4px 2px; margin-bottom: 4px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .cp-group-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
+  .cp-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 10px; border-radius: 10px;
+    color: #334155; font-size: 0.86rem; cursor: pointer;
+    transition: background 0.12s;
+  }
+  .cp-item:hover { background: #eff6ff; }
+  .cp-item .cp-emoji { font-size: 0.95rem; }
+  /* 搜索匹配高亮 */
+  .cp-item.match { background: #fef3c7; color: #92400e; font-weight: 700; }
+  .cp-chip.match { border-color: #f59e0b; background: #fffbeb; color: #92400e; }
+  body.dark .cp-item.match { background: #3a2e12; color: #fbbf24; }
+  body.dark .cp-chip.match { border-color: #f59e0b; background: #2a2414; color: #fbbf24; }
+  .cp-empty { color: #94a3b8; font-size: 0.85rem; padding: 20px 0; text-align: center; }
+  /* 字母索引条（固定在面板 body 区域右侧，不随内容滚动） */
+  .cp-index {
+    position: absolute;
+    right: 4px;
+    top: 72px; /* 面板 head 高度下方 */
+    bottom: 12px;
+    display: flex; flex-direction: column; gap: 0;
+    padding: 6px 2px;
+    z-index: 5;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* 隐藏滚动条但保留滚动能力 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .cp-index::-webkit-scrollbar { display: none; }
+  .cp-index span {
+    font-size: 0.62rem; color: #2563eb; font-weight: 700;
+    padding: 2px 5px; cursor: pointer; border-radius: 4px;
+    text-align: center; line-height: 1.2;
+    flex-shrink: 0;
+  }
+  .cp-index span:hover { background: #eff6ff; }
+  /* 「历史」「热门」快捷入口（小字，带分隔） */
+  .cp-index span.cp-idx-quick {
+    color: #64748b; font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 2px;
+    white-space: nowrap;
+  }
+  .cp-index span.cp-idx-quick:hover { background: #f1f5f9; color: #2563eb; }
+  .cp-index span.cp-idx-divider {
+    display: block; height: 1px; margin: 3px 3px;
+    background: #e2e8f0; cursor: default; padding: 0;
+  }
+  body.dark .cp-index span.cp-idx-quick { color: #94a3b8; }
+  body.dark .cp-index span.cp-idx-quick:hover { background: #334155; color: #60a5fa; }
+  body.dark .cp-index span.cp-idx-divider { background: #334155; }
+  body.dark .city-panel { background: #1e293b; }
+  body.dark .city-panel-head { border-bottom-color: #1e293b; }
+  body.dark .city-panel-head .cp-title { color: #e2e8f0; }
+  body.dark .city-panel-head .cp-search { background: #16213a; }
+  body.dark .city-panel-head .cp-search input { color: #e2e8f0; }
+  body.dark .city-panel-head .cp-search .cp-search-ico { color: #64748b; }
+  body.dark .city-panel-close { background: #334155; color: #cbd5e1; }
+  body.dark .city-panel-close:hover { background: #475569; }
+  body.dark .cp-section-title { color: #64748b; }
+  body.dark .cp-chip { background: #16213a; border-color: #334155; color: #cbd5e1; }
+  body.dark .cp-chip:hover { border-color: #60a5fa; color: #60a5fa; background: #1e293b; }
+  body.dark .cp-group-letter { color: #60a5fa; border-bottom-color: #1e293b; }
+  body.dark .cp-item { color: #cbd5e1; }
+  body.dark .cp-item:hover { background: #16213a; }
+  body.dark .cp-empty { color: #64748b; }
+  body.dark .cp-index span { color: #60a5fa; }
+  body.dark .cp-index span:hover { background: #16213a; }
 
   /* ===== 浮动按钮 ===== */
   .floating-bar {
@@ -267,9 +481,24 @@
     .sc-fields { grid-template-columns: 1fr; }
     /* iOS 聚焦输入框不自动缩放 */
     .sc-field input, .sc-field select { font-size: 16px; }
-    .hot-tag { padding: 3px 10px; font-size: 0.78rem; }
     .s-btn { height: 46px; font-size: 1rem; }
     .floating-bar { right: 12px; bottom: 20px; }
+    /* 城市面板移动端适配 */
+    .city-panel { max-height: 90vh; }
+    .city-panel-head { padding: 14px 14px 10px; gap: 8px; }
+    .city-panel-head .cp-title { font-size: 0.95rem; }
+    .city-panel-head .cp-search input { font-size: 16px; } /* iOS 聚焦不缩放 */
+    .city-panel-body { padding: 4px 32px 20px 14px; }
+    .cp-group-items { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); }
+    .cp-item { padding: 9px 8px; font-size: 0.9rem; }
+    /* 字母索引条：增大点击区域 */
+    .cp-index { right: 2px; top: 68px; bottom: 8px; }
+    .cp-index span {
+      font-size: 0.68rem;
+      padding: 4px 7px;
+      min-width: 24px;
+    }
+    .cp-index span.cp-idx-quick { font-size: 0.64rem; }
   }
 
   @media print {
@@ -300,9 +529,8 @@
         <div class="sc-field">
           <label for="s-to">目的地</label>
           <div class="city-search">
-            <input type="text" id="s-to" placeholder="输入城市名搜索，如：北京" autocomplete="off">
+            <input type="text" id="s-to" placeholder="点击选择目的地城市" autocomplete="off" readonly>
             <input type="hidden" id="s-to-val">
-            <ul class="city-search-list" id="s-to-list"></ul>
           </div>
         </div>
         <div class="sc-field">
@@ -347,15 +575,63 @@
     </form>
   </section>
 
-  <!-- ==================== 热门目的地快捷选择（常年热门旅游城市，由 JS 渲染） ==================== -->
-  <div class="hot-section">
-    <div class="hot-tip">或直接选择热门目的地</div>
-    <div id="hot-tags"></div>
-  </div>
+  <!-- ==================== 我的足迹（历史 + 收藏） ==================== -->
+  <section class="footprint" id="footprint">
+    <div class="fp-head">
+      <h2>👣 我的足迹</h2>
+    </div>
+    <div class="fp-group" id="fp-fav-group">
+      <div class="fp-group-title">
+        <span>⭐ 收藏的城市</span>
+        <button class="fp-clear" id="fp-clear-favs" title="清空收藏">清空</button>
+      </div>
+      <div class="fp-tags" id="fp-favs"></div>
+    </div>
+    <div class="fp-group" id="fp-history-group">
+      <div class="fp-group-title">
+        <span>🕘 最近生成的行程</span>
+        <button class="fp-clear" id="fp-clear-history" title="清空历史">清空</button>
+      </div>
+      <div class="fp-tags" id="fp-history"></div>
+    </div>
+  </section>
 
   <!-- ==================== Footer ==================== -->
   <div class="footer">
     <p><strong>旅行攻略合集</strong> · 出发地默认西安 · 价格为出行参考</p>
+  </div>
+
+  <!-- ==================== 城市选择面板（点击目的地打开） ==================== -->
+  <div class="city-panel-mask" id="city-panel-mask">
+    <div class="city-panel" id="city-panel">
+      <div class="city-panel-head">
+        <span class="cp-title">选择目的地</span>
+        <div class="cp-search">
+          <span class="cp-search-ico">🔍</span>
+          <input type="text" id="cp-search-input" placeholder="输入城市名搜索" autocomplete="off">
+          <button type="button" class="cp-search-clear" id="cp-search-clear" aria-label="清空">✕</button>
+        </div>
+        <button type="button" class="city-panel-close" id="cp-close" aria-label="关闭">✕</button>
+      </div>
+      <div class="city-panel-body" id="city-panel-body">
+        <div class="cp-section" id="cp-history-section" style="display:none;">
+          <div class="cp-section-title">
+            <span>🕘 最近选过</span>
+            <button type="button" class="cp-history-clear" id="cp-history-clear" title="清空最近选过">清空</button>
+          </div>
+          <div class="cp-history" id="cp-history"></div>
+        </div>
+        <div class="cp-section" id="cp-hot-section">
+          <div class="cp-section-title">🔥 热门目的地</div>
+          <div class="cp-hot" id="cp-hot"></div>
+        </div>
+        <div class="cp-section" id="cp-all-section">
+          <div class="cp-section-title">📚 全部城市</div>
+          <div id="cp-groups"></div>
+        </div>
+      </div>
+      <div class="cp-index" id="cp-index"></div>
+    </div>
   </div>
 
 </div>
@@ -377,7 +653,6 @@
   var fromSel = document.getElementById('s-from');
   var toInput = document.getElementById('s-to');
   var toVal = document.getElementById('s-to-val');
-  var toList = document.getElementById('s-to-list');
   var daysSel = document.getElementById('s-days');
   var personsSel = document.getElementById('s-persons');
   var budgetSel = document.getElementById('s-budget');
@@ -410,7 +685,22 @@
     go(to);
   });
 
-  /* ===== 加载城市数据并构建目的地搜索下拉（支持按名称搜索） ===== */
+  /* ===== 加载城市数据并构建城市选择面板 ===== */
+  /* 城市拼音首字母映射（用于字母分组 + 索引跳转） */
+  var CITY_PY = {
+    '北京': 'B', '上海': 'S', '广州': 'G', '深圳': 'S', '香港': 'X', '澳门': 'A', '台湾': 'T',
+    '成都': 'C', '重庆': 'C', '西安': 'X', '杭州': 'H', '苏州': 'S', '南京': 'N',
+    '长沙': 'C', '青岛': 'Q', '厦门': 'X', '三亚': 'S', '丽江': 'L', '大理': 'D',
+    '东莞': 'D', '佛山': 'F', '合肥': 'H', '沈阳': 'S', '天津': 'T', '武汉': 'W', '郑州': 'Z',
+    '大连': 'D', '贵阳': 'G', '哈尔滨': 'H', '昆明': 'K', '宁波': 'N',
+    '开封': 'K', '洛阳': 'L', '威海': 'W', '西双版纳': 'X', '延安': 'Y', '榆林': 'Y'
+  };
+  var HOT_NAMES = [
+    '北京', '上海', '广州', '深圳', '香港', '澳门',
+    '成都', '重庆', '西安', '杭州', '苏州', '南京',
+    '长沙', '青岛', '厦门', '三亚', '丽江', '大理'
+  ];
+
   var loader = document.createElement('script');
   loader.src = 'assets/js/cities.js';
   loader.onload = function() {
@@ -420,81 +710,214 @@
     var loaded = 0;
     function fill() {
       if (loaded < list.length) return;
-      initCitySearch();
-
-      /* 热门目的地：只展示常年热门的旅游城市（精选清单，非按线级全量机械推导） */
-      var hotTags = document.getElementById('hot-tags');
-      var HOT_NAMES = [
-        '北京', '上海', '广州', '深圳', '香港', '澳门',
-        '成都', '重庆', '西安', '杭州', '苏州', '南京',
-        '长沙', '青岛', '厦门', '三亚', '丽江', '大理'
-      ];
-
-      function makeTag(name) {
-        var el = document.createElement('div');
-        el.className = 'hot-tag';
-        el.setAttribute('data-to', name);
-        el.textContent = name;
-        el.addEventListener('click', function() {
-          setTo(name);
-          go(name);
-        });
-        return el;
-      }
-
-      HOT_NAMES.forEach(function(name) {
-        /* 城市存在且已加载数据时才渲染 */
-        var exists = list.some(function(c) { return c.name === name; });
-        if (exists && window.CITY_DATA && window.CITY_DATA[name]) {
-          hotTags.appendChild(makeTag(name));
-        }
-      });
+      initCityPanel();
     }
 
-    /* 选中城市：回填输入框 + 隐藏值 + 收起下拉 */
+    function cityEmoji(name) {
+      return window.CITY_DATA && window.CITY_DATA[name] ? window.CITY_DATA[name].emoji : '';
+    }
+
+    /* 选中城市：回填输入框 + 关闭面板 + 记录「最近选过」 */
     function setTo(name) {
       toVal.value = name;
       toInput.value = name;
-      toList.classList.remove('open');
+      recordSelectedCity(name);
+      closeCityPanel();
     }
 
-    /* 渲染下拉列表（按名称过滤） */
-    function renderCityList(keyword) {
+    /* 记录用户在目的地选择里点过的城市（与「最近生成的行程」独立） */
+    var CITY_SELECTED_KEY = 'xj-trip-city-selected';
+    function recordSelectedCity(name) {
+      try {
+        var arr = fpLoad(CITY_SELECTED_KEY);
+        arr = arr.filter(function(n) { return n !== name; });
+        arr.unshift(name);
+        if (arr.length > 8) arr.length = 8;
+        localStorage.setItem(CITY_SELECTED_KEY, JSON.stringify(arr));
+      } catch (e) { /* 忽略 */ }
+    }
+
+    /* ===== 城市选择面板 ===== */
+    var panelMask = document.getElementById('city-panel-mask');
+    var panelBody = document.getElementById('city-panel-body');
+    var cpSearchInput = document.getElementById('cp-search-input');
+
+    function openCityPanel() {
+      panelMask.classList.add('show');
+      /* 打开时重置搜索、滚动位置并重新渲染 */
+      cpSearchInput.value = '';
+      var clearBtn = document.getElementById('cp-search-clear');
+      if (clearBtn) clearBtn.classList.remove('show');
+      panelBody.scrollTop = 0;
+      renderPanel('');
+      /* 聚焦搜索框 */
+      setTimeout(function () { cpSearchInput.focus(); }, 260);
+    }
+    function closeCityPanel() {
+      panelMask.classList.remove('show');
+    }
+
+    /* 渲染面板：始终展示完整结构（历史+热门+字母分组）；
+       keyword 非空时高亮匹配项，并自动滚动定位到第一个匹配项（不减数据） */
+    function renderPanel(keyword) {
       keyword = (keyword || '').trim();
-      var matched = list.filter(function(c) {
-        if (!keyword) return true;
-        return c.name.indexOf(keyword) > -1 || c.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1;
-      });
-      var html = '';
-      if (!matched.length) {
-        html = '<li class="empty">未找到匹配城市</li>';
-      } else {
-        matched.forEach(function(c) {
-          var emoji = window.CITY_DATA && window.CITY_DATA[c.name] ? window.CITY_DATA[c.name].emoji : '';
-          html += '<li data-name="' + c.name + '"><span class="cs-emoji">' + emoji + '</span><span class="cs-name">' + c.name + '</span></li>';
-        });
+      var histSection = document.getElementById('cp-history-section');
+      var hotSection = document.getElementById('cp-hot-section');
+      var allSection = document.getElementById('cp-all-section');
+      var indexBar = document.getElementById('cp-index');
+
+      /* 匹配判断 */
+      function isMatch(name) {
+        if (!keyword) return false;
+        return name.indexOf(keyword) > -1;
       }
-      toList.innerHTML = html;
-      toList.classList.add('open');
+
+      /* 1. 最近选过（用户在选择目的地时点过的城市，独立于「最近生成的行程」；
+            搜索时不过滤，始终完整显示，仅高亮匹配项） */
+      var history = fpLoad(CITY_SELECTED_KEY);
+      var histBox = document.getElementById('cp-history');
+      if (history.length) {
+        var seen = {};
+        var histCities = history.filter(function(n) {
+          if (seen[n] || !list.some(function(c) { return c.name === n; })) return false;
+          seen[n] = true;
+          return true;
+        });
+        histSection.style.display = histCities.length ? '' : 'none';
+        histBox.innerHTML = histCities.slice(0, 6).map(function(n) {
+          return '<span class="cp-chip' + (isMatch(n) ? ' match' : '') + '" data-name="' + n + '"><span class="cp-emoji">' + cityEmoji(n) + '</span>' + n + '</span>';
+        }).join('');
+      } else {
+        histSection.style.display = 'none';
+      }
+
+      /* 2. 热门 */
+      hotSection.style.display = '';
+      var hotBox = document.getElementById('cp-hot');
+      var hotCities = HOT_NAMES.filter(function(n) {
+        return list.some(function(c) { return c.name === n; });
+      });
+      hotBox.innerHTML = hotCities.map(function(n) {
+        return '<span class="cp-chip' + (isMatch(n) ? ' match' : '') + '" data-name="' + n + '"><span class="cp-emoji">' + cityEmoji(n) + '</span>' + n + '</span>';
+      }).join('');
+
+      /* 3. 全部城市按拼音分组（保留完整列表） */
+      allSection.style.display = '';
+      var groupsBox = document.getElementById('cp-groups');
+      var groups = {};
+      list.forEach(function(c) {
+        var letter = (CITY_PY[c.name] || '#').toUpperCase();
+        if (!groups[letter]) groups[letter] = [];
+        groups[letter].push(c);
+      });
+      var letters = Object.keys(groups).sort();
+      var html = '';
+      letters.forEach(function(letter) {
+        html += '<div class="cp-group" data-letter="' + letter + '">';
+        html += '<div class="cp-group-letter">' + letter + '</div>';
+        html += '<div class="cp-group-items">';
+        groups[letter].forEach(function(c) {
+          html += '<div class="cp-item' + (isMatch(c.name) ? ' match' : '') + '" data-name="' + c.name + '"><span class="cp-emoji">' + cityEmoji(c.name) + '</span>' + c.name + '</div>';
+        });
+        html += '</div></div>';
+      });
+      groupsBox.innerHTML = html;
+
+      /* 4. 字母索引条（始终显示）：顶部含「历史」「热门」快捷跳转 */
+      indexBar.style.display = '';
+      var indexHtml = '';
+      if (history.length) {
+        indexHtml += '<span class="cp-idx-quick" data-jump="history">历史</span>';
+      }
+      indexHtml += '<span class="cp-idx-quick" data-jump="hot">热门</span>';
+      indexHtml += '<span class="cp-idx-divider"></span>';
+      indexHtml += letters.map(function(letter) {
+        return '<span data-letter="' + letter + '">' + letter + '</span>';
+      }).join('');
+      indexBar.innerHTML = indexHtml;
+
+      /* 5. 有搜索词时：自动滚动定位到「全部城市」里第一个匹配项（居中可见） */
+      if (keyword) {
+        var firstMatch = groupsBox.querySelector('.cp-item.match');
+        if (firstMatch) {
+          setTimeout(function () {
+            var rect = firstMatch.getBoundingClientRect();
+            var panelRect = panelBody.getBoundingClientRect();
+            /* 目标 scrollTop = 匹配项在文档流中的绝对位置 - 面板高度的一半（居中） */
+            var absoluteTop = panelBody.scrollTop + (rect.top - panelRect.top);
+            panelBody.scrollTop = absoluteTop - panelRect.height / 2;
+          }, 30);
+        }
+      }
     }
 
-    function initCitySearch() {
-      toInput.addEventListener('focus', function() {
-        /* 聚焦即展示全部城市，并选中已输入文字便于直接覆盖重选 */
-        renderCityList('');
-        toInput.select();
-      });
-      toInput.addEventListener('input', function() {
-        toVal.value = ''; /* 输入即视为重新选择 */
-        renderCityList(toInput.value);
-      });
-      toList.addEventListener('mousedown', function(e) {
-        var li = e.target.closest('li[data-name]');
-        if (li) setTo(li.getAttribute('data-name'));
-      });
-      document.addEventListener('click', function(e) {
-        if (!e.target.closest('.city-search')) toList.classList.remove('open');
-      });
+    /* 字母跳转 + 「历史」「热门」快捷跳转 */
+    document.getElementById('cp-index').addEventListener('click', function(e) {
+      /* 快捷跳转到历史/热门区块 */
+      var quick = e.target.closest('span[data-jump]');
+      if (quick) {
+        var target = quick.getAttribute('data-jump');
+        var sectionId = target === 'history' ? 'cp-history-section' : 'cp-hot-section';
+        var section = document.getElementById(sectionId);
+        if (section) {
+          var sTop = section.getBoundingClientRect().top - panelBody.getBoundingClientRect().top + panelBody.scrollTop;
+          panelBody.scrollTop = sTop - 8;
+        }
+        return;
+      }
+      /* 字母跳转 */
+      var span = e.target.closest('span[data-letter]');
+      if (!span) return;
+      var letter = span.getAttribute('data-letter');
+      var group = panelBody.querySelector('.cp-group[data-letter="' + letter + '"]');
+      if (group) {
+        /* 直接计算目标滚动位置：当前滚动 + 分组相对滚动容器的偏移 */
+        var targetTop = group.getBoundingClientRect().top - panelBody.getBoundingClientRect().top + panelBody.scrollTop;
+        panelBody.scrollTop = targetTop - 8;
+      }
+    });
+
+    /* 选择城市（事件委托） */
+    panelBody.addEventListener('click', function(e) {
+      var el = e.target.closest('[data-name]');
+      if (el) {
+        var name = el.getAttribute('data-name');
+        setTo(name);
+      }
+    });
+
+    /* 搜索输入：实时过滤 + 同步清除按钮显隐 */
+    var cpClearBtn = document.getElementById('cp-search-clear');
+    function syncClearBtn() {
+      if (cpSearchInput.value) cpClearBtn.classList.add('show');
+      else cpClearBtn.classList.remove('show');
+    }
+    cpSearchInput.addEventListener('input', function() {
+      syncClearBtn();
+      renderPanel(cpSearchInput.value);
+    });
+    /* 点击 ✕ 一键清空 */
+    cpClearBtn.addEventListener('click', function() {
+      cpSearchInput.value = '';
+      syncClearBtn();
+      renderPanel('');
+      cpSearchInput.focus();
+    });
+
+    /* 清空「最近选过」 */
+    document.getElementById('cp-history-clear').addEventListener('click', function() {
+      try { localStorage.removeItem(CITY_SELECTED_KEY); } catch (e) {}
+      renderPanel(cpSearchInput.value);
+    });
+
+    /* 关闭按钮 + 点击遮罩关闭 */
+    document.getElementById('cp-close').addEventListener('click', closeCityPanel);
+
+    function initCityPanel() {
+      /* 点击目的地输入框打开面板 */
+      toInput.addEventListener('click', openCityPanel);
+      /* 初始渲染（预渲染，打开时再重置） */
+      renderPanel('');
     }
 
     list.forEach(function(c) {
@@ -516,6 +939,162 @@
   btnTop.addEventListener('click', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  /* ===== 自定义确认弹窗（替代浏览器默认 confirm） ===== */
+  function showConfirm(opts) {
+    opts = opts || {};
+    return new Promise(function (resolve) {
+      var mask = document.createElement('div');
+      mask.className = 'confirm-mask';
+      var danger = opts.danger !== false;
+      var icon = danger ? '⚠️' : 'ℹ️';
+      var iconCls = danger ? 'danger' : 'warn';
+      var okCls = danger ? 'confirm-ok' : 'confirm-ok primary';
+      mask.innerHTML =
+        '<div class="confirm-box">' +
+          '<div class="confirm-icon ' + iconCls + '">' + icon + '</div>' +
+          '<div class="confirm-title">' + (opts.title || '确认操作') + '</div>' +
+          '<div class="confirm-msg">' + (opts.message || '') + '</div>' +
+          '<div class="confirm-actions">' +
+            '<button type="button" class="' + okCls + '">' + (opts.okText || '确定') + '</button>' +
+            '<button type="button" class="confirm-cancel">' + (opts.cancelText || '取消') + '</button>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(mask);
+
+      function close(result) {
+        mask.classList.remove('show');
+        setTimeout(function () { mask.remove(); resolve(result); }, 200);
+      }
+      mask.querySelector('.confirm-cancel').addEventListener('click', function () { close(false); });
+      mask.querySelector('.confirm-ok').addEventListener('click', function () { close(true); });
+      mask.addEventListener('click', function (e) {
+        if (e.target === mask) close(false);
+      });
+
+      requestAnimationFrame(function () { mask.classList.add('show'); });
+    });
+  }
+
+  /* ===== 我的足迹（历史 + 收藏） ===== */
+  var FP_HISTORY_KEY = 'xj-trip-history';
+  var FP_FAV_KEY = 'xj-trip-favs';
+
+  function fpLoad(key) {
+    try {
+      var v = localStorage.getItem(key);
+      return v ? JSON.parse(v) : [];
+    } catch (e) { return []; }
+  }
+
+  /* 渲染足迹区块；数据为空时隐藏 */
+  function fpRender() {
+    var box = document.getElementById('footprint');
+    var favBox = document.getElementById('fp-favs');
+    var histBox = document.getElementById('fp-history');
+    var favGroup = document.getElementById('fp-fav-group');
+    var histGroup = document.getElementById('fp-history-group');
+    var favs = fpLoad(FP_FAV_KEY);
+    var history = fpLoad(FP_HISTORY_KEY);
+
+    if (!favs.length && !history.length) {
+      box.classList.remove('show');
+      return;
+    }
+    box.classList.add('show');
+
+    /* 收藏城市 */
+    if (favs.length) {
+      favGroup.style.display = '';
+      favBox.innerHTML = favs.map(function (f) {
+        return '<span class="fp-tag fp-fav-on" data-city="' + escAttr(f.name) + '" title="点击生成攻略">' +
+          '<span class="fp-emoji">' + (f.emoji || '📍') + '</span>' + escHtml(f.name) +
+          '<span class="fp-del" data-del-city="' + escAttr(f.name) + '" title="取消收藏">✕</span></span>';
+      }).join('');
+    } else {
+      favGroup.style.display = 'none';
+      favBox.innerHTML = '';
+    }
+
+    /* 历史记录 */
+    if (history.length) {
+      histGroup.style.display = '';
+      histBox.innerHTML = history.map(function (h) {
+        var meta = h.days + '天' + (h.persons ? '·' + h.persons + '人' : '');
+        return '<span class="fp-tag" data-city="' + escAttr(h.to) + '" title="点击重新生成攻略">' +
+          '<span class="fp-emoji">' + (h.emoji || '📍') + '</span>' + escHtml(h.to) +
+          '<span class="fp-meta">' + escHtml(meta) + '</span>' +
+          '<span class="fp-del" data-del-history="' + escAttr(h.to) + '" title="删除该记录">✕</span></span>';
+      }).join('');
+    } else {
+      histGroup.style.display = 'none';
+      histBox.innerHTML = '';
+    }
+  }
+
+  function escHtml(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function escAttr(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* 足迹点击：城市标签 → 生成；✕ → 删除 */
+  document.getElementById('footprint').addEventListener('click', function (e) {
+    var delFav = e.target.closest('[data-del-city]');
+    var delHist = e.target.closest('[data-del-history]');
+    if (delFav) {
+      e.stopPropagation();
+      var city = delFav.getAttribute('data-del-city');
+      var favs = fpLoad(FP_FAV_KEY).filter(function (f) { return f.name !== city; });
+      try { localStorage.setItem(FP_FAV_KEY, JSON.stringify(favs)); } catch (err) {}
+      fpRender();
+      return;
+    }
+    if (delHist) {
+      e.stopPropagation();
+      var hcity = delHist.getAttribute('data-del-history');
+      var hist = fpLoad(FP_HISTORY_KEY).filter(function (h) { return h.to !== hcity; });
+      try { localStorage.setItem(FP_HISTORY_KEY, JSON.stringify(hist)); } catch (err) {}
+      fpRender();
+      return;
+    }
+    var tag = e.target.closest('.fp-tag[data-city]');
+    if (tag) {
+      var name = tag.getAttribute('data-city');
+      if (name) go(name);
+    }
+  });
+
+  /* 清空收藏 */
+  document.getElementById('fp-clear-favs').addEventListener('click', function () {
+    showConfirm({
+      title: '清空收藏',
+      message: '确定清空所有收藏的城市吗？',
+      okText: '清空',
+      cancelText: '取消'
+    }).then(function (sure) {
+      if (!sure) return;
+      try { localStorage.removeItem(FP_FAV_KEY); } catch (e) {}
+      fpRender();
+    });
+  });
+
+  /* 清空历史 */
+  document.getElementById('fp-clear-history').addEventListener('click', function () {
+    showConfirm({
+      title: '清空历史记录',
+      message: '确定清空所有历史记录吗？',
+      okText: '清空',
+      cancelText: '取消'
+    }).then(function (sure) {
+      if (!sure) return;
+      try { localStorage.removeItem(FP_HISTORY_KEY); } catch (e) {}
+      fpRender();
+    });
+  });
+
+  fpRender();
 
   /* ===== 夜间模式 ===== */
   var btnDark = document.getElementById('btn-dark');

@@ -183,6 +183,7 @@
   }
   .section h2 { font-size: 1.22rem; color: #1e3a5f; margin-bottom: 16px; }
   .section h3 { font-size: 1.02rem; color: #334155; margin: 18px 0 10px; }
+  .section h3.sub-h { font-size: 0.95rem; font-weight: 700; color: #475569; margin: 16px 0 10px; display: flex; align-items: center; gap: 6px; }
 
   .table-wrap { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
@@ -306,6 +307,22 @@
     height: fit-content;
   }
   .tl-body { line-height: 1.75; }
+  /* 编辑模式下，行程项的时间与内容可点击直接改字 */
+  .editing .tl-time, .editing .tl-body {
+    cursor: text;
+    outline: none;
+    border-radius: 6px;
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+  .editing .tl-time:hover, .editing .tl-body:hover { background: #eff6ff; }
+  .editing .tl-time:focus, .editing .tl-body:focus {
+    background: #fff;
+    box-shadow: 0 0 0 2px #93c5fd;
+  }
+  .editing .tl-time { min-width: 44px; }
+  .editing .tl-body { min-width: 40px; }
+  body.dark .editing .tl-time:hover, body.dark .editing .tl-body:hover { background: #16213a; }
+  body.dark .editing .tl-time:focus, body.dark .editing .tl-body:focus { background: #1e293b; box-shadow: 0 0 0 2px #3b82f6; }
 
   /* ===== 预算 ===== */
   .budget-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 16px; }
@@ -389,6 +406,82 @@
 
   /* ===== Floating ===== */
   .floating-bar { position: fixed; right: 18px; bottom: 120px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+
+  /* ===== 侧边可收起的操作面板（编辑 / 复制 / 打印） ===== */
+  .action-float {
+    position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
+    z-index: 998; display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+  }
+  .action-float .af-menu {
+    display: flex; flex-direction: column; align-items: stretch; gap: 8px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+    padding: 10px; box-shadow: 0 6px 24px rgba(0,0,0,0.14);
+    opacity: 0; transform: translateX(12px); pointer-events: none;
+    transition: opacity 0.22s, transform 0.22s;
+    position: relative; z-index: 2;
+  }
+  .action-float.open .af-menu { opacity: 1; transform: translateX(0); pointer-events: auto; }
+  .action-float .af-menu .btn {
+    display: flex; align-items: center; justify-content: flex-start; gap: 8px;
+    width: 100%; text-align: left; white-space: nowrap;
+    padding: 9px 14px; font-size: 0.86rem; font-weight: 600;
+    line-height: 1; /* 避免 <a> 默认 line-height 影响高度统一 */
+    border: none; background: transparent;
+    color: #334155; border-radius: 9px; cursor: pointer;
+    transition: color 0.15s, filter 0.15s, box-shadow 0.15s, transform 0.1s;
+    /* 覆盖基础 .btn 的 transform 动画，面板内点击按钮不应让整行跳动 */
+    transform: none;
+  }
+  /* hover：不再用大色块背景，改用文字加色 + 左侧色条指示 */
+  .action-float .af-menu .btn:hover { color: #1d4ed8; }
+  .action-float .af-menu .btn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+  .action-float .af-menu .btn:active { transform: scale(0.97); }
+  .action-float .af-menu .btn.btn-primary {
+    background: linear-gradient(135deg, #2563eb, #0ea5e9);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+  }
+  .action-float .af-menu .btn.btn-primary:hover { filter: brightness(1.08); color: #fff; background: linear-gradient(135deg, #2563eb, #0ea5e9); }
+  .action-float .af-menu .btn.btn-primary.editing {
+    background: linear-gradient(135deg, #16a34a, #059669);
+    box-shadow: 0 2px 8px rgba(22,163,74,0.3);
+  }
+  .action-float .af-menu a.btn { color: #334155; text-decoration: none; }
+  .action-float .af-menu a.btn:hover { color: #1d4ed8; text-decoration: none; }
+  /* 复制成功短暂反馈 */
+  .action-float .af-menu .btn.copied {
+    background: linear-gradient(135deg, #16a34a, #059669);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(22,163,74,0.3);
+  }
+  /* 收藏按钮：已收藏态 */
+  .action-float .af-menu .btn.fav-on {
+    background: #fffbeb;
+    color: #b45309;
+    box-shadow: inset 0 0 0 1px #f59e0b;
+  }
+  .action-float .af-menu .btn.fav-on:hover { color: #b45309; }
+  body.dark .action-float .af-menu .btn.fav-on { background: #2a2414; color: #fbbf24; box-shadow: inset 0 0 0 1px #f59e0b; }
+  body.dark .action-float .af-menu .btn.fav-on:hover { color: #fbbf24; }
+  .action-float .af-divider { height: 1px; background: #e2e8f0; margin: 4px 2px; }
+  body.dark .action-float .af-divider { background: #334155; }
+  .action-float .af-toggle {
+    width: 46px; height: 46px; border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #0ea5e9); color: #fff;
+    border: none; cursor: pointer; font-size: 1.25rem;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.35);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.25s, filter 0.2s;
+    position: relative; z-index: 2;
+  }
+  .action-float .af-toggle:hover { filter: brightness(1.08); transform: scale(1.06); }
+  .action-float.open .af-toggle { transform: rotate(90deg); }
+  body.dark .action-float .af-menu { background: #1e293b; border-color: #334155; }
+  body.dark .action-float .af-menu .btn { color: #cbd5e1; }
+  body.dark .action-float .af-menu .btn:hover { background: #16213a; color: #e2e8f0; }
+  body.dark .action-float .af-menu .btn:focus-visible { outline-color: #60a5fa; }
+  body.dark .action-float .af-menu a.btn { color: #cbd5e1; }
+  body.dark .action-float .af-menu a.btn:hover { background: #16213a; color: #e2e8f0; }
   .fab {
     width: 44px; height: 44px; border-radius: 50%;
     background: #fff; border: 1px solid #e2e8f0;
@@ -403,6 +496,189 @@
 
   /* ===== 空状态 ===== */
   .empty-tip { text-align: center; padding: 30px 20px; color: #94a3b8; font-size: 0.92rem; }
+
+  /* ===== 行程可编辑（编辑模式） ===== */
+  .tl-item { position: relative; }
+  .tl-ops { display: none; gap: 4px; margin-left: auto; flex-shrink: 0; }
+  .editing .tl-ops { display: flex; }
+  .tl-op {
+    width: 26px; height: 26px; padding: 0;
+    border: 1px solid #e2e8f0; background: #fff; color: #475569;
+    border-radius: 6px; cursor: pointer; font-size: 0.8rem; line-height: 1;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .tl-op:hover { border-color: #2563eb; color: #2563eb; }
+  .tl-op.del:hover { border-color: #ef4444; color: #ef4444; }
+  .tl-item.dragging { opacity: 0.5; }
+  .tl-item.drag-over { outline: 2px dashed #2563eb; outline-offset: 3px; border-radius: 8px; }
+  /* 进入编辑时定位到最近修改项的高亮闪烁 */
+  .tl-item.flash {
+    animation: flash-hl 1.6s ease;
+    border-radius: 8px;
+  }
+  @keyframes flash-hl {
+    0%, 100% { background: transparent; }
+    20%, 60% { background: #fff7d6; }
+  }
+  body.dark .tl-item.flash { animation-name: flash-hl-dark; }
+  @keyframes flash-hl-dark {
+    0%, 100% { background: transparent; }
+    20%, 60% { background: #3a2e12; }
+  }
+  .day-add { display: none; margin-top: 12px; }
+  .editing .day-add { display: block; }
+  .day-add button {
+    padding: 6px 14px; border-radius: 8px;
+    border: 1px dashed #94a3b8; background: transparent; color: #64748b;
+    cursor: pointer; font-size: 0.85rem;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .day-add button:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+  .edit-hint {
+    display: none;
+    background: #eff6ff; border: 1px solid #bfdbfe;
+    border-radius: 10px; padding: 10px 14px;
+    font-size: 0.85rem; color: #1e40af; margin-bottom: 12px;
+  }
+  .editing .edit-hint { display: block; }
+  .edit-hint button {
+    margin-left: 8px; padding: 3px 12px; border-radius: 8px;
+    border: 1px solid #93c5fd; background: #fff; color: #1e40af;
+    cursor: pointer; font-size: 0.82rem;
+  }
+  body.dark .tl-op { background: #1e293b; border-color: #334155; color: #cbd5e1; }
+  body.dark .tl-op:hover { border-color: #60a5fa; color: #60a5fa; }
+  body.dark .day-add button { border-color: #475569; color: #94a3b8; }
+  body.dark .day-add button:hover { border-color: #60a5fa; color: #60a5fa; background: #16213a; }
+  body.dark .edit-hint { background: #1e3a5f; border-color: #334155; color: #93c5fd; }
+  body.dark .edit-hint button { background: #16213a; border-color: #475569; color: #93c5fd; }
+
+  /* ===== Toast 提示 ===== */
+  .toast {
+    position: fixed; left: 50%; bottom: 44px; transform: translateX(-50%) translateY(20px);
+    background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 10px;
+    font-size: 0.88rem; z-index: 9999; opacity: 0; pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    max-width: 90vw; text-align: center;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ===== 自定义确认弹窗（替代浏览器默认 confirm） ===== */
+  .confirm-mask {
+    position: fixed; inset: 0; z-index: 10000;
+    background: rgba(15,23,42,0.45);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .confirm-mask.show { opacity: 1; pointer-events: auto; }
+  .confirm-box {
+    width: 100%; max-width: 340px;
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 24px 22px 18px;
+    transform: translateY(16px) scale(0.96);
+    transition: transform 0.2s;
+    text-align: center;
+  }
+  .confirm-mask.show .confirm-box { transform: translateY(0) scale(1); }
+  .confirm-icon {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px; font-size: 1.5rem;
+  }
+  .confirm-icon.warn { background: #fff7ed; }
+  .confirm-icon.danger { background: #fef2f2; }
+  .confirm-title { font-size: 1.02rem; font-weight: 800; color: #1e293b; margin-bottom: 8px; }
+  .confirm-msg { font-size: 0.86rem; color: #64748b; line-height: 1.6; margin-bottom: 20px; }
+  .confirm-actions { display: flex; gap: 10px; }
+  .confirm-actions button {
+    flex: 1; padding: 10px 0; border-radius: 10px;
+    font-size: 0.88rem; font-weight: 700; cursor: pointer;
+    border: none; transition: filter 0.15s, background 0.15s;
+  }
+  .confirm-cancel { background: #f1f5f9; color: #475569; }
+  .confirm-cancel:hover { background: #e2e8f0; }
+  .confirm-ok { background: #ef4444; color: #fff; }
+  .confirm-ok:hover { filter: brightness(1.08); }
+  .confirm-ok.primary { background: linear-gradient(135deg, #2563eb, #0ea5e9); }
+  body.dark .confirm-box { background: #1e293b; }
+  body.dark .confirm-title { color: #e2e8f0; }
+  body.dark .confirm-msg { color: #94a3b8; }
+  body.dark .confirm-icon.warn { background: #2a2414; }
+  body.dark .confirm-icon.danger { background: #2a1a1a; }
+  body.dark .confirm-cancel { background: #334155; color: #cbd5e1; }
+  body.dark .confirm-cancel:hover { background: #475569; }
+
+  /* ===== 地图链接 ===== */
+  .map-link {
+    display: inline-flex; align-items: center; gap: 3px;
+    color: #2563eb; font-size: 0.78rem; font-weight: 600;
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+    padding: 2px 6px; border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .map-link:hover { background: #eff6ff; color: #1d4ed8; }
+  body.dark .map-link { color: #60a5fa; }
+  body.dark .map-link:hover { background: #16213a; color: #93c5fd; }
+
+  /* ===== 地图选择弹窗 ===== */
+  .map-picker {
+    position: fixed; inset: 0; z-index: 10000;
+    background: rgba(15,23,42,0.45);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .map-picker.show { opacity: 1; pointer-events: auto; }
+  .map-picker-box {
+    width: 100%; max-width: 340px;
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 24px 22px 18px;
+    transform: translateY(16px) scale(0.96);
+    transition: transform 0.2s;
+    text-align: center;
+  }
+  .map-picker.show .map-picker-box { transform: translateY(0) scale(1); }
+  .map-picker-title { font-size: 1.02rem; font-weight: 800; color: #1e293b; margin-bottom: 6px; }
+  .map-picker-sub { font-size: 0.8rem; color: #94a3b8; margin-bottom: 16px; }
+  .map-picker-options { display: flex; flex-direction: column; gap: 10px; }
+  .map-picker-option {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 14px; border-radius: 12px;
+    border: 1px solid #e2e8f0; background: #fff;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .map-picker-option:hover { border-color: #2563eb; background: #eff6ff; }
+  .map-picker-option .mp-ico {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .map-picker-option .mp-ico.amap { background: #e6f4ff; }
+  .map-picker-option .mp-ico.baidu { background: #e8f5e9; }
+  .map-picker-option .mp-name { font-weight: 700; color: #1e293b; font-size: 0.92rem; }
+  .map-picker-option .mp-desc { font-size: 0.74rem; color: #94a3b8; margin-top: 2px; }
+  .map-picker-cancel {
+    margin-top: 12px; width: 100%; padding: 10px 0;
+    border: none; background: transparent; color: #94a3b8;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    border-radius: 10px; transition: background 0.15s, color 0.15s;
+  }
+  .map-picker-cancel:hover { background: #f1f5f9; color: #475569; }
+  body.dark .map-picker-box { background: #1e293b; }
+  body.dark .map-picker-title { color: #e2e8f0; }
+  body.dark .map-picker-sub { color: #64748b; }
+  body.dark .map-picker-option { border-color: #334155; background: #16213a; }
+  body.dark .map-picker-option:hover { border-color: #60a5fa; background: #1e293b; }
+  body.dark .map-picker-option .mp-name { color: #e2e8f0; }
+  body.dark .map-picker-option .mp-ico.amap { background: #0f2747; }
+  body.dark .map-picker-option .mp-ico.baidu { background: #10301f; }
+  body.dark .map-picker-cancel { color: #64748b; }
+  body.dark .map-picker-cancel:hover { background: #334155; color: #cbd5e1; }
 
   /* ===== 移动端适配（手机 / 小屏平板） ===== */
   @media (max-width: 640px) {
@@ -432,11 +708,16 @@
     th, td { padding: 8px 10px; font-size: 0.85rem; }
     .budget-grid { grid-template-columns: 1fr; }
     .footer { padding-bottom: 24px; }
+    /* 侧边操作面板：小屏更靠边、按钮缩小 */
+    .action-float { right: 8px; }
+    .action-float .af-toggle { width: 42px; height: 42px; font-size: 1.1rem; }
+    .action-float .af-menu { padding: 8px; }
+    .action-float .af-menu .btn { padding: 7px 12px; font-size: 0.8rem; }
   }
 
   @media print {
     body { background: #fff !important; color: #000 !important; }
-    .hero, .builder-card, .action-bar, .floating-bar, .footer, .notice, .quick-nav { display: none !important; }
+    .hero, .builder-card, .action-bar, .action-float, .floating-bar, .footer, .notice, .quick-nav { display: none !important; }
     .result-wrap { display: block !important; margin-top: 0; }
     .section { box-shadow: none; border: 1px solid #e2e8f0; break-inside: avoid; }
     body.dark .section, body.dark .day-header, body.dark .bud-item { background: #fff !important; color: #000 !important; }
@@ -444,6 +725,7 @@
     .day-arrow { display: none !important; }
     .day-card.collapsed .timeline { display: flex !important; }
     .tl-time { background: #f1f5f9 !important; color: #000 !important; }
+    .tl-ops, .day-add, .edit-hint { display: none !important; }
     .guide-hero { -webkit-print-color-adjust: exact; }
   }
 </style>
@@ -529,7 +811,6 @@
 
 <!-- ==================== 浮动快捷工具栏 ==================== -->
 <div class="floating-bar">
-  <button class="fab" id="btn-dark" title="切换夜间模式" aria-label="切换夜间/白天模式">🌙</button>
   <button class="fab" id="btn-top" title="回到顶部" aria-label="回到顶部">⬆</button>
 </div>
 
@@ -560,10 +841,96 @@
   window.CITY_DATA = window.CITY_DATA || {};
   var CITY_DATA = window.CITY_DATA;
   var resultBox = document.getElementById('result');
+  var state = null;     /* 最近一次生成的全部上下文（供导出 / 编辑使用） */
+  var editMode = false; /* 行程编辑模式开关 */
+  var dragFrom = null;  /* 拖拽排序：来源 {day, idx} */
 
   /* 每日行程下拉：点击按钮展开/收起，点击菜单项后收起 */
   resultBox.addEventListener('click', function (e) {
     var t = e.target;
+
+    /* 地图链接：点击查看地图 */
+    var mapLink = null;
+    var mwalk = t;
+    while (mwalk && mwalk !== resultBox) {
+      if (mwalk.classList && mwalk.classList.contains('map-link')) { mapLink = mwalk; break; }
+      mwalk = mwalk.parentNode;
+    }
+    if (mapLink) {
+      e.preventDefault();
+      var mName = mapLink.getAttribute('data-map-name');
+      var mLat = parseFloat(mapLink.getAttribute('data-map-lat'));
+      var mLng = parseFloat(mapLink.getAttribute('data-map-lng'));
+      if (mName && !isNaN(mLat) && !isNaN(mLng)) openMap(mName, mLat, mLng);
+      return;
+    }
+
+    /* 编辑模式：上移/下移/删除 行程项 */
+    var op = null;
+    var walk = t;
+    while (walk && walk !== resultBox && !(walk.classList && walk.classList.contains('tl-op'))) walk = walk.parentNode;
+    if (walk && walk !== resultBox) op = walk;
+    if (op && state) {
+      var itemEl = op.parentNode ? op.parentNode.parentNode : null;
+      if (itemEl && itemEl.getAttribute) {
+        var day = parseInt(itemEl.getAttribute('data-day'), 10);
+        var idx = parseInt(itemEl.getAttribute('data-idx'), 10);
+        if (op.classList.contains('up')) moveItem(day, idx, -1);
+        else if (op.classList.contains('down')) moveItem(day, idx, 1);
+        else if (op.classList.contains('del')) removeItem(day, idx);
+      }
+      return;
+    }
+    /* 编辑模式：添加行程项 */
+    var addBtn = null;
+    walk = t;
+    while (walk && walk !== resultBox && !(walk.classList && walk.classList.contains('day-add'))) walk = walk.parentNode;
+    if (walk && walk !== resultBox) addBtn = walk;
+    if (addBtn) {
+      var btn = addBtn.querySelector('button');
+      var dayIdx = btn ? parseInt(btn.getAttribute('data-day'), 10) : NaN;
+      if (!isNaN(dayIdx) && state) addItem(dayIdx);
+      return;
+    }
+    if (t.id === 'af-toggle' || (t.parentNode && t.parentNode.id === 'af-toggle')) {
+      var af0 = document.getElementById('action-float');
+      setActionFloat(!(af0 && af0.classList.contains('open')));
+      return;
+    }
+    /* 操作按钮：编辑 / 还原默认 / 复制文本 / 复制 Markdown / 打印 / 夜间模式
+       （点完后保持面板展开，方便继续点其他功能；仅用户主动关闭时才收起） */
+    if (t.id === 'btn-edit') {
+      toggleEdit();
+      return;
+    }
+    if (t.id === 'btn-reset') {
+      showConfirm({
+        title: '还原为默认行程',
+        message: '你之前对行程的修改将被清除，确定还原吗？',
+        okText: '还原',
+        cancelText: '取消'
+      }).then(function (sure) {
+        if (!sure) return;
+        clearEdit();
+        editMode = false;
+        toast('↩️ 已还原为默认行程');
+        build();
+        setActionFloat(true); /* build 重建面板后重新展开 */
+      });
+      return;
+    }
+    if (t.id === 'btn-copy-text') { copyToClipboard(buildExportText(), '✅ 行程文本已复制到剪贴板', t); return; }
+    if (t.id === 'btn-copy-md') { copyToClipboard(buildExportMarkdown(), '✅ Markdown 已复制到剪贴板', t); return; }
+    if (t.id === 'btn-print') { window.print(); return; }
+    if (t.id === 'btn-dark') { toggleDark(); return; }
+    if (t.id === 'btn-fav') {
+      if (!state) return;
+      var nowFav = toggleFav(state.to, state.city.emoji);
+      updateFavBtn();
+      toast(nowFav ? '⭐ 已收藏「' + state.to + '」' : '已取消收藏「' + state.to + '」');
+      return;
+    }
+
     var drop = null;
     while (t && t !== resultBox && !(t.classList && (t.classList.contains('drop-btn') || t.classList.contains('drop-menu')))) t = t.parentNode;
     if (t && t !== resultBox) {
@@ -577,6 +944,10 @@
     /* 点击其它区域：关闭所有已展开的下拉 */
     var openDrops = resultBox.querySelectorAll('.drop.open');
     for (var i = 0; i < openDrops.length; i++) openDrops[i].classList.remove('open');
+    /* 收起侧边操作面板：编辑模式下保持常驻（方便随时点「完成编辑」），
+       非编辑模式点击面板外才收起 */
+    var afBox = document.getElementById('action-float');
+    if (afBox && !editMode && !afBox.contains(e.target)) setActionFloat(false);
 
     /* 每日行程：点击标题折叠/展开当天内容 */
     t = e.target;
@@ -590,8 +961,629 @@
     }
   });
 
+  /* 行程项内容编辑：点击时间/内容可直接改字，失焦后自动保存 */
+  resultBox.addEventListener('focusout', function (e) {
+    var t = e.target;
+    if (!t || !t.classList || !(t.classList.contains('tl-time') || t.classList.contains('tl-body'))) return;
+    if (!editMode || !state) return;
+    var itemEl = t.closest('.tl-item');
+    if (!itemEl) return;
+    var day = parseInt(itemEl.getAttribute('data-day'), 10);
+    var idx = parseInt(itemEl.getAttribute('data-idx'), 10);
+    var field = t.getAttribute('data-field');
+    if (isNaN(day) || isNaN(idx) || !field) return;
+    var d = state.plan[day];
+    if (!d || !d.items || !d.items[idx]) return;
+    var val = (t.innerText || t.textContent || '').replace(/\s*\n\s*/g, ' ').replace(/\s+/g, ' ').trim();
+    if (field === 't') {
+      d.items[idx].t = val || '全天';
+    } else if (field === 'x') {
+      d.items[idx].x = val || '🚶 自由安排';
+    }
+    saveEdit();
+    saveEditPos(day, idx);
+    t.innerText = field === 't' ? d.items[idx].t : d.items[idx].x; /* 规整显示 */
+  });
+
+  /* 拖拽排序（仅编辑模式生效；拖拽起点在可编辑文本内时不触发拖拽，避免干扰改字） */
+  resultBox.addEventListener('dragstart', function (e) {
+    var t = e.target;
+    if (t && t.classList && (t.classList.contains('tl-time') || t.classList.contains('tl-body'))) { e.preventDefault(); return; }
+    var item = t;
+    while (item && item !== resultBox && !(item.classList && item.classList.contains('tl-item'))) item = item.parentNode;
+    if (!item || item === resultBox || !editMode || !state) { e.preventDefault(); return; }
+    dragFrom = {
+      day: parseInt(item.getAttribute('data-day'), 10),
+      idx: parseInt(item.getAttribute('data-idx'), 10)
+    };
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', 'x');
+    item.classList.add('dragging');
+  });
+  resultBox.addEventListener('dragover', function (e) {
+    if (!editMode || !state || !dragFrom) return;
+    var item = e.target;
+    while (item && item !== resultBox && !(item.classList && item.classList.contains('tl-item'))) item = item.parentNode;
+    if (!item || item === resultBox) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    resultBox.querySelectorAll('.tl-item.drag-over').forEach(function (n) { n.classList.remove('drag-over'); });
+    item.classList.add('drag-over');
+  });
+  resultBox.addEventListener('dragleave', function (e) {
+    var item = e.target;
+    while (item && item !== resultBox && !(item.classList && item.classList.contains('tl-item'))) item = item.parentNode;
+    if (item && item !== resultBox) item.classList.remove('drag-over');
+  });
+  resultBox.addEventListener('drop', function (e) {
+    if (!editMode || !state || !dragFrom) return;
+    var item = e.target;
+    while (item && item !== resultBox && !(item.classList && item.classList.contains('tl-item'))) item = item.parentNode;
+    if (!item || item === resultBox) return;
+    e.preventDefault();
+    resultBox.querySelectorAll('.tl-item').forEach(function (n) { n.classList.remove('dragging', 'drag-over'); });
+    var to = {
+      day: parseInt(item.getAttribute('data-day'), 10),
+      idx: parseInt(item.getAttribute('data-idx'), 10)
+    };
+    var from = dragFrom;
+    dragFrom = null;
+    if (from.day === to.day && from.idx === to.idx) return;
+    /* 从源位置移除，插入到目标位置 */
+    var srcItems = state.plan[from.day].items;
+    var moved = srcItems.splice(from.idx, 1)[0];
+    var dstItems = state.plan[to.day].items;
+    var insertAt = to.idx;
+    if (from.day === to.day && from.idx < to.idx) insertAt--; /* 同天向下移动，先删后插会前移 */
+    dstItems.splice(insertAt, 0, moved);
+    saveEdit();
+    rerenderDays();
+  });
+
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* ===== 出发地交通估算（非西安出发时，按两地直线距离估算高铁/飞机） ===== */
+  function estimateTransport(fromName, toName) {
+    var fc = CITY_DATA[fromName];
+    var tc = CITY_DATA[toName];
+    if (!fc || !fc.loc || !tc || !tc.loc) return null;
+    var d = haversine({ lat: fc.loc[0], lng: fc.loc[1] }, { lat: tc.loc[0], lng: tc.loc[1] }) / 1000; /* km */
+    if (!isFinite(d) || d < 10) return null;
+    var km = Math.round(d);
+    var rows = [];
+    /* 高铁：均速约 280km/h，二等座约 0.45 元/km */
+    var railH = Math.round(d / 280);
+    var railP = Math.max(80, Math.round(d * 0.45));
+    rows.push({ mode: '🚄 高铁（估算）', line: fromName + ' → ' + toName, time: '约 ' + railH + ' 小时', price: '二等座约 ' + fmt(railP) + ' 起' });
+    /* 飞机：飞行均速约 750km/h，另加往返机场约 2h；经济舱约 0.6-1.0 元/km */
+    var flyH = Math.round(d / 750 + 1.5);
+    var flyLo = Math.max(250, Math.round(d * 0.6));
+    var flyHi = Math.max(400, Math.round(d * 1.0));
+    rows.push({ mode: '✈️ 飞机（估算）', line: fromName + ' → ' + toName + ' 机场', time: '约 ' + flyH + ' 小时（含机场时间）', price: '经济舱约 ' + fmt(flyLo) + ' - ' + fmt(flyHi) });
+    return {
+      rows: rows,
+      note: '📏 出发地「' + fromName + '」与目的地直线距离约 ' + km.toLocaleString('zh-CN') + ' km，以上时长/价格为按直线距离估算的参考，实际班次与票价请以 12306 / 航司实时查询为准。'
+    };
+  }
+
+  /* ===== 导出：行程文本 / Markdown ===== */
+  function buildExportText() {
+    if (!state) return '';
+    var s = state, L = [];
+    L.push('【' + s.from + ' → ' + s.to + ' ' + s.days + '天' + s.nights + '晚 旅游攻略】');
+    L.push(s.city.emoji + ' ' + s.city.tagline);
+    L.push('最佳旅行时间：' + s.city.bestMonths + (s.city.weather ? '（' + s.city.weather + '）' : '') + ' · ' + s.persons + '人同行' + (s.level ? ' · ' + s.level.label + '档' : ''));
+    L.push('');
+    L.push('【交通方案】');
+    s.transportRows.forEach(function (t) {
+      L.push('· ' + t.mode + '｜' + t.line + '｜' + t.time + '｜' + t.price);
+    });
+    if (s.transportNote) L.push(s.transportNote.replace(/<[^>]+>/g, ''));
+    L.push('');
+    L.push('【每日行程】');
+    s.plan.forEach(function (day, i) {
+      L.push('D' + (i + 1) + ' · ' + day.title + (day.tag ? '（' + day.tag + '）' : ''));
+      (day.items || []).forEach(function (it) {
+        L.push('  ' + it.t + '：' + it.x);
+      });
+    });
+    L.push('');
+    L.push('【地道美食】');
+    s.levelFoods.forEach(function (f) {
+      L.push('· ' + f.name + '（' + f.shop + '，约' + f.per + '）' + (f.note ? '：' + f.note : ''));
+    });
+    L.push('');
+    L.push('【景点 & 活动】');
+    s.levelSpots.forEach(function (sp) {
+      L.push('· ' + sp.name + '（' + sp.ticket + '，建议' + sp.time + '）' + (sp.note ? '：' + sp.note : ''));
+    });
+    L.push('');
+    L.push('【住宿推荐】');
+    s.shownHotels.forEach(function (h) {
+      L.push('· ' + h.type + '｜' + h.rec + '｜' + h.price + '｜' + h.note);
+    });
+    L.push('');
+    L.push('【预算】人均总预算约 ' + fmt(s.perLow) + ' - ' + (s.level && s.level.displayHigh ? s.level.displayHigh : fmt(s.perHigh)) + ' 元（' + s.days + '天），' + s.persons + '人合计约 ' + fmt(s.totalLow) + ' - ' + (s.level && s.level.displayHigh ? fmt(s.level.range[1] * s.persons) + '+' : fmt(s.totalHigh)) + ' 元。');
+    L.push('');
+    if ((s.city.specialties || []).length || (s.city.shopping || []).length) {
+      L.push('【本地特产 & 购物】');
+      (s.city.specialties || []).forEach(function (sp) {
+        L.push('· ' + sp.name + (sp.price ? '（' + sp.price + '）' : '') + (sp.note ? '：' + sp.note : ''));
+      });
+      (s.city.shopping || []).forEach(function (sh) {
+        L.push('· 🏪 ' + sh.name + (sh.area ? '（' + sh.area + '）' : '') + (sh.note ? '：' + sh.note : ''));
+      });
+      L.push('');
+    }
+    L.push('【避坑指南】');
+    (s.city.tips || []).forEach(function (t) {
+      L.push('· ' + t);
+    });
+    L.push('');
+    L.push('—— 由「自定义旅游攻略生成器」生成，价格以实际出行时为准 ——');
+    return L.join('\n');
+  }
+
+  function buildExportMarkdown() {
+    if (!state) return '';
+    var s = state, L = [];
+    L.push('# ' + s.to + ' ' + s.days + '天' + s.nights + '晚 攻略');
+    L.push('');
+    L.push('- **出发地**：' + s.from);
+    L.push('- **最佳旅行时间**：' + s.city.bestMonths + (s.city.weather ? '（' + s.city.weather + '）' : ''));
+    L.push('- **人数**：' + s.persons + '人' + (s.level ? ' · **档位**：' + s.level.label : ''));
+    L.push('');
+    L.push('## 交通方案');
+    L.push('| 方式 | 路线 | 耗时 | 参考价 |');
+    L.push('|---|---|---|---|');
+    s.transportRows.forEach(function (t) {
+      L.push('| ' + t.mode + ' | ' + t.line + ' | ' + t.time + ' | ' + t.price + ' |');
+    });
+    if (s.transportNote) L.push('');
+    L.push('## 每日行程');
+    s.plan.forEach(function (day, i) {
+      L.push('');
+      L.push('### D' + (i + 1) + ' · ' + day.title);
+      (day.items || []).forEach(function (it) {
+        L.push('- **' + it.t + '**：' + it.x);
+      });
+    });
+    L.push('');
+    L.push('## 地道美食');
+    s.levelFoods.forEach(function (f) {
+      L.push('- ' + f.name + '（' + f.shop + '，约' + f.per + '）' + (f.note ? ' — ' + f.note : ''));
+    });
+    L.push('');
+    L.push('## 景点 & 活动');
+    s.levelSpots.forEach(function (sp) {
+      L.push('- ' + sp.name + '（' + sp.ticket + '，建议' + sp.time + '）' + (sp.note ? ' — ' + sp.note : ''));
+    });
+    L.push('');
+    L.push('## 住宿推荐');
+    s.shownHotels.forEach(function (h) {
+      L.push('- ' + h.type + '｜' + h.rec + '｜' + h.price + ' — ' + h.note);
+    });
+    L.push('');
+    L.push('## 预算');
+    L.push('人均总预算约 ' + fmt(s.perLow) + ' - ' + (s.level && s.level.displayHigh ? s.level.displayHigh : fmt(s.perHigh)) + ' 元（' + s.days + '天），' + s.persons + '人合计约 ' + fmt(s.totalLow) + ' - ' + (s.level && s.level.displayHigh ? fmt(s.level.range[1] * s.persons) + '+' : fmt(s.totalHigh)) + ' 元。');
+    L.push('');
+    if ((s.city.specialties || []).length || (s.city.shopping || []).length) {
+      L.push('## 本地特产 & 购物');
+      (s.city.specialties || []).forEach(function (sp) {
+        L.push('- ' + sp.name + (sp.price ? '（' + sp.price + '）' : '') + (sp.note ? ' — ' + sp.note : ''));
+      });
+      (s.city.shopping || []).forEach(function (sh) {
+        L.push('- 🏪 ' + sh.name + (sh.area ? '（' + sh.area + '）' : '') + (sh.note ? ' — ' + sh.note : ''));
+      });
+      L.push('');
+    }
+    L.push('## 避坑指南');
+    (s.city.tips || []).forEach(function (t) {
+      L.push('- ' + t);
+    });
+    return L.join('\n');
+  }
+
+  function copyToClipboard(text, tip, btnEl) {
+    if (!text) return;
+    function done() {
+      toast(tip || '✅ 已复制到剪贴板');
+      /* 按钮短暂反馈「已复制」 */
+      if (btnEl && (btnEl.tagName === 'BUTTON' || btnEl.tagName === 'A')) {
+        var old = btnEl.textContent;
+        btnEl.classList.add('copied');
+        btnEl.textContent = '✅ 已复制';
+        setTimeout(function () {
+          btnEl.textContent = old;
+          btnEl.classList.remove('copied');
+        }, 1000);
+      }
+    }
+    function fail() {
+      /* 降级：临时 textarea + execCommand（兼容 file:// 场景） */
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        done();
+      } catch (e) {
+        toast('❌ 复制失败，请手动复制');
+      }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, fail);
+    } else {
+      fail();
+    }
+  }
+
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'toast';
+      el.id = 'toast';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { el.classList.remove('show'); }, 2200);
+  }
+
+  /* 自定义确认弹窗（Promise 风格，替代浏览器默认 confirm） */
+  function showConfirm(opts) {
+    opts = opts || {};
+    return new Promise(function (resolve) {
+      var mask = document.createElement('div');
+      mask.className = 'confirm-mask';
+      var danger = opts.danger !== false;
+      var icon = danger ? '⚠️' : 'ℹ️';
+      var iconCls = danger ? 'danger' : 'warn';
+      var okCls = danger ? 'confirm-ok' : 'confirm-ok primary';
+      mask.innerHTML =
+        '<div class="confirm-box">' +
+          '<div class="confirm-icon ' + iconCls + '">' + icon + '</div>' +
+          '<div class="confirm-title">' + (opts.title || '确认操作') + '</div>' +
+          '<div class="confirm-msg">' + (opts.message || '') + '</div>' +
+          '<div class="confirm-actions">' +
+            '<button type="button" class="' + okCls + '">' + (opts.okText || '确定') + '</button>' +
+            '<button type="button" class="confirm-cancel">' + (opts.cancelText || '取消') + '</button>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(mask);
+
+      function close(result) {
+        mask.classList.remove('show');
+        setTimeout(function () { mask.remove(); resolve(result); }, 200);
+      }
+      mask.querySelector('.confirm-cancel').addEventListener('click', function () { close(false); });
+      mask.querySelector('.confirm-ok').addEventListener('click', function () { close(true); });
+      /* 点击遮罩空白处 = 取消 */
+      mask.addEventListener('click', function (e) {
+        if (e.target === mask) close(false);
+      });
+
+      /* 触发进入动画 */
+      requestAnimationFrame(function () { mask.classList.add('show'); });
+    });
+  }
+
+  /* ===== 历史与收藏（首页「我的足迹」联动） ===== */
+  var HIST_KEY = 'xj-trip-history';
+  var FAV_KEY = 'xj-trip-favs';
+
+  function loadJSON(key) {
+    try {
+      var v = localStorage.getItem(key);
+      return v ? JSON.parse(v) : [];
+    } catch (e) { return []; }
+  }
+  function saveJSON(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* 忽略 */ }
+  }
+
+  /* ===== 地图跳转（高德 / 百度网页版，选择后半小时内免提示） ===== */
+  var MAP_KEY = 'xj-trip-map-choice';
+  var MAP_TTL = 30 * 60 * 1000; /* 30 分钟过期 */
+
+  /* 读取当前有效的地图选择；过期返回 null */
+  function getMapChoice() {
+    try {
+      var v = localStorage.getItem(MAP_KEY);
+      if (!v) return null;
+      var o = JSON.parse(v);
+      if (!o || !o.provider || !o.expireAt) return null;
+      if (Date.now() > o.expireAt) return null;
+      return o.provider;
+    } catch (e) { return null; }
+  }
+
+  function saveMapChoice(provider) {
+    saveJSON(MAP_KEY, { provider: provider, expireAt: Date.now() + MAP_TTL });
+  }
+
+  /* 构造地图跳转 URL（坐标精确标记） */
+  function mapUrl(provider, name, lat, lng) {
+    if (provider === 'amap') {
+      return 'https://uri.amap.com/marker?position=' + lng + ',' + lat + '&name=' + encodeURIComponent(name) + '&src=xinjump';
+    }
+    return 'https://api.map.baidu.com/marker?location=' + lat + ',' + lng + '&title=' + encodeURIComponent(name) + '&content=' + encodeURIComponent(name) + '&output=html';
+  }
+
+  /* 打开地图：若已有有效选择则直接跳转，否则弹出选择框 */
+  function openMap(name, lat, lng) {
+    var provider = getMapChoice();
+    if (provider) {
+      window.open(mapUrl(provider, name, lat, lng), '_blank');
+      return;
+    }
+    showMapPicker(name, lat, lng);
+  }
+
+  /* 地图选择弹窗（高德 / 百度 / 取消） */
+  function showMapPicker(name, lat, lng) {
+    var mask = document.createElement('div');
+    mask.className = 'map-picker';
+    mask.innerHTML =
+      '<div class="map-picker-box">' +
+        '<div class="map-picker-title">🗺️ 选择地图应用</div>' +
+        '<div class="map-picker-sub">查看「' + (name || '') + '」的位置，本次选择将记住 30 分钟</div>' +
+        '<div class="map-picker-options">' +
+          '<div class="map-picker-option" data-provider="amap">' +
+            '<div class="mp-ico amap">🗺️</div>' +
+            '<div><div class="mp-name">高德地图</div><div class="mp-desc">网页版 · 精准标记</div></div>' +
+          '</div>' +
+          '<div class="map-picker-option" data-provider="baidu">' +
+            '<div class="mp-ico baidu">📍</div>' +
+            '<div><div class="mp-name">百度地图</div><div class="mp-desc">网页版 · 精准标记</div></div>' +
+          '</div>' +
+        '</div>' +
+        '<button type="button" class="map-picker-cancel">取消</button>' +
+      '</div>';
+    document.body.appendChild(mask);
+
+    function close() {
+      mask.classList.remove('show');
+      setTimeout(function () { mask.remove(); }, 200);
+    }
+    mask.querySelectorAll('.map-picker-option').forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        var provider = opt.getAttribute('data-provider');
+        saveMapChoice(provider);
+        close();
+        window.open(mapUrl(provider, name, lat, lng), '_blank');
+      });
+    });
+    mask.querySelector('.map-picker-cancel').addEventListener('click', close);
+    mask.addEventListener('click', function (e) {
+      if (e.target === mask) close();
+    });
+
+    requestAnimationFrame(function () { mask.classList.add('show'); });
+  }
+
+  /* 记录一次生成历史：按城市去重，最新在前，最多保留 20 条 */
+  function recordHistory(item) {
+    var hist = loadJSON(HIST_KEY);
+    hist = hist.filter(function (h) { return h.to !== item.to; });
+    hist.unshift({ to: item.to, from: item.from, days: item.days, persons: item.persons, budget: item.budget, emoji: item.emoji, ts: Date.now() });
+    if (hist.length > 20) hist.length = 20;
+    saveJSON(HIST_KEY, hist);
+  }
+
+  /* 是否已收藏某城市 */
+  function isFav(name) {
+    return loadJSON(FAV_KEY).some(function (f) { return f.name === name; });
+  }
+  /* 切换收藏状态，返回收藏后是否处于已收藏 */
+  function toggleFav(name, emoji) {
+    var favs = loadJSON(FAV_KEY);
+    var i = -1;
+    for (var k = 0; k < favs.length; k++) if (favs[k].name === name) { i = k; break; }
+    if (i >= 0) {
+      favs.splice(i, 1);
+      saveJSON(FAV_KEY, favs);
+      return false;
+    } else {
+      favs.unshift({ name: name, emoji: emoji || '', ts: Date.now() });
+      if (favs.length > 50) favs.length = 50;
+      saveJSON(FAV_KEY, favs);
+      return true;
+    }
+  }
+
+  /* ===== 行程可编辑（增删 / 排序 / 本机保存） ===== */
+  var EDIT_KEY = 'xj-trip-edit-v1-';
+
+  function editKey() {
+    return EDIT_KEY + state.from + '|' + state.to + '|' + state.days;
+  }
+
+  function saveEdit() {
+    if (!state) return;
+    try {
+      localStorage.setItem(editKey(), JSON.stringify(state.plan));
+    } catch (e) { /* 忽略存储失败 */ }
+  }
+
+  function loadEdit() {
+    if (!state) return null;
+    try {
+      var raw = localStorage.getItem(editKey());
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+
+  function clearEdit() {
+    if (!state) return;
+    try {
+      localStorage.removeItem(editKey());
+      localStorage.removeItem(editKey() + '-pos');
+    } catch (e) { /* 忽略 */ }
+  }
+
+  /* 记录最近一次修改的行程项位置（用于进入编辑时自动定位） */
+  function saveEditPos(day, idx) {
+    if (!state) return;
+    try { localStorage.setItem(editKey() + '-pos', day + ':' + idx); } catch (e) { /* 忽略 */ }
+  }
+  function loadEditPos() {
+    if (!state) return null;
+    try {
+      var raw = localStorage.getItem(editKey() + '-pos');
+      if (!raw) return null;
+      var parts = raw.split(':');
+      var day = parseInt(parts[0], 10);
+      var idx = parseInt(parts[1], 10);
+      if (isNaN(day) || isNaN(idx)) return null;
+      if (!state.plan[day] || !state.plan[day].items || !state.plan[day].items[idx]) return null;
+      return { day: day, idx: idx };
+    } catch (e) { return null; }
+  }
+
+  function applyEditIfAny() {
+    /* 生成后若本机有该行程的编辑记录，则静默恢复内容，但不自动进入编辑模式；
+       用户需手动点击「编辑行程」才会展开编辑控件 */
+    if (!state) return;
+    var saved = loadEdit();
+    if (saved && Array.isArray(saved) && saved.length) {
+      state.plan = saved;
+    }
+  }
+
+  /* 同步行程项可编辑状态：仅编辑模式下允许点击改字 */
+  function syncEditable() {
+    if (!state) return;
+    resultBox.querySelectorAll('.tl-time, .tl-body').forEach(function (el) {
+      el.setAttribute('contenteditable', editMode ? 'true' : 'false');
+    });
+  }
+
+  /* 侧边操作面板：展开/收起（统一入口，负责同步图标） */
+  function setActionFloat(open) {
+    var afBox = document.getElementById('action-float');
+    var toggle = document.getElementById('af-toggle');
+    if (afBox) afBox.classList.toggle('open', open);
+    if (toggle) toggle.textContent = open ? '✕' : '⚙️';
+  }
+
+  /* 同步「收藏」按钮文字与状态（随 build 重建，故每次重新查找） */
+  function updateFavBtn() {
+    var btn = document.getElementById('btn-fav');
+    if (!btn || !state) return;
+    var on = isFav(state.to);
+    btn.textContent = on ? '⭐ 已收藏' : '☆ 收藏城市';
+    btn.classList.toggle('fav-on', on);
+  }
+
+  /* 进入编辑时，自动滚动定位到最近一次修改的行程项并高亮；
+     若无修改记录，则定位到行程第一个行程项（D1 第一项） */
+  function scrollToLastEdit() {
+    if (!state) return;
+    var item = null;
+    var pos = loadEditPos();
+    if (pos) {
+      item = resultBox.querySelector('.tl-item[data-day="' + pos.day + '"][data-idx="' + pos.idx + '"]');
+    }
+    if (!item) {
+      /* 无修改记录：定位到第一个行程项 */
+      item = resultBox.querySelector('.tl-item');
+    }
+    if (!item) return;
+    item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    item.classList.add('flash');
+    setTimeout(function () { item.classList.remove('flash'); }, 1600);
+  }
+
+  function toggleEdit() {
+    editMode = !editMode;
+    if (editMode) {
+      toast('✏️ 已进入编辑模式，点击文字即可修改行程项');
+    } else {
+      saveEdit();
+      toast('💾 行程修改已保存到本机');
+    }
+    resultBox.classList.toggle('editing', editMode);
+    var editBtn = document.getElementById('btn-edit');
+    editBtn.textContent = editMode ? '✅ 完成编辑' : '✏️ 编辑行程';
+    editBtn.classList.toggle('editing', editMode);
+    syncEditable();
+    if (editMode) {
+      /* 进入编辑后定位到最近修改项（等待布局稳定后执行） */
+      setTimeout(scrollToLastEdit, 60);
+    }
+  }
+
+  function rerenderDays() {
+    if (!state) return;
+    var sec = document.getElementById('sec-days');
+    var html = '<div class="section" id="sec-days"><h2>📋 每日详细行程</h2>';
+    html += '<div class="edit-hint">✏️ 编辑模式：<strong>点击行程项的文字或时间即可直接修改</strong>，也可上下移动、删除、添加行程项或拖拽卡片排序；修改会自动保存到本机，点击「完成」退出编辑。</div>';
+    if (state.level) {
+      html += '<div class="callout callout-info">💡 本行程已按「' + state.level.label + '」档位生成：每日餐饮替换为' + (state.level.id === 'economy' ? '高性价比' : state.level.id === 'quality' ? '高品质' : '舒适') + '价位的当地推荐，整体消费控制在所选预算内。</div>';
+    }
+    state.plan.forEach(function (day, i) {
+      html += '<div class="day-card" id="day-' + (i + 1) + '">' +
+        '<div class="day-header"><div class="day-num">D' + (i + 1) + '</div><div class="day-title">' + esc(day.title) + '</div>' +
+        (day.tag ? '<span class="tag">' + esc(day.tag) + '</span>' : '') +
+        '<span class="day-arrow">▾</span></div>';
+      html += '<div class="timeline">';
+      (day.items || []).forEach(function (it, j) {
+        html += '<div class="tl-item" data-day="' + i + '" data-idx="' + j + '" draggable="true">' +
+          '<div class="tl-time" data-field="t">' + esc(it.t) + '</div>' +
+          '<div class="tl-body" data-field="x">' + esc(it.x) + '</div>' +
+          '<span class="tl-ops">' +
+            '<button type="button" class="tl-op up" title="上移">↑</button>' +
+            '<button type="button" class="tl-op down" title="下移">↓</button>' +
+            '<button type="button" class="tl-op del" title="删除">✕</button>' +
+          '</span></div>';
+      });
+      html += '</div>';
+      html += '<div class="day-add"><button type="button" data-day="' + i + '">＋ 添加行程项</button></div></div>';
+    });
+    html += '</div>';
+    sec.outerHTML = html;
+    syncEditable();
+  }
+
+  /* 编辑操作：移动 / 删除 / 添加 */
+  function moveItem(day, idx, dir) {
+    var items = state.plan[day].items;
+    var to = idx + dir;
+    if (to < 0 || to >= items.length) return;
+    var tmp = items[idx];
+    items[idx] = items[to];
+    items[to] = tmp;
+    saveEdit();
+    saveEditPos(day, to);
+    rerenderDays();
+  }
+
+  function removeItem(day, idx) {
+    state.plan[day].items.splice(idx, 1);
+    if (!state.plan[day].items.length) {
+      state.plan[day].items.push({ t: '全天', x: '🚶 自由安排：睡到自然醒，市区 City Walk 随走随拍' });
+    }
+    var posIdx = Math.max(0, idx - 1);
+    saveEdit();
+    saveEditPos(day, posIdx);
+    rerenderDays();
+  }
+
+  function addItem(day) {
+    state.plan[day].items.push({ t: '下午', x: '🚶 自由安排：按当天节奏灵活调整，累了就找家咖啡馆歇脚' });
+    var newIdx = state.plan[day].items.length - 1;
+    saveEdit();
+    saveEditPos(day, newIdx);
+    rerenderDays();
   }
 
   function fmt(n) {
@@ -1129,6 +2121,7 @@
   }
 
   function build() {
+    editMode = false; /* 每次重新生成默认退出编辑模式 */
     var fromInput = document.getElementById('f-from');
     var from = fromInput.value.trim() || '西安';
     fromInput.value = from;
@@ -1217,6 +2210,35 @@
     var hotelFallback = hotelPick.fallback;
     var hotelTrimmed = shownHotels.length < (city.hotels || []).length;
 
+    /* 出发地交通：from 为西安时用城市内置交通表；否则按两地直线距离估算高铁/飞机 */
+    var transportRows = city.transport || [];
+    var transportNote = '';
+    var isXiAn = from === '西安';
+    if (!isXiAn) {
+      var est = estimateTransport(from, to);
+      if (est) {
+        transportRows = est.rows;
+        transportNote = est.note;
+      } else {
+        transportNote = '⚠️ 出发地「' + esc(from) + '」暂无内置数据，以下为目的地常用交通参考，请以 12306 / 航司实时查询为准。';
+      }
+    }
+
+    /* 记住本次生成的全部上下文（供导出 / 编辑 / 打印使用） */
+    state = {
+      from: from, to: to, days: days, nights: nights, persons: persons,
+      city: city, level: level, plan: plan,
+      levelFoods: levelFoods, levelSpots: levelSpots,
+      shownHotels: shownHotels, hotelFallback: hotelFallback, hotelTrimmed: hotelTrimmed,
+      transportRows: transportRows, transportNote: transportNote,
+      b: b, perLow: perLow, perHigh: perHigh, perDayLv: perDayLv,
+      totalLow: totalLow, totalHigh: totalHigh,
+      fallbackDays: fallbackDays, origPlanDays: origPlanDays
+    };
+
+    /* 记录生成历史到 localStorage（供首页「我的足迹」展示） */
+    recordHistory({ to: to, from: from, days: days, persons: persons, budget: levelId, emoji: city.emoji });
+
     var html = '';
 
     /* -------- 封面 -------- */
@@ -1225,7 +2247,7 @@
         '<h2>' + city.emoji + ' ' + esc(from) + ' → ' + esc(to) + ' ' + days + '天' + nights + '晚 攻略</h2>' +
         '<div class="guide-sub">' + esc(city.tagline) + ' · 最佳旅行时间 ' + esc(city.bestMonths) + ' · ' + persons + ' 人同行</div>' +
         '<div class="chips">' +
-          '<span class="chip">🌤️ ' + esc(city.bestMonths) + ' 最佳</span>' +
+          '<span class="chip">🌤️ ' + esc(city.bestMonths) + ' 最佳' + (city.weather ? ' · ' + esc(city.weather) : '') + '</span>' +
           '<span class="chip">🗓️ ' + days + '天' + nights + '晚</span>' +
           '<span class="chip">👥 ' + persons + ' 人</span>' +
           (level ? '<span class="chip">💎 ' + level.label + '档</span>' : '') +
@@ -1252,6 +2274,7 @@
       '</span></span>' +
       '<a href="#sec-food">🍴 美食</a>' +
       '<a href="#sec-spots">🎫 景点</a>' +
+      '<a href="#sec-shopping">🛍️ 购物</a>' +
       '<a href="#sec-budget">💰 预算</a>' +
       '<a href="#sec-tips">⚠️ 避坑</a>' +
     '</div>';
@@ -1263,12 +2286,13 @@
         '<p>' + esc(city.intro) + '</p>' +
       '</div>';
 
-    /* -------- 交通 -------- */
+    /* -------- 交通（按出发地动态展示） -------- */
     html += '<div class="section" id="sec-transport"><h2>🚄 交通方案（基于' + esc(from) + '出发）</h2><div class="table-wrap"><table><tr><th>方式</th><th>班次/路线</th><th>耗时</th><th>参考价</th></tr>';
-    (city.transport || []).forEach(function (t) {
+    transportRows.forEach(function (t) {
       html += '<tr><td><strong>' + esc(t.mode) + '</strong></td><td>' + esc(t.line) + '</td><td>' + esc(t.time) + '</td><td>' + esc(t.price) + '</td></tr>';
     });
     html += '</table></div>';
+    if (transportNote) html += '<div class="callout callout-info">' + transportNote + '</div>';
     html += '<div class="callout callout-warn"><strong>购票提醒</strong>：节假日出行务必提前 15 天在 12306 / 航司 APP 购票，热门班次票源紧张。</div></div>';
 
     /* -------- 住宿 -------- */
@@ -1282,8 +2306,9 @@
     }
     html += '<div class="callout callout-tip"><strong>住宿总预算</strong>（' + nights + '晚 × ' + persons + '人，按人均核算）：约 <strong>' + fmt(perDayLv[0] * 0.45 * nights) + ' - ' + fmt(perDayLv[1] * 0.45 * nights) + ' /人</strong>，已计入人均每日预算。</div></div>';
 
-    /* -------- 每日行程 -------- */
+    /* -------- 每日行程（可编辑：编辑模式下支持增删/拖拽排序） -------- */
     html += '<div class="section" id="sec-days"><h2>📋 每日详细行程</h2>';
+    html += '<div class="edit-hint">✏️ 编辑模式：<strong>点击行程项的文字或时间即可直接修改</strong>，也可上下移动、删除、添加行程项或拖拽卡片排序；修改会自动保存到本机，点击「完成」退出编辑。</div>';
     if (level) {
       html += '<div class="callout callout-info">💡 本行程已按「' + level.label + '」档位生成：每日餐饮替换为' + (level.id === 'economy' ? '高性价比' : level.id === 'quality' ? '高品质' : '舒适') + '价位的当地推荐，整体消费控制在所选预算内。</div>';
     }
@@ -1293,10 +2318,18 @@
         (day.tag ? '<span class="tag">' + esc(day.tag) + '</span>' : '') +
         '<span class="day-arrow">▾</span></div>';
       html += '<div class="timeline">';
-      (day.items || []).forEach(function (it) {
-        html += '<div class="tl-item"><div class="tl-time">' + esc(it.t) + '</div><div class="tl-body">' + esc(it.x) + '</div></div>';
+      (day.items || []).forEach(function (it, j) {
+        html += '<div class="tl-item" data-day="' + i + '" data-idx="' + j + '" draggable="true">' +
+          '<div class="tl-time" data-field="t">' + esc(it.t) + '</div>' +
+          '<div class="tl-body" data-field="x">' + esc(it.x) + '</div>' +
+          '<span class="tl-ops">' +
+            '<button type="button" class="tl-op up" title="上移">↑</button>' +
+            '<button type="button" class="tl-op down" title="下移">↓</button>' +
+            '<button type="button" class="tl-op del" title="删除">✕</button>' +
+          '</span></div>';
       });
-      html += '</div></div>';
+      html += '</div>';
+      html += '<div class="day-add"><button type="button" data-day="' + i + '">＋ 添加行程项</button></div></div>';
     });
     html += '</div>';
 
@@ -1314,9 +2347,13 @@
     html += '</div>';
 
     /* -------- 景点（按档位排序） -------- */
-    html += '<div class="section" id="sec-spots"><h2>🎫 景点 & 活动参考</h2><div class="table-wrap"><table><tr><th>景点/项目</th><th>参考费用</th><th>建议时长</th><th>亮点</th></tr>';
+    html += '<div class="section" id="sec-spots"><h2>🎫 景点 & 活动参考</h2><div class="table-wrap"><table><tr><th>景点/项目</th><th>参考费用</th><th>建议时长</th><th>亮点</th><th>地图</th></tr>';
     levelSpots.forEach(function (s) {
-      html += '<tr><td><strong>' + esc(s.name) + '</strong></td><td>' + esc(s.ticket) + '</td><td>' + esc(s.time) + '</td><td>' + esc(s.note) + '</td></tr>';
+      var hasLoc = typeof s.lat === 'number' && typeof s.lng === 'number';
+      var mapCell = hasLoc
+        ? '<a class="map-link" data-map-name="' + esc(s.name) + '" data-map-lat="' + s.lat + '" data-map-lng="' + s.lng + '">🗺️ 查看</a>'
+        : '—';
+      html += '<tr><td><strong>' + esc(s.name) + '</strong></td><td>' + esc(s.ticket) + '</td><td>' + esc(s.time) + '</td><td>' + esc(s.note) + '</td><td>' + mapCell + '</td></tr>';
     });
     html += '</table></div>';
     if (level && level.id === 'economy') {
@@ -1340,6 +2377,28 @@
       ) + '人数越多住宿分摊越省，实际以出行时价格为准。</div>';
     html += '</div>';
 
+    /* -------- 购物 & 特产 -------- */
+    var specialties = city.specialties || [];
+    var shopping = city.shopping || [];
+    if (specialties.length || shopping.length) {
+      html += '<div class="section" id="sec-shopping"><h2>🛍️ 本地特产 & 购物地</h2>';
+      if (specialties.length) {
+        html += '<h3 class="sub-h">🎁 必买特产</h3><div class="table-wrap"><table><tr><th>特产</th><th>参考价</th><th>推荐理由</th></tr>';
+        specialties.forEach(function (sp) {
+          html += '<tr><td><strong>' + esc(sp.name) + '</strong></td><td>' + esc(sp.price || '—') + '</td><td>' + esc(sp.note || '') + '</td></tr>';
+        });
+        html += '</table></div>';
+      }
+      if (shopping.length) {
+        html += '<h3 class="sub-h">🏪 购物地推荐</h3><div class="table-wrap"><table><tr><th>购物地</th><th>位置</th><th>特色</th></tr>';
+        shopping.forEach(function (sh) {
+          html += '<tr><td><strong>' + esc(sh.name) + '</strong></td><td>' + esc(sh.area || '—') + '</td><td>' + esc(sh.note || '') + '</td></tr>';
+        });
+        html += '</table></div>';
+      }
+      html += '</div>';
+    }
+
     /* -------- 避坑 -------- */
     html += '<div class="section" id="sec-tips"><h2>⚠️ 避坑指南 & 实用贴士</h2><ol style="padding-left:20px;line-height:2.1">';
     (city.tips || []).forEach(function (t) {
@@ -1347,15 +2406,43 @@
     });
     html += '</ol></div>';
 
-    /* -------- 底部操作 -------- */
-    html += '<div class="action-bar">' +
-      '<button class="btn btn-primary" onclick="window.print()">🖨️ 打印 / 保存 PDF</button>' +
-      '<a class="btn" href="index.html">🏠 返回首页</a>' +
-      '<button class="btn" onclick="window.scrollTo({top:0,behavior:\'smooth\'})">⬆ 回到顶部</button>' +
+    /* -------- 侧边可收起的操作面板（编辑 / 复制 / 打印 / 夜间模式） -------- */
+    html += '<div class="action-float" id="action-float">' +
+      '<div class="af-menu">' +
+        '<button type="button" class="btn btn-primary" id="btn-edit">✏️ 编辑行程</button>' +
+        '<button type="button" class="btn" id="btn-reset">↩️ 还原默认</button>' +
+        '<button type="button" class="btn" id="btn-copy-text">📋 复制行程文本</button>' +
+        '<button type="button" class="btn" id="btn-copy-md">📝 复制 Markdown</button>' +
+        '<button type="button" class="btn" id="btn-print">🖨️ 打印 / 保存 PDF</button>' +
+        '<button type="button" class="btn" id="btn-fav">☆ 收藏城市</button>' +
+        '<a class="btn" href="index.html">🏠 返回首页</a>' +
+        '<div class="af-divider"></div>' +
+        '<button type="button" class="btn" id="btn-dark">🌙 切换夜间模式</button>' +
+      '</div>' +
+      '<button type="button" class="af-toggle" id="af-toggle" title="操作" aria-label="操作菜单">⚙️</button>' +
     '</div>';
 
     resultBox.className = 'result-wrap show';
     resultBox.innerHTML = html;
+
+    /* 若本机存有该行程的编辑记录，则静默恢复内容（保持浏览模式，不自动进入编辑）；
+       用户需手动点击「编辑行程」才会展开编辑控件 */
+    applyEditIfAny();
+    if (editMode) {
+      /* 理论上此处不会进入编辑模式（applyEditIfAny 不再置位），保留分支以防其它入口触发 */
+      resultBox.classList.add('editing');
+      var editBtn = document.getElementById('btn-edit');
+      if (editBtn) {
+        editBtn.textContent = '✅ 完成编辑';
+        editBtn.classList.add('editing');
+      }
+    }
+    rerenderDays();
+    /* 同步面板内夜间按钮文字（面板随 build 重建，用 body 实时状态避免与缓存不一致） */
+    applyDark(document.body.classList.contains('dark'));
+    /* 同步收藏按钮状态（面板随 build 重建） */
+    updateFavBtn();
+
     resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -1370,26 +2457,35 @@
   });
 
   /* ===== 夜间模式 ===== */
-  var btnDark = document.getElementById('btn-dark');
   var isDark = localStorage.getItem('trip-guide-dark') === '1';
   function applyDark(on) {
-    if (on) document.body.classList.add('dark');
+    isDark = !!on;
+    if (isDark) document.body.classList.add('dark');
     else document.body.classList.remove('dark');
-    btnDark.textContent = on ? '☀️' : '🌙';
-    localStorage.setItem('trip-guide-dark', on ? '1' : '0');
+    /* 同步面板内夜间按钮文字（按钮会随 build 重建，故每次重新查找） */
+    var darkBtn = document.getElementById('btn-dark');
+    if (darkBtn) darkBtn.textContent = isDark ? '☀️ 切换白天模式' : '🌙 切换夜间模式';
+    localStorage.setItem('trip-guide-dark', isDark ? '1' : '0');
+  }
+  function toggleDark() {
+    applyDark(!document.body.classList.contains('dark'));
   }
   applyDark(isDark);
-  btnDark.addEventListener('click', function () {
-    isDark = !document.body.classList.contains('dark');
-    applyDark(isDark);
-  });
 
   document.addEventListener('keydown', function (e) {
     var k = e.key.toLowerCase();
     if (k === 'd' && e.ctrlKey) {
       e.preventDefault();
-      isDark = !document.body.classList.contains('dark');
-      applyDark(isDark);
+      toggleDark();
+    }
+    /* Esc：先关闭操作面板；若面板已关闭且处于编辑模式，则退出编辑 */
+    if (e.key === 'Escape') {
+      var afBox = document.getElementById('action-float');
+      if (afBox && afBox.classList.contains('open')) {
+        setActionFloat(false);
+      } else if (editMode) {
+        toggleEdit();
+      }
     }
   });
 })();
