@@ -1110,12 +1110,13 @@ if ('serviceWorker' in navigator) {
 
   /* ===== 夜间模式 ===== */
   var btnDark = document.getElementById('btn-dark');
-  var isDark = localStorage.getItem('trip-guide-dark') === '1';
+  var isDark = false;
+  try { isDark = localStorage.getItem('trip-guide-dark') === '1'; } catch (e) { /* 存储不可用时忽略 */ }
   function applyDark(on) {
     if (on) document.body.classList.add('dark');
     else document.body.classList.remove('dark');
     btnDark.textContent = on ? '☀️' : '🌙';
-    localStorage.setItem('trip-guide-dark', on ? '1' : '0');
+    try { localStorage.setItem('trip-guide-dark', on ? '1' : '0'); } catch (e) { /* 存储不可用时忽略 */ }
   }
   applyDark(isDark);
   btnDark.addEventListener('click', function() {

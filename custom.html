@@ -2469,7 +2469,8 @@ if ('serviceWorker' in navigator) {
   });
 
   /* ===== 夜间模式 ===== */
-  var isDark = localStorage.getItem('trip-guide-dark') === '1';
+  var isDark = false;
+  try { isDark = localStorage.getItem('trip-guide-dark') === '1'; } catch (e) { /* 存储不可用时忽略 */ }
   function applyDark(on) {
     isDark = !!on;
     if (isDark) document.body.classList.add('dark');
@@ -2477,7 +2478,7 @@ if ('serviceWorker' in navigator) {
     /* 同步面板内夜间按钮文字（按钮会随 build 重建，故每次重新查找） */
     var darkBtn = document.getElementById('btn-dark');
     if (darkBtn) darkBtn.textContent = isDark ? '☀️ 切换白天模式' : '🌙 切换夜间模式';
-    localStorage.setItem('trip-guide-dark', isDark ? '1' : '0');
+    try { localStorage.setItem('trip-guide-dark', isDark ? '1' : '0'); } catch (e) { /* 存储不可用时忽略 */ }
   }
   function toggleDark() {
     applyDark(!document.body.classList.contains('dark'));
