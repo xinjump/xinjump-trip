@@ -1,6 +1,6 @@
 {
-  "name": "鑫跳旅游攻略",
-  "short_name": "鑫跳攻略",
+  "name": "心游攻略 - 一键生成旅行攻略",
+  "short_name": "心游攻略",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f0f4f8",
