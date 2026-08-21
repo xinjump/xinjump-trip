@@ -1,4 +1,4 @@
-# 🗺️ xinjump-trip · 旅行攻略合集
+# 🗺️ 鑫跳旅游攻略（xinjump-trip）
 
 纯前端实现的旅行攻略生成器：选择目的地与行程参数，一键生成包含交通、住宿、逐日行程、美食、景点、预算与避坑指南的完整攻略页。
 
@@ -179,7 +179,7 @@ window.CITY_DATA['青岛'] = {
 2. **注册城市**：在 `assets/js/cities.js` 的 `CITY_LIST` 中，按地区分组插入一条记录（`region` 与 `tier` 决定目录归属与排序权重，无需手动排位置）：
 
 ```js
-window.CITY_LIST = [
+var CITY_LIST = [
   /* ---- 中国内地 · 一线 ---- */
   { name: '北京', region: 'cn', tier: 'tier1', file: 'cn/tier1/beijing.js' },
   // ...

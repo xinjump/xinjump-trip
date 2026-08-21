@@ -3,10 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>旅行攻略合集 | 选目的地，一键生成攻略</title>
+<title>鑫跳旅游攻略 | 选目的地，一键生成攻略</title>
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/favicon.png">
 <meta name="theme-color" content="#2563eb">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="鑫跳攻略">
+<link rel="apple-touch-icon" href="assets/icon-512.png">
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
 <style>
   /* ===== Reset & Base ===== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -511,7 +523,7 @@
 
 <!-- ==================== HERO ==================== -->
 <header class="hero">
-  <h1>🗺️ 下一站，去哪儿？</h1>
+  <h1>🗺️ 鑫跳旅游攻略</h1>
   <p class="subtitle">输入目的地与行程参数，一键生成专属攻略</p>
 </header>
 
@@ -598,7 +610,7 @@
 
   <!-- ==================== Footer ==================== -->
   <div class="footer">
-    <p><strong>旅行攻略合集</strong> · 出发地默认西安 · 价格为出行参考</p>
+    <p><strong>鑫跳旅游攻略</strong> · 出发地默认西安 · 价格为出行参考</p>
   </div>
 
   <!-- ==================== 城市选择面板（点击目的地打开） ==================== -->

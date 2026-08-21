@@ -24,7 +24,7 @@
 var TIER_ORDER = { tier1: 0, tierNew: 1, tier2: 2, tier3: 3, overseas: 4 };
 var REGION_ORDER = { cn: 0, 'hk-mo-tw': 1, overseas: 2 };
 
-window.CITY_LIST = [
+var CITY_LIST = [
   /* ---- 中国内地 · 一线 ---- */
   { name: '北京',  region: 'cn',       tier: 'tier1',   file: 'cn/tier1/beijing.js' },
   { name: '上海',  region: 'cn',       tier: 'tier1',   file: 'cn/tier1/shanghai.js' },
@@ -78,7 +78,7 @@ window.CITY_LIST = [
 
 /* 按 线级 → 地区 → 名称 排序，保证下拉展示稳定有序 */
 (function () {
-  window.CITY_LIST.sort(function (a, b) {
+  CITY_LIST.sort(function (a, b) {
     var t = (TIER_ORDER[a.tier] == null ? 99 : TIER_ORDER[a.tier]) - (TIER_ORDER[b.tier] == null ? 99 : TIER_ORDER[b.tier]);
     if (t) return t;
     var r = (REGION_ORDER[a.region] == null ? 99 : REGION_ORDER[a.region]) - (REGION_ORDER[b.region] == null ? 99 : REGION_ORDER[b.region]);
@@ -86,3 +86,5 @@ window.CITY_LIST = [
     return a.name.localeCompare(b.name, 'zh');
   });
 })();
+
+if (typeof window !== 'undefined') window.CITY_LIST = CITY_LIST;
